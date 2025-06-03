@@ -91,7 +91,7 @@
                                     <i class="fas fa-user mr-2 text-gray-400"></i>
                                     Username atau Email
                                 </label>
-                                <input type="text" id="username" name="username" 
+                                <input type="text" id="username" name="identity" 
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus transition-all duration-200"
                                     required>
                             </div>
