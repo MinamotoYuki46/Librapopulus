@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "npx @tailwindcss/cli -i ./src/input.css -o ./public/assets/css/tailwind.css --watch"
+    "dev": "npx @tailwindcss/cli -i ./src/input.css -o ./public/assets/css/tailwind.css --w"
   },
   "keywords": [],
   "author": "",
