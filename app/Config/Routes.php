@@ -16,3 +16,5 @@ $routes -> group('auth', function($routes) {
     $routes -> post('processRegister', 'Auth::processRegister');
     $routes -> get('logout', 'Auth::logout');
 });
+
+$routes->get('/main', 'Home::index');
