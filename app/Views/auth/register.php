@@ -44,7 +44,10 @@
                         <div class="mb-8">
                             <i class="fas fa-user-plus text-6xl mb-4 opacity-90"></i>
                         </div>
-                        <h2 class="text-4xl font-bold mb-4">Join Our Community</h2>
+                        <h2 class="text-4xl font-bold mb-4">Mari Bergabung</h2>
+                        <p class="text-xl opacity-90 leading-relaxed">
+                            Temukan teman dan buku barumu
+                        </p>
                     </div>
                 </div>
             </div>
@@ -62,8 +65,8 @@
 
                     <!-- Register Header -->
                     <div class="text-center mb-8">
-                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Make New Account</h1>
-                        <p class="text-gray-600">Join our community and read the books</p>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Buat Akun Baru</h1>
+                        <p class="text-gray-600">Ayo bergabung ke komunitas dan baca bukunya</p>
                     </div>
                     
                     <!-- Error Message -->
@@ -94,7 +97,7 @@
                                 <input type="text" id="username" name="username" 
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent input-focus transition-all duration-200"
                                     required>
-                                <p class="text-xs text-gray-500 mt-1">This username will be used for log in</p>
+                                <p class="text-xs text-gray-500 mt-1">Username ini akan muncul sebagai nama yang terlihat oleh pengguna lain</p>
                             </div>
 
                             <!-- Email Field -->
@@ -126,7 +129,7 @@
                                 <!-- Password Strength Indicator -->
                                 <div class="mt-2">
                                     <div class="password-strength bg-gray-200" id="passwordStrength"></div>
-                                    <p class="text-xs text-gray-500 mt-1">Must be at least 8 characters long and include letters, numbers, and symbols.
+                                    <p class="text-xs text-gray-500 mt-1">Minimal 8 karakter berupa kombinasi huruf, angka, dan simbol.
                                 </div>
                             </div>
 
@@ -134,12 +137,12 @@
                             <div>
                                 <label for="confirmPassword" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-lock mr-2 text-gray-400"></i>
-                                    Password Confirmation
+                                    Konfirmasi Password
                                 </label>
                                 <div class="relative">
                                     <input type="password" id="confirmPassword" name="confirmPassword"
                                         class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent input-focus transition-all duration-200"
-                                        placeholder="Masukkan kembali password" required>
+                                        required>
                                     <button type="button" id="toggleConfirm"
                                         class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors">
                                         <i class="fa-solid fa-eye" id="eyeIconConfirm"></i>
@@ -148,7 +151,7 @@
                                 <div id="passwordMatch" class="text-xs mt-1 hidden">
                                     <span class="text-red-500">
                                         <i class="fas fa-times-circle mr-1"></i>
-                                        Password is not match
+                                        Password tidak cocok
                                     </span>
                                 </div>
                             </div>
@@ -170,7 +173,7 @@
                                 <button type="submit" 
                                     class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
                                     <i class="fas fa-user-plus mr-2"></i>
-                                    Register Now
+                                    Daftar Sekarang
                                 </button>
                             </div>
                         </form>
@@ -178,9 +181,9 @@
                         <!-- Login Link -->
                         <div class="mt-6 text-center">
                             <p class="text-gray-600">
-                                Already have an account? 
+                                Sudah punya akun? 
                                 <a href="<?= base_url('auth/login') ?>" class="text-green-600 hover:text-green-700 font-semibold hover:underline transition-colors">
-                                    Login here
+                                    Daftar di sini
                                 </a>
                             </p>
                         </div>
@@ -190,7 +193,7 @@
                     <div class="text-center mt-8">
                         <a href="<?= base_url() ?>" class="inline-flex items-center text-gray-500 hover:text-green-600 text-sm font-medium transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
-                            Back to home
+                            Kembali ke halaman utama
                         </a>
                     </div>
                 </div>

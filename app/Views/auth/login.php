@@ -39,9 +39,9 @@
                         <div class="mb-8">
                             <i class="fas fa-book-open text-6xl mb-4 opacity-90"></i>
                         </div>
-                        <h2 class="text-4xl font-bold mb-4">Welcome to Librapopulus</h2>
+                        <h2 class="text-4xl font-bold mb-4">Selamat datang di Librapopulus</h2>
                         <p class="text-xl opacity-90 leading-relaxed">
-                            Discover your new friend and book.
+                            Masuk untuk mulai menjelajahi koleksi buku dan terhubung dengan teman
                         </p>
                         <div class="mt-8 flex justify-center space-x-6 text-sm opacity-80">
                         </div>
@@ -62,8 +62,8 @@
 
                     <!-- Login Header -->
                     <div class="text-center mb-8">
-                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Login to your account</h1>
-                        <p class="text-gray-600">Welcome.</p>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Masuk ke Akunmu</h1>
+                        <p class="text-gray-600">Selamat datang</p>
                     </div>
                     
                     <!-- Error Message -->
@@ -89,7 +89,7 @@
                             <div>
                                 <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-user mr-2 text-gray-400"></i>
-                                    Username or Email
+                                    Username atau Email
                                 </label>
                                 <input type="text" id="username" name="username" 
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus transition-all duration-200"
@@ -118,7 +118,7 @@
                                 <button type="submit" 
                                     class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
                                     <i class="fas fa-sign-in-alt mr-2"></i>
-                                    Login
+                                    Masuk
                                 </button>
                             </div>
                         </form>
@@ -126,9 +126,9 @@
                         <!-- Register Link -->
                         <div class="mt-6 text-center">
                             <p class="text-gray-600">
-                                Haven't had an acoount? 
+                                Belum punya akun? 
                                 <a href="<?= base_url('auth/register') ?>" class="text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-colors">
-                                    Register now!
+                                    Daftar sekarang!
                                 </a>
                             </p>
                         </div>
@@ -138,7 +138,7 @@
                     <div class="text-center mt-8">
                         <a href="<?= base_url() ?>" class="inline-flex items-center text-gray-500 hover:text-blue-600 text-sm font-medium transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
-                            Back to home
+                            Kembali ke halaman utama
                         </a>
                     </div>
                 </div>
