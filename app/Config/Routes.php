@@ -5,8 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Welcome::index');
 
+$routes -> get('/', 'Home::index');
 
 $routes -> group('auth', function($routes) {
     $routes -> get('/', 'Auth::index');
@@ -21,4 +21,3 @@ $routes -> group('auth', function($routes) {
     $routes -> get('logout', 'Auth::logout');
 });
 
-$routes->get('/main', 'Home::index');

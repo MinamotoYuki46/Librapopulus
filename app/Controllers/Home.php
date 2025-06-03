@@ -3,7 +3,13 @@
 namespace App\Controllers;
 
 class Home extends BaseController {
-    public function index(): string {
-        return view('main/home');
+    public function index(){
+        if (session() -> get('isLoggedIn')) {
+            $main = new MainController;
+
+            return $main -> index();
+        } else {
+            return view('welcome');
+        }
     }
 }
