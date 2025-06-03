@@ -1,146 +1,294 @@
+<?php
+// Sample book data - Replace with your database data
+$resumeBooks = [
+    [
+        'id' => 1,
+        'title' => 'The Great Gatsby',
+        'author' => 'F. Scott Fitzgerald',
+        'progress' => 65,
+        'image' => 'https://m.media-amazon.com/images/I/81af+MCATTL.jpg'
+    ],
+    [
+        'id' => 2,
+        'title' => 'To Kill a Mockingbird',
+        'author' => 'Harper Lee',
+        'progress' => 32,
+        'image' => 'https://m.media-amazon.com/images/I/71FxgtFKcQL._SY522_.jpg'
+    ],
+    [
+        'id' => 3,
+        'title' => '1984',
+        'author' => 'George Orwell',
+        'progress' => 78,
+        'image' => 'https://m.media-amazon.com/images/I/71kxa1-0mfL.jpg'
+    ],
+    [
+        'id' => 4,
+        'title' => 'Pride and Prejudice',
+        'author' => 'Jane Austen',
+        'progress' => 45,
+        'image' => 'https://m.media-amazon.com/images/I/81a3sr-RgdL._SY425_.jpg'
+    ],
+    [
+        'id' => 5,
+        'title' => 'The Catcher in the Rye',
+        'author' => 'J.D. Salinger',
+        'progress' => 12,
+        'image' => 'https://m.media-amazon.com/images/I/81OthjkJBuL.jpg'
+    ],
+    [
+        'id' => 6,
+        'title' => 'Moby Dick',
+        'author' => 'Herman Melville',
+        'progress' => 50,
+        'image' => 'https://m.media-amazon.com/images/I/61cGr2j9KFL._SY522_.jpg'
+    ],
+    [
+        'id' => 7,
+        'title' => 'Jane Eyre',
+        'author' => 'Charlotte Brontë',
+        'progress' => 38,
+        'image' => 'https://m.media-amazon.com/images/I/81eB+7+CkUL.jpg'
+    ],
+    [
+        'id' => 8,
+        'title' => 'Brave New World',
+        'author' => 'Aldous Huxley',
+        'progress' => 80,
+        'image' => 'https://m.media-amazon.com/images/I/71GNqqXuN3L._SY466_.jpg'
+    ],
+    [
+        'id' => 9,
+        'title' => 'Frankenstein',
+        'author' => 'Mary Shelley',
+        'progress' => 27,
+        'image' => 'https://m.media-amazon.com/images/I/81z7E0uWdtL._SY466_.jpg'
+    ],
+    [
+        'id' => 10,
+        'title' => 'Wuthering Heights',
+        'author' => 'Emily Brontë',
+        'progress' => 59,
+        'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg'
+    ]
+];
+
+
+// Sample discussion data - Replace with your database data
+$hotDiscussions = [
+    [
+        'id' => 1,
+        'title' => 'Best Fantasy Books of 2024',
+        'author' => 'BookLover42',
+        'comments' => 24,
+        'likes' => 156,
+        'image' => null
+    ],
+    [
+        'id' => 2,
+        'title' => 'Classic Literature Reading Club',
+        'author' => 'LiteraryMind',
+        'comments' => 18,
+        'likes' => 89,
+        'image' => null
+    ],
+    [
+        'id' => 3,
+        'title' => 'Sci-Fi Recommendations',
+        'author' => 'SpaceReader',
+        'comments' => 31,
+        'likes' => 203,
+        'image' => null
+    ],
+    [
+        'id' => 4,
+        'title' => 'Book Club Meetup Ideas',
+        'author' => 'CommunityOrg',
+        'comments' => 12,
+        'likes' => 67,
+        'image' => null
+    ],
+    [
+        'id' => 5,
+        'title' => 'Underrated Mystery Novels',
+        'author' => 'DetectiveFan',
+        'comments' => 20,
+        'likes' => 112,
+        'image' => null
+    ],
+    [
+        'id' => 6,
+        'title' => 'Reading Goals for the Year',
+        'author' => 'GoalSetter99',
+        'comments' => 15,
+        'likes' => 95,
+        'image' => null
+    ],
+    [
+        'id' => 7,
+        'title' => 'Books that Changed My Life',
+        'author' => 'DeepReader',
+        'comments' => 28,
+        'likes' => 145,
+        'image' => null
+    ],
+    [
+        'id' => 8,
+        'title' => 'Non-Fiction Gems',
+        'author' => 'FactFinder',
+        'comments' => 10,
+        'likes' => 74,
+        'image' => null
+    ],
+    [
+        'id' => 9,
+        'title' => 'Young Adult Books We Love',
+        'author' => 'TeenReader',
+        'comments' => 19,
+        'likes' => 99,
+        'image' => null
+    ],
+    [
+        'id' => 10,
+        'title' => 'Should You Reread Books?',
+        'author' => 'Rereader',
+        'comments' => 14,
+        'likes' => 68,
+        'image' => null
+    ]
+];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Librapopulus - Aplikasi Peminjaman Buku</title>
+        <title>Dashboard - Librapopulus</title>
         <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <!-- Inter Font -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <style>
-            body {
-                font-family: 'Inter', sans-serif;
+            .book-card {
+                min-width: 140px;
+                flex-shrink: 0;
+                height: 240px; /* Fixed height for all book cards */
             }
-            .hero-gradient {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            .discussion-card {
+                min-width: 160px;
+                flex-shrink: 0;
+                height: 180px; /* Fixed height for all discussion cards */
             }
-            .floating-animation {
-                animation: float 6s ease-in-out infinite;
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
-            .floating-animation:nth-child(2) {
-                animation-delay: -2s;
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
             }
-            .floating-animation:nth-child(3) {
-                animation-delay: -4s;
+            .text-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
-            @keyframes float {
-                0%, 100% { transform: translateY(0px); }
-                50% { transform: translateY(-20px); }
-            }
-            .glass-card {
-                backdrop-filter: blur(10px);
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+            .text-clamp-1 {
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
         </style>
     </head>
-    <body class="bg-gray-50">
-        <!-- Navigation -->
-        <nav class="absolute top-0 w-full z-50 px-6 py-4">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg">
-                        <i class="fas fa-book-open text-purple-600 text-lg"></i>
-                    </div>
-                    <span class="text-white font-bold text-xl">Librapopulus</span>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Hero Section -->
-        <section class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
-            <!-- Floating Books Background -->
-            <div class="absolute inset-0 overflow-hidden">
-                <div class="floating-animation absolute top-20 left-10 opacity-20">
-                    <i class="fas fa-book text-6xl text-white"></i>
-                </div>
-                <div class="floating-animation absolute top-40 right-20 opacity-20">
-                    <i class="fas fa-book-open text-5xl text-white"></i>
-                </div>
-                <div class="floating-animation absolute bottom-32 left-1/4 opacity-20">
-                    <i class="fas fa-graduation-cap text-4xl text-white"></i>
-                </div>
-                <div class="floating-animation absolute top-60 right-1/3 opacity-20">
-                    <i class="fas fa-scroll text-5xl text-white"></i>
-                </div>
-            </div>
-
-            <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
-                <div class="mb-12">
-                    <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                        Selamat datang di
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
-                            Librapopulus
-                        </span>
-                    </h1>
-                    <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-                        Platform pinjam buku antar anggota.
-                    </p>
-                </div>
-
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-                    <a href="<?= site_url('auth/login') ?>" 
-                       class="group px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
-                        <i class="fas fa-sign-in-alt mr-2"></i>
-                        Masuk
-                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </a>
-                    <a href="<?= site_url('auth/register') ?>" 
-                       class="group px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105">
-                        <i class="fas fa-user-plus mr-2"></i>
-                        Daftar
-                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </a>
-                </div>
-
-                <!-- Features Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                    <div class="glass-card rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300">
-                        <i class="fas fa-exchange-alt text-3xl text-white mb-4"></i>
-                        <h3 class="text-xl font-semibold text-white mb-2">Saling meminjam</h3>
-                        <p class="text-white/80 text-sm">Pinjamkan bukumu kepada anggota lain</p>
-                    </div>
-                    <div class="glass-card rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300">
-                        <i class="fas fa-users text-3xl text-white mb-4"></i>
-                        <h3 class="text-xl font-semibold text-white mb-2">Komunitas</h3>
-                        <p class="text-white/80 text-sm">Gabung komunitas dan para pecinta buku lainnya</p>
-                    </div>
-                    <div class="glass-card rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300">
-                        <i class="fas fa-star text-3xl text-white mb-4"></i>
-                        <h3 class="text-xl font-semibold text-white mb-2">Ulasan</h3>
-                        <p class="text-white/80 text-sm"> Temukan buku bagus berdasarkan rekomendasi komunitas</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer (Inside Hero Section) -->
-            <div class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm py-4">
-                <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-                    <div class="flex items-center space-x-2 mb-4 md:mb-0">
-                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-book-open text-white text-sm"></i>
+    <body class="bg-gray-200 min-h-screen">
+        <!-- Header -->
+        <?php include 'layout/header.php' ?>
+        <!-- Main Content -->
+        <main class="px-6 pb-6">
+            <!-- Resume Reading Section -->
+            <section class="mb-8">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Lanjutkan bacaan</h2>
+                <div class="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+                    <?php foreach ($resumeBooks as $book): ?>
+                        <div class="book-card bg-gray-400 rounded-lg p-4 hover:bg-gray-500 transition-colors cursor-pointer flex flex-col" 
+                             data-book-id="<?= $book['id'] ?>">
+                            <!-- Fixed Image Container -->
+                            <div class="bg-gray-300 rounded-lg h-32 mb-3 flex items-center justify-center flex-shrink-0">
+                                <?php if ($book['image']): ?>
+                                    <img src="<?= $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>" 
+                                         class="w-full h-full object-cover rounded-lg">
+                                <?php else: ?>
+                                    <div class="w-12 h-12 border-2 border-gray-500 rounded flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-500 text-lg"></i>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <!-- Text Content with Fixed Layout -->
+                            <div class="flex flex-col flex-grow">
+                                <h3 class="font-semibold text-gray-900 text-sm mb-1 text-clamp-2 leading-tight">
+                                    <?= htmlspecialchars($book['title']) ?>
+                                </h3>
+                                <p class="text-gray-700 text-xs mb-2 text-clamp-1"><?= htmlspecialchars($book['author']) ?></p>
+                                
+                                <!-- Progress Bar at Bottom -->
+                                <div class="mt-auto">
+                                    <div class="bg-gray-300 rounded-full h-1">
+                                        <div class="bg-purple-600 h-1 rounded-full" style="width: <?= $book['progress'] ?>%"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mt-1"><?= $book['progress'] ?>% complete</p>
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-white font-bold text-sm">Librapopulus</span>
-                    </div>
-                    <p class="text-white/70 text-sm">&copy; 2025 Librapopulus - Membuka pengetahuan, membangun komunitas</p>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <script>
-            // Add scroll effect to navigation
-            window.addEventListener('scroll', function() {
-                const nav = document.querySelector('nav');
-                if (window.scrollY > 100) {
-                    nav.classList.add('bg-white/10', 'backdrop-blur-md');
-                } else {
-                    nav.classList.remove('bg-white/10', 'backdrop-blur-md');
-                }
-            });
-        </script>
+            <!-- Hot Discussion Section -->
+            <section>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Diskusi hangat</h2>
+                <div class="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+                    <?php foreach ($hotDiscussions as $discussion): ?>
+                        <div class="discussion-card bg-gray-400 rounded-lg p-4 hover:bg-gray-500 transition-colors cursor-pointer flex flex-col"
+                             data-discussion-id="<?= $discussion['id'] ?>">
+                            <!-- Fixed Image Container -->
+                            <div class="bg-gray-300 rounded-lg h-20 mb-3 flex items-center justify-center flex-shrink-0">
+                                <?php if ($discussion['image']): ?>
+                                    <img src="<?= $discussion['image'] ?>" alt="<?= htmlspecialchars($discussion['title']) ?>" 
+                                         class="w-full h-full object-cover rounded-lg">
+                                <?php else: ?>
+                                    <div class="w-8 h-8 border-2 border-gray-500 rounded flex items-center justify-center">
+                                        <i class="fas fa-comments text-gray-500 text-sm"></i>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <!-- Text Content with Fixed Layout -->
+                            <div class="flex flex-col flex-grow">
+                                <h3 class="font-semibold text-gray-900 text-sm mb-1 text-clamp-2 leading-tight">
+                                    <?= htmlspecialchars($discussion['title']) ?>
+                                </h3>
+                                <p class="text-gray-700 text-xs mb-2 text-clamp-1"><?= htmlspecialchars($discussion['author']) ?></p>
+                                
+                                <!-- Stats at Bottom -->
+                                <div class="flex items-center text-xs text-gray-600 mt-auto">
+                                    <i class="fas fa-comment mr-1"></i>
+                                    <span class="mr-3"><?= $discussion['comments'] ?></span>
+                                    <i class="fas fa-heart mr-1"></i>
+                                    <span><?= $discussion['likes'] ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        </main>
+
+        <?php include 'layout/footer.php'?>
+
+        <script src="<?= base_url(relativePath: 'assets/js/main.js')?>"></script>
     </body>
 </html>
