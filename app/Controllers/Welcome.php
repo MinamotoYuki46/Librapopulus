@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-class Home extends BaseController {
+class Welcome extends BaseController {
     public function index(): string {
-        return view('home/home');
+        return view('welcome');
     }
 }
