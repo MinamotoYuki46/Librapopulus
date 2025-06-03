@@ -23,6 +23,22 @@ class Auth extends BaseController {
         
         return view('auth/register');
     }
+
+    public function detail() {
+        if (session() -> get('isLoggedIn')) {
+            return redirect() -> to(base_url('dashboard'));
+        }
+        
+        return view('auth/detail');
+    }
+
+    public function success() {
+        if (session() -> get('isLoggedIn')) {
+            return redirect() -> to(base_url('dashboard'));
+        }
+        
+        return view('auth/success');
+    }
     
     public function processLogin() {
         // TODO

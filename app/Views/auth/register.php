@@ -33,6 +33,28 @@
                 border-radius: 2px;
                 transition: all 0.3s ease;
             }
+            .progress-step {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            .progress-step.active {
+                background-color: #10b981;
+                color: white;
+            }
+            .progress-step.completed {
+                background-color: #10b981;
+                color: white;
+            }
+            .progress-step.inactive {
+                background-color: #e5e7eb;
+                color: #6b7280;
+            }
         </style>
     </head>
     <body class="bg-gray-50 min-h-screen">
@@ -45,9 +67,30 @@
                             <i class="fas fa-user-plus text-6xl mb-4 opacity-90"></i>
                         </div>
                         <h2 class="text-4xl font-bold mb-4">Mari Bergabung</h2>
-                        <p class="text-xl opacity-90 leading-relaxed">
-                            Temukan teman dan buku barumu
+                        <p class="text-xl opacity-90 leading-relaxed mb-6">
+                            Temukan teman dan buku barumu di komunitas pembaca
                         </p>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                            <h3 class="text-lg font-semibold mb-4">Apa yang akan kamu dapatkan:</h3>
+                            <div class="space-y-3 text-left">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
+                                    <span>Akses ke 50,000+ buku</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
+                                    <span>Komunitas pembaca aktif</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
+                                    <span>Rekomendasi personal</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
+                                    <span>Akses 24/7 online</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -55,6 +98,17 @@
             <!-- Right Side - Register Form -->
             <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
                 <div class="max-w-md w-full">
+                    <!-- Progress Indicator -->
+                    <div class="flex items-center justify-center mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="progress-step active">1</div>
+                            <div class="h-1 w-12 bg-gray-300"></div>
+                            <div class="progress-step inactive">2</div>
+                            <div class="h-1 w-12 bg-gray-300"></div>
+                            <div class="progress-step inactive">3</div>
+                        </div>
+                    </div>
+
                     <!-- Mobile Header (visible on small screens) -->
                     <div class="lg:hidden text-center mb-8">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
@@ -129,7 +183,7 @@
                                 <!-- Password Strength Indicator -->
                                 <div class="mt-2">
                                     <div class="password-strength bg-gray-200" id="passwordStrength"></div>
-                                    <p class="text-xs text-gray-500 mt-1">Minimal 8 karakter berupa kombinasi huruf, angka, dan simbol.
+                                    <p class="text-xs text-gray-500 mt-1">Minimal 8 karakter berupa kombinasi huruf, angka, dan simbol</p>
                                 </div>
                             </div>
 
@@ -172,8 +226,8 @@
                             <div>
                                 <button type="submit" 
                                     class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
-                                    <i class="fas fa-user-plus mr-2"></i>
-                                    Daftar Sekarang
+                                    <i class="fas fa-arrow-right mr-2"></i>
+                                    Lanjutkan ke Profil
                                 </button>
                             </div>
                         </form>
@@ -183,7 +237,7 @@
                             <p class="text-gray-600">
                                 Sudah punya akun? 
                                 <a href="<?= base_url('auth/login') ?>" class="text-green-600 hover:text-green-700 font-semibold hover:underline transition-colors">
-                                    Daftar di sini
+                                    Masuk di sini
                                 </a>
                             </p>
                         </div>
