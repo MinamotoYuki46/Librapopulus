@@ -9,7 +9,7 @@ class UserModel extends Model
     protected $table = 'user';
     protected $allowedFields = [
         'username',
-        'display_name',
+        'full_name',
         'email',
         'password',
         'city',
