@@ -11,6 +11,7 @@ class Auth extends BaseController {
     }
     
     public function index()    {
+        $this->destroyRegisterSession();
         return redirect() -> to(base_url('auth/login'));
     }
     
@@ -19,6 +20,7 @@ class Auth extends BaseController {
             return redirect() -> to(base_url('dashboard'));
         }
         
+        $this->destroyRegisterSession();
         return view('auth/login');
     }
     
@@ -27,6 +29,26 @@ class Auth extends BaseController {
             return redirect() -> to(base_url('dashboard'));
         }
         
+        $this->destroyRegisterSession();
+
+        $username = $this->request->getPost('username'); 
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $confirmPassword = $this->request->getPost('confirmPassword');
+
+        if($password != $confirmPassword) {
+            return redirect()->back()->with('error', 'konfirmasi Password Gagal');
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        session()->set('register_data',[
+            'step' => 'detail',
+            'username' => $username,
+            'email' => $email,
+            'password' => $hashedPassword
+        ]);
+
         return view('auth/register');
     }
 
@@ -81,5 +103,11 @@ class Auth extends BaseController {
         session() -> destroy();
         
         return redirect() -> to(base_url());
+    }
+
+    private function destroyRegisterSession(){
+        if(session()->has('register_data')) {
+            session()->remove('register_data');
+        }
     }
 }
