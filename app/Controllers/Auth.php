@@ -30,25 +30,7 @@ class Auth extends BaseController {
         }
         
         $this->destroyRegisterSession();
-
-        $username = $this->request->getPost('username'); 
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-        $confirmPassword = $this->request->getPost('confirmPassword');
-
-        if($password != $confirmPassword) {
-            return redirect()->back()->with('error', 'konfirmasi Password Gagal');
-        }
-
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        session()->set('register_data',[
-            'step' => 'detail',
-            'username' => $username,
-            'email' => $email,
-            'password' => $hashedPassword
-        ]);
-
+        
         return view('auth/register');
     }
 
