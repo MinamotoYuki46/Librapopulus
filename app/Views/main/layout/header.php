@@ -1,4 +1,4 @@
-<header class="bg-gray-200 px-6 py-4 flex justify-between items-center md:pl-20 bg-white relative z-40">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-white/40 shadow-sm px-6 py-4 flex justify-between items-center md:pl-20">
     <div>
         <h1 class="text-4xl font-bold text-gray-900">
             <?= $headerTitle ?? 'Librapopulus' ?>
@@ -36,19 +36,5 @@
     </div>
 </header>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const profileBtn = document.getElementById('profileBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
-
-    profileBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent closing immediately
-        profileDropdown.classList.toggle('hidden');
-    });
-
-    // Close dropdown on click outside
-    document.addEventListener('click', () => {
-        profileDropdown.classList.add('hidden');
-    });
-});
-</script>
+<!-- Add top margin so content doesn’t go under the fixed header -->
+<div class="h-[88px]"></div>

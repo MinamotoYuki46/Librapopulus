@@ -175,12 +175,12 @@ $hotDiscussions = [
             .book-card {
                 min-width: 140px;
                 flex-shrink: 0;
-                height: 240px; /* Fixed height for all book cards */
+                height: 400px; /* Fixed height for all book cards */
             }
             .discussion-card {
                 min-width: 160px;
                 flex-shrink: 0;
-                height: 180px; /* Fixed height for all discussion cards */
+                height: 350px; /* Fixed height for all discussion cards */
             }
             .scrollbar-hide {
                 -ms-overflow-style: none;
@@ -204,77 +204,78 @@ $hotDiscussions = [
         </style>
     </head>
     <body class="bg-gray-200 min-h-screen">
-        <!-- Header -->
         <?php include 'layout/header.php' ?>
-        <!-- Main Content -->
-        <main class="px-6 pb-6 " id="mainContent">
-            <!-- Resume Reading Section -->
+
+
+        <main class="px-6 pb-6 py-6" id="mainContent">
+
+
             <section class="mb-8">
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Lanjutkan bacaan</h2>
-                <div class="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Lanjutkan bacaan</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     <?php foreach ($resumeBooks as $book): ?>
-                        <div class="book-card bg-gray-400 rounded-lg p-4 hover:bg-gray-500 transition-colors cursor-pointer flex flex-col" 
-                             data-book-id="<?= $book['id'] ?>">
-                            <!-- Fixed Image Container -->
-                            <div class="bg-gray-300 rounded-lg h-32 mb-3 flex items-center justify-center flex-shrink-0">
+                        <div class="book-card bg-gray-100 rounded-lg p-4 hover:bg-gray-300 transition-colors cursor-pointer flex flex-col" 
+                            data-book-id="<?= $book['id'] ?>">
+                            <div class="bg-gray-300 rounded-lg mb-3 aspect-[2/3] overflow-hidden">
                                 <?php if ($book['image']): ?>
                                     <img src="<?= $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>" 
-                                         class="w-full h-full object-cover rounded-lg">
+                                        class="w-full h-full object-cover rounded-lg">
                                 <?php else: ?>
-                                    <div class="w-12 h-12 border-2 border-gray-500 rounded flex items-center justify-center">
-                                        <i class="fas fa-image text-gray-500 text-lg"></i>
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-500 text-3xl"></i>
                                     </div>
                                 <?php endif; ?>
                             </div>
                             
-                            <!-- Text Content with Fixed Layout -->
                             <div class="flex flex-col flex-grow">
-                                <h3 class="font-semibold text-gray-900 text-sm mb-1 text-clamp-2 leading-tight">
+                                <h3 class="font-semibold text-gray-900 text-xl mb-1 text-clamp-2 leading-tight">
                                     <?= htmlspecialchars($book['title']) ?>
                                 </h3>
-                                <p class="text-gray-700 text-xs mb-2 text-clamp-1"><?= htmlspecialchars($book['author']) ?></p>
+                                <p class="text-gray-700 text-lg mb-2 text-clamp-1"><?= htmlspecialchars($book['author']) ?></p>
                                 
-                                <!-- Progress Bar at Bottom -->
                                 <div class="mt-auto">
                                     <div class="bg-gray-300 rounded-full h-1">
                                         <div class="bg-purple-600 h-1 rounded-full" style="width: <?= $book['progress'] ?>%"></div>
                                     </div>
-                                    <p class="text-xs text-gray-600 mt-1"><?= $book['progress'] ?>% complete</p>
+                                    <p class="text-base text-gray-600 mt-1"><?= $book['progress'] ?>% complete</p>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+
             </section>
 
-            <!-- Hot Discussion Section -->
-            <section>
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Diskusi hangat</h2>
-                <div class="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+            <section class="mt-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Diskusi hangat</h2>
+                
+                <!-- Grid layout for 2 to 4 columns depending on screen size -->
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <?php foreach ($hotDiscussions as $discussion): ?>
-                        <div class="discussion-card bg-gray-400 rounded-lg p-4 hover:bg-gray-500 transition-colors cursor-pointer flex flex-col"
-                             data-discussion-id="<?= $discussion['id'] ?>">
-                            <!-- Fixed Image Container -->
-                            <div class="bg-gray-300 rounded-lg h-20 mb-3 flex items-center justify-center flex-shrink-0">
+                        <div class="discussion-card bg-gray-100 rounded-lg p-4 hover:bg-gray-300 transition-colors cursor-pointer flex flex-col"
+                            data-discussion-id="<?= $discussion['id'] ?>">
+                            
+                            <!-- Fixed Aspect Ratio Image -->
+                            <div class="relative w-full rounded-lg overflow-hidden mb-3" style="padding-top: 56.25%;"> <!-- 16:9 = 9/16 = 0.5625 -->
                                 <?php if ($discussion['image']): ?>
-                                    <img src="<?= $discussion['image'] ?>" alt="<?= htmlspecialchars($discussion['title']) ?>" 
-                                         class="w-full h-full object-cover rounded-lg">
+                                    <img src="<?= $discussion['image'] ?>" alt="<?= htmlspecialchars($discussion['title']) ?>"
+                                        class="absolute inset-0 w-full h-full object-cover">
                                 <?php else: ?>
-                                    <div class="w-8 h-8 border-2 border-gray-500 rounded flex items-center justify-center">
+                                    <div class="absolute inset-0 flex items-center justify-center border-2 border-gray-500 bg-white">
                                         <i class="fas fa-comments text-gray-500 text-sm"></i>
                                     </div>
                                 <?php endif; ?>
                             </div>
-                            
-                            <!-- Text Content with Fixed Layout -->
+
+                            <!-- Text Content -->
                             <div class="flex flex-col flex-grow">
-                                <h3 class="font-semibold text-gray-900 text-sm mb-1 text-clamp-2 leading-tight">
+                                <h3 class="font-semibold text-gray-900 text-xl mb-1 text-clamp-2 leading-tight">
                                     <?= htmlspecialchars($discussion['title']) ?>
                                 </h3>
-                                <p class="text-gray-700 text-xs mb-2 text-clamp-1"><?= htmlspecialchars($discussion['author']) ?></p>
-                                
-                                <!-- Stats at Bottom -->
-                                <div class="flex items-center text-xs text-gray-600 mt-auto">
+                                <p class="text-gray-700 text-lg mb-2 text-clamp-1"><?= htmlspecialchars($discussion['author']) ?></p>
+
+                                <!-- Stats -->
+                                <div class="flex items-center text-ms text-gray-600 mt-auto">
                                     <i class="fas fa-comment mr-1"></i>
                                     <span class="mr-3"><?= $discussion['comments'] ?></span>
                                     <i class="fas fa-heart mr-1"></i>

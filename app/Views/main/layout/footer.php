@@ -36,7 +36,7 @@ $navigationItems = [
 </style>
 
 <!-- Desktop Sidebar Navigation -->
-<nav id="sidebar" class="fixed top-20 bottom-0 left-0 w-48 bg-white px-4 py-6 hidden md:flex flex-col justify-between z-50">
+<nav id="sidebar" class="fixed top-21.5 bottom-0 left-0 w-48 bg-white px-4 py-6 hidden md:flex flex-col justify-between z-50">
     <div>
         <div class="flex items-center justify-between mb-8">
             <button id="toggleSidebar" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
