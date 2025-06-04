@@ -77,7 +77,7 @@
                     <?php endif; ?>
                     
                     <div class="glass-effect rounded-2xl shadow-xl p-8 border border-gray-200">
-                        <form action="<?= base_url('auth/processLogin') ?>" method="post" class="space-y-6">
+                        <form action="<?= base_url('auth/processLogin') ?>" method="post" class="space-y-6">  <?= csrf_field() ?>
 
                             <div>
                                 <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">

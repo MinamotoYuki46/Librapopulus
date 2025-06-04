@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\UserModel;
 
 class Auth extends BaseController {
+
+    protected $userModel;
     
     public function __construct() {
         $this -> userModel = new UserModel();
