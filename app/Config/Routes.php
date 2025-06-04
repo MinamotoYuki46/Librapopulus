@@ -21,3 +21,4 @@ $routes -> group('auth', function($routes) {
     $routes -> get('logout', 'Auth::logout');
 });
 
+$routes -> get('/library', 'MainController::library');

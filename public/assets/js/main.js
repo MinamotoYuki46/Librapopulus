@@ -1,10 +1,7 @@
-// Add click handlers for book cards
 document.querySelectorAll('.book-card').forEach(card => {
     card.addEventListener('click', function() {
         const bookId = this.getAttribute('data-book-id');
-        // Redirect to book details or handle click
         console.log('Book clicked:', bookId);
-        // window.location.href = `<?= base_url('books/') ?>${bookId}`;
     });
 });
 

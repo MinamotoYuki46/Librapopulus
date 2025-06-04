@@ -1,7 +1,7 @@
 <?php
 $currentPage = $_GET['page'] ?? 'dashboard';
 $navigationItems = [
-    ['icon' => 'fas fa-home', 'label' => 'Home', 'page' => 'dashboard'],
+    ['icon' => 'fas fa-home', 'label' => 'Home', 'page' => ''],
     ['icon' => 'fas fa-search', 'label' => 'Search', 'page' => 'search'],
     ['icon' => 'fas fa-book', 'label' => 'Library', 'page' => 'library'],
     ['icon' => 'fas fa-users', 'label' => 'Community', 'page' => 'community'],
@@ -46,7 +46,7 @@ $navigationItems = [
         
         <div class="space-y-2">
             <?php foreach ($navigationItems as $item): ?>
-                <a href="?page=<?= $item['page'] ?>" 
+                <a href="<?= base_url('/' . $item['page']) ?>"
                    class="nav-item flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 <?= $currentPage == $item['page'] ? 'bg-purple-100 text-purple-600' : 'text-gray-600 hover:bg-gray-100 hover:text-purple-600' ?>">
                     <i class="<?= $item['icon'] ?> text-lg flex-shrink-0"></i>
                     <span class="nav-text transition-opacity duration-300"><?= $item['label'] ?></span>
@@ -54,7 +54,7 @@ $navigationItems = [
             <?php endforeach; ?>
         </div>
     </div>
-    <div class="footer-text text-xs text-gray-400 transition-opacity duration-300">© 2025 MyApp</div>
+    <div class="footer-text text-xs text-gray-400 transition-opacity duration-300">© 2025 Librapopulus</div>
 </nav>
 
 <!-- Mobile Bottom Navigation -->

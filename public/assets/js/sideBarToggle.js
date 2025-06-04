@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (text) item.setAttribute('title', text);
     });
 
-    const navLinks = document.querySelectorAll('a[href*="?page="]');
+    const navLinks = document.querySelectorAll('a[href*="/"]');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             this.style.opacity = '0.7';
