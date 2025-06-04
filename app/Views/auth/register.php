@@ -120,7 +120,7 @@
                     
                     <!-- Register Form -->
                     <div class="glass-effect rounded-2xl shadow-xl p-8 border border-gray-200">
-                        <form action="<?= base_url('auth/processRegister') ?>" method="post" class="space-y-5">
+                        <form action="<?= base_url('auth/processRegister') ?>" method="post" class="space-y-5">  <?= csrf_field() ?>
                             <!-- Username Field -->
                             <div>
                                 <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
