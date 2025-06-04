@@ -18,11 +18,6 @@ class CreateUserTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '255'
             ],
-            'full_name' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true
-            ],
             'email' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255'
@@ -30,21 +25,6 @@ class CreateUserTable extends Migration
             'password' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255'
-            ],
-            'city' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true
-            ],
-            'country' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true
-            ],
-            'picture' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true
             ],
             'created_at' => [
                 'type' => 'DATETIME',

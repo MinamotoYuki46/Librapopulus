@@ -5,11 +5,10 @@ namespace App\Controllers;
 use App\Models\UserModel;
 
 class Auth extends BaseController {
-
-    protected $userModel;
+    private $userModel;
     
     public function __construct() {
-        $this -> userModel = new UserModel();
+        $this->userModel = new UserModel();
     }
     
     public function index()    {
