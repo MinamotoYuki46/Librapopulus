@@ -70,27 +70,6 @@
                         <p class="text-xl opacity-90 leading-relaxed mb-6">
                             Temukan teman dan buku barumu di komunitas pembaca
                         </p>
-                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                            <h3 class="text-lg font-semibold mb-4">Apa yang akan kamu dapatkan:</h3>
-                            <div class="space-y-3 text-left">
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                                    <span>Akses ke 50,000+ buku</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                                    <span>Komunitas pembaca aktif</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                                    <span>Rekomendasi personal</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                                    <span>Akses 24/7 online</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -254,81 +233,7 @@
             </div>
         </div>
         
-        <!-- Enhanced JavaScript for better UX -->
-        <script>
-            // Password visibility toggles
-            document.getElementById('togglePassword').addEventListener('click', function() {
-                const password = document.getElementById('password');
-                const eyeIcon = document.getElementById('eyeIcon');
-                
-                if (password.type === 'password') {
-                    password.type = 'text';
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                } else {
-                    password.type = 'password';
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
-                }
-            });
-
-            document.getElementById('toggleConfirm').addEventListener('click', function() {
-                const confirmPassword = document.getElementById('confirmPassword');
-                const eyeIconConfirm = document.getElementById('eyeIconConfirm');
-                
-                if (confirmPassword.type === 'password') {
-                    confirmPassword.type = 'text';
-                    eyeIconConfirm.classList.remove('fa-eye');
-                    eyeIconConfirm.classList.add('fa-eye-slash');
-                } else {
-                    confirmPassword.type = 'password';
-                    eyeIconConfirm.classList.remove('fa-eye-slash');
-                    eyeIconConfirm.classList.add('fa-eye');
-                }
-            });
-
-            // Password strength indicator
-            document.getElementById('password').addEventListener('input', function() {
-                const password = this.value;
-                const strengthBar = document.getElementById('passwordStrength');
-                let strength = 0;
-
-                if (password.length >= 8) strength++;
-                if (password.match(/[a-z]/)) strength++;
-                if (password.match(/[A-Z]/)) strength++;
-                if (password.match(/[0-9]/)) strength++;
-                if (password.match(/[^a-zA-Z0-9]/)) strength++;
-
-                const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500'];
-                const widths = ['20%', '40%', '60%', '80%', '100%'];
-
-                strengthBar.className = `password-strength ${colors[strength - 1] || 'bg-gray-200'}`;
-                strengthBar.style.width = widths[strength - 1] || '0%';
-            });
-
-            // Password match validation
-            function checkPasswordMatch() {
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                const matchIndicator = document.getElementById('passwordMatch');
-
-                if (confirmPassword.length > 0) {
-                    if (password !== confirmPassword) {
-                        matchIndicator.classList.remove('hidden');
-                        matchIndicator.innerHTML = '<span class="text-red-500"><i class="fas fa-times-circle mr-1"></i>Password tidak cocok</span>';
-                    } else {
-                        matchIndicator.classList.remove('hidden');
-                        matchIndicator.innerHTML = '<span class="text-green-500"><i class="fas fa-check-circle mr-1"></i>Password cocok</span>';
-                    }
-                } else {
-                    matchIndicator.classList.add('hidden');
-                }
-            }
-
-            document.getElementById('password').addEventListener('input', checkPasswordMatch);
-            document.getElementById('confirmPassword').addEventListener('input', checkPasswordMatch);
-        </script>
-        
-        <script src="<?= base_url('assets/js/showPass.js')?>"></script>
+        <script src="<?= base_url('assets/js/passStrength.js') ?>"> </script>
+        <script src="<?= base_url('assets/js/showPass.js')?>"> </script>
     </body>
 </html>

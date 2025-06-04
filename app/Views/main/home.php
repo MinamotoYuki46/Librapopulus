@@ -207,7 +207,7 @@ $hotDiscussions = [
         <!-- Header -->
         <?php include 'layout/header.php' ?>
         <!-- Main Content -->
-        <main class="px-6 pb-6">
+        <main class="px-6 pb-6 " id="mainContent">
             <!-- Resume Reading Section -->
             <section class="mb-8">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">Lanjutkan bacaan</h2>
