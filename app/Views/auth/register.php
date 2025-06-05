@@ -103,16 +103,27 @@
                     </div>
                     
                     <!-- Error Message -->
-                    <?php if(session()->getFlashdata('error')): ?>
+                    <?php 
+                        $errors = session()->getFlashdata('errors');
+                        $error  = session()->getFlashdata('error');
+                    
+                        if ($errors || $error):
+                    ?>
                         <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <i class="fas fa-exclamation-circle text-red-400"></i>
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-sm text-red-700">
-                                        <?= session()->getFlashdata('error') ?>
-                                    </p>
+                                    <?php if ($errors && is_array($errors)): ?>
+                                        <ul class="text-sm text-red-700 list-disc pl-5 space-y-1">
+                                            <?php foreach ($errors as $err): ?>
+                                                <li><?= esc($err) ?></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <?php elseif ($error): ?>
+                                        <p class="text-sm text-red-700"><?= esc($error) ?></p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

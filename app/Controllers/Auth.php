@@ -66,7 +66,7 @@ class Auth extends BaseController {
             return redirect()->to(base_url('auth/register'));
         }
 
-
+        
         $tmpId = $registerData['tmp_id'];
 
         $tmp = $this->tmpRegisterModel->find($tmpId);
@@ -135,6 +135,13 @@ class Auth extends BaseController {
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         $confirmPassword = $this->request->getPost('confirmPassword');
+
+        $rules = $this->userModel->getValidationRules();
+        $messageValidate = $this->userModel->getValidationMessages();
+
+        if(!$this->validate($rules, $messageValidate)){
+            return redirect()->back()->with('errors', $this->validator->getErrors());
+        }
 
         if($password != $confirmPassword){
             return redirect()->back()->with('error', 'konfirmasi Password Gagal');
