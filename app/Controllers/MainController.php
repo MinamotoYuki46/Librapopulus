@@ -8,7 +8,7 @@ class MainController extends BaseController {
     }
 
     public function library() {
-        return view('main/library');
+        return view('main/library/library');
     }
 
     

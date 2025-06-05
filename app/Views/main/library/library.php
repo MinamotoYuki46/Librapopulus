@@ -122,7 +122,7 @@ $books = [
     </style>
 </head>
 <body class="bg-gray-200 min-h-screen">
-    <?php include 'layout/header.php' ?>
+    <?php include __DIR__ . '/../layout/header.php'; ?>
     <main class="px-6 pb-6 py-6" id="mainContent">
 
         <section class="mb-8">
@@ -179,7 +179,7 @@ $books = [
             </div>
         </section>
     </main>
-    <?php include 'layout/footer.php'?>
+    <?php include __DIR__ . '/../layout/header.php'; ?>
 
     <script src="<?= base_url(relativePath: 'assets/js/main.js')?>"></script>
 </body>
