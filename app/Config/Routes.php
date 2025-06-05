@@ -17,6 +17,7 @@ $routes -> group('auth', function($routes) {
 
     $routes -> post('processLogin', 'Auth::processLogin');
     $routes -> post('processRegister', 'Auth::processRegister');
+    $routes -> post('processProfileSetup', 'Auth::processProfile');
 
     $routes -> get('logout', 'Auth::logout');
 });

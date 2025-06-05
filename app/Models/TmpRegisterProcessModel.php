@@ -4,13 +4,13 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProfileModel extends Model
+class TmpRegisterProcessModel extends Model
 {
-    protected $table = 'profile';
-    protected $primaryKey = 'user_id';
-    protected $useAutoIncrement = false; 
+    protected $table = 'tmp_register_process';
     protected $allowedFields = [
-        'user_id',
+        'username',
+        'email',
+        'password',
         'full_name',
         'city',
         'province',
