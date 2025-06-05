@@ -4,15 +4,27 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateTableUserProfile extends Migration
+class CreateTmpRegisterProcessTable extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'user_id' => [
+            'id' => [
                 'type' => 'INT',
                 'unsigned' => true,
-                'auto_increment' => false
+                'auto_increment' => true
+            ],
+            'username' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255'
+            ],
+            'email' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255'
+            ],
+            'password' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255'
             ],
             'full_name' => [
                 'type' => 'VARCHAR',
@@ -52,13 +64,12 @@ class CreateTableUserProfile extends Migration
                 'null' => true
             ]
         ]);
-        $this->forge->addKey('user_id', true);
-        $this->forge->addForeignKey('user_id', 'user', 'id', 'CASCADE', 'CASCADE', 'fk_profile_user');
-        $this->forge->createTable('profile');
+        $this->forge->addKey('id', true);
+        $this->forge->createTable('tmp_register_process');
     }
 
     public function down()
     {
-        $this->forge->dropTable('profile');
+        $this->forge->dropTable('tmp_register_process');
     }
 }
