@@ -22,3 +22,4 @@ $routes -> group('auth', function($routes) {
 });
 
 $routes -> get('/library', 'MainController::library');
+$routes -> get('/library/book', 'Book::index');
