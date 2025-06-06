@@ -22,6 +22,12 @@ $routes -> group('auth', function($routes) {
     $routes -> get('logout', 'Auth::logout');
 });
 
+
 $routes -> get('/library', 'MainController::library');
 $routes -> get('/library/book', 'Book::index');
-$routes -> get('library/book/focus', "Book::focus");
+$routes -> get('/library/book/focus', "Book::focus");
+$routes -> get('/library/book/loanrequest', "Book::loanRequest");
+$routes -> get('library/book/acceptloan', "Book::acceptLoan");
+
+$routes -> get("profile", "Profile::index");
+$routes -> get("profile other", "Profile::otherProfile");
