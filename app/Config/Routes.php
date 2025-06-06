@@ -31,3 +31,7 @@ $routes -> get('library/book/acceptloan', "Book::acceptLoan");
 
 $routes -> get("profile", "Profile::index");
 $routes -> get("profile other", "Profile::otherProfile");
+
+$routes -> get("search", "MainController::search");
+
+$routes -> get("group", "MainController::group");

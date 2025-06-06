@@ -33,3 +33,11 @@ document.querySelector('.fa-user-circle').parentElement.addEventListener('click'
     console.log('Profile clicked');
     // window.location.href = '<?= base_url('profile') ?>';
 });
+
+function toggleNotifications(event) {
+    event?.stopPropagation();
+    const overlay = document.getElementById('notificationOverlay');
+    if (overlay) {
+        overlay.classList.toggle('hidden');
+    }
+}

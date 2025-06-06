@@ -11,5 +11,11 @@ class MainController extends BaseController {
         return view('main/library/library');
     }
 
-    
+    public function search() {
+        return view('main/search');
+    }
+
+    public function group() {
+        return view("main/group");
+    }
 }

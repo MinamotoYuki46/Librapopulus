@@ -120,10 +120,6 @@
                         class="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition">
                             <i class="fa-solid fa-book"></i> Koleksi Buku
                         </a>
-                        <a href="<?= base_url('/users/' . $user['username'] . '/discussions') ?>"
-                        class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
-                            <i class="fa-solid fa-comments"></i> Diskusi
-                        </a>
                     </div>
                 </div>
             </div>

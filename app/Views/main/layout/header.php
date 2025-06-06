@@ -1,3 +1,52 @@
+<?php
+// Dummy notifications for demo (replace with DB fetch)
+$notifications = [
+    [
+        'id' => 1,
+        'type' => 'friend_request',
+        'sender' => [
+            'name' => 'Jane Doe',
+            'avatar' => 'https://i.pravatar.cc/150?u=jane_doe'
+        ],
+        'timestamp' => strtotime('-2 hours'),
+        'read' => false
+    ],
+    [
+        'id' => 2,
+        'type' => 'loan_request',
+        'sender' => [
+            'name' => 'John Smith',
+            'avatar' => 'https://i.pravatar.cc/150?u=john_smith'
+        ],
+        'details' => [
+            'book_title' => "Lord of The Rings"
+        ],
+        'timestamp' => strtotime('-1 day'),
+        'read' => false
+    ],
+    [
+        'id' => 3,
+        'type' => 'friend_request',
+        'sender' => [
+            'name' => 'Peter Jones',
+            'avatar' => 'https://i.pravatar.cc/150?u=peter_jones'
+        ],
+        'timestamp' => strtotime('-3 days'),
+        'read' => true
+    ],
+];
+
+function time_ago($timestamp) {
+    $diff = time() - $timestamp;
+    if ($diff < 60) return $diff . 's ago';
+    if ($diff < 3600) return floor($diff / 60) . 'm ago';
+    if ($diff < 86400) return floor($diff / 3600) . 'h ago';
+    return floor($diff / 86400) . 'd ago';
+}
+
+$notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
+?>
+
 <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-white/40 shadow-sm px-6 py-4 flex justify-between items-center md:pl-20">
     <div>
         <h1 class="text-4xl font-bold text-gray-900">
@@ -6,7 +55,7 @@
     </div>
     <div class="flex items-center space-x-4 relative">
         <!-- Notification Button -->
-        <button class="p-2 hover:bg-gray-300 rounded-lg transition-colors relative" onclick="handleNotifications()">
+        <button class="p-2 hover:bg-gray-300 rounded-lg transition-colors relative" onclick="toggleNotifications(event)">
             <i class="fas fa-bell text-gray-700 text-4xl"></i>
             <?php 
             $notificationCount = $notificationCount ?? 3;
@@ -35,6 +84,22 @@
         </div>
     </div>
 </header>
+
+<!-- Notification Overlay -->
+<div id="notificationOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-md z-40 hidden overflow-y-auto">
+    <div class="max-w-2xl mx-auto py-8 px-4">
+        <button onclick="toggleNotifications(event)" class="text-sm text-gray-500 mb-6 hover:text-gray-800">
+            <i class="fas fa-times mr-1"></i> Close
+        </button>
+        <h1 class="text-3xl font-bold text-gray-900 mb-6 pt-10">Notifications</h1>
+
+        <div id="notificationContent" class="space-y-4">
+            <?php include __DIR__ . '/../components/notification_cards.php'; ?>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Add top margin so content doesn’t go under the fixed header -->
 <div class="h-[88px]"></div>
