@@ -18,4 +18,12 @@ class MainController extends BaseController {
     public function group() {
         return view("main/group");
     }
+
+    public function groupMessage(){
+        return view("main/group_message");
+    }
+
+    public function groupList(){
+        return view("main/group_list");
+    }
 }
