@@ -179,7 +179,7 @@ $books = [
             </div>
         </section>
     </main>
-    <?php include __DIR__ . '/../layout/header.php'; ?>
+    <?php include __DIR__ . '/../layout/footer.php'; ?>
 
     <script src="<?= base_url(relativePath: 'assets/js/main.js')?>"></script>
 </body>
