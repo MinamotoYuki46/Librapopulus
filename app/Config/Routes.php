@@ -24,8 +24,8 @@ $routes -> group('auth', function($routes) {
 
 
 $routes -> get('/library', 'MainController::library');
-$routes -> get('/library/book', 'Book::index');
-$routes -> get('/library/book/focus', "Book::focus");
+$routes -> get('library/book/(:num)/(:segment)', 'Book::index/$1/$2');
+$routes -> get('library/book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
 $routes -> get('/library/book/loanrequest', "Book::loanRequest");
 $routes -> get('library/book/acceptloan', "Book::acceptLoan");
 

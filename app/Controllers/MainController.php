@@ -2,13 +2,50 @@
 
 namespace App\Controllers;
 
+use App\Models\BookCollectionModel;
+use App\Models\BookModel;
+
 class MainController extends BaseController {
+    private $bookModel;
+    private $bookCollectionModel;
+
+    public function __construct() {
+        $this->bookModel = new BookModel();
+        $this->bookCollectionModel = new BookCollectionModel();
+    }
+
     public function index() {
-        return view('main/home');
+        if (!session() -> get('isLoggedIn')) {
+            return redirect() -> to(base_url('auth/login'));
+        }
+
+        $userId = session()->get('user_id');
+        $username = session()->get('username');
+
+        $data = [
+            'user_id' => $userId,
+            'username' => $username,
+            'user_collection' => $this->bookCollectionModel->getBookCollectionByUserId($userId)
+        ];
+
+        return view('main/home', $data);
     }
 
     public function library() {
-        return view('main/library/library');
+        if (!session() -> get('isLoggedIn')) {
+            return redirect() -> to(base_url('auth/login'));
+        }
+
+        $userId = session()->get('user_id');
+        $username = session()->get('username');
+
+        $data = [
+            'user_id' => $userId,
+            'username' => $username,
+            'user_collection' => $this->bookCollectionModel->getBookCollectionByUserId($userId)
+        ];
+
+        return view('main/library/library', $data);
     }
 
     public function search() {

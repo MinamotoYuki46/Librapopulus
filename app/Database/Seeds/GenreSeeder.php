@@ -5,18 +5,16 @@ namespace App\Database\Seeds;
 use CodeIgniter\Database\Seeder;
 use CodeIgniter\I18n\Time;
 
-class UserSeed extends Seeder
+class GenreSeeder extends Seeder
 {
     public function run()
     {
         $data = [
-            'username' => 'admin',
-            'email'    => 'admin@thepowerful.com',
-            'password' => password_hash('admin123', PASSWORD_DEFAULT),
+            'genre_name' => 'Gothic Fiction',
             'created_at' => Time::now(),
             'updated_at' => Time::now()
         ];
 
-        $this->db->table('user')->insert($data);
+        $this->db->table('genres')->insert($data);
     }
 }

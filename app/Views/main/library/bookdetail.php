@@ -1,19 +1,19 @@
 <?php
 
-$book = [
-    'id' => 10,
-    'title' => 'Wuthering Heights',
-    'author' => 'Emily Brontë',
-    'genre' => 'Gothic Fiction',
-    'readPages' => 10,
-    'totalPages' => 416,
-    'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg',
-    'desc' => 'Wuthering Heights is a classic novel of intense passion and revenge, set on the bleak Yorkshire moors. It tells the tragic story of Heathcliff and Catherine Earnshaw, and explores themes of love, class, and destiny.',
-    'rate' => '5',
-    'review' => 'A haunting and powerful story with unforgettable characters. A must-read for fans of classic literature.',
-    'date_published' => '1847-12-01',
-    'date_added' => date('Y-m-d'),
-];
+// $book = [
+//     'id' => 10,
+//     'title' => 'Wuthering Heights',
+//     'author' => 'Emily Brontë',
+//     'genre' => 'Gothic Fiction',
+//     'readPages' => 10,
+//     'totalPages' => 416,
+//     'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg',
+//     'desc' => 'Wuthering Heights is a classic novel of intense passion and revenge, set on the bleak Yorkshire moors. It tells the tragic story of Heathcliff and Catherine Earnshaw, and explores themes of love, class, and destiny.',
+//     'rate' => '5',
+//     'review' => 'A haunting and powerful story with unforgettable characters. A must-read for fans of classic literature.',
+//     'date_published' => '1847-12-01',
+//     'date_added' => date('Y-m-d'),
+// ];
 
 ?>
 <!DOCTYPE html>
@@ -39,10 +39,10 @@ $book = [
 
                 <div class="flex gap-3">
                     <!-- Focus Mode Button -->
-                    <button aria-label="Focus Mode" title="Focus Mode"
+                    <a aria-label="Focus Mode" title="Focus Mode" href="<?= base_url('/library/book/focus/' . $book['collection_id'] . '/' . $book['slug']) ?>"
                         class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
                         <i class="fas fa-glasses"></i>
-                    </button>
+                    </a>
 
                     <!-- Edit Button -->
                     <button aria-label="Edit Book" title="Edit Book"
@@ -56,42 +56,42 @@ $book = [
             <div class="flex flex-col md:flex-row gap-x-6 lg:gap-x-8">
 
                 <div class="w-full md:w-2/5 lg:w-1/3 flex-shrink-0 mb-6 md:mb-0">
-                    <img src="<?= isset($book['image']) ? htmlspecialchars($book['image']) : 'https://via.placeholder.com/300x450.png?text=No+Image' ?>"
-                        alt="Cover of <?= isset($book['title']) ? htmlspecialchars($book['title']) : 'Book Title' ?>"
+                    <img src="<?= isset($book['book_cover']) ? esc($book['book_cover']) : 'https://via.placeholder.com/300x450.png?text=No+Image' ?>"
+                        alt="Cover of <?= isset($book['title']) ? esc($book['title']) : 'Book Title' ?>"
                         class="w-full h-auto object-cover  rounded-lg shadow-xl sticky top-6 md:max-h-[600px] lg:max-h-[800px]">
                 </div>
 
                 <div class="w-full md:w-3/5 lg:w-2/3">
                     <div class="space-y-5 md:max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide pr-2 pb-8">
                         <h1 class="text-3xl lg:text-4xl font-bold text-gray-900">
-                            <?= isset($book['title']) ? htmlspecialchars($book['title']) : 'Book Title Not Available' ?>
+                            <?= isset($book['title']) ? esc($book['title']) : 'Book Title Not Available' ?>
                         </h1>
 
                         <p class="text-lg lg:text-xl text-gray-700">
-                            by <strong><?= isset($book['author']) ? htmlspecialchars($book['author']) : 'Author Not Available' ?></strong>
+                            by <strong><?= isset($book['author']) ? esc($book['author']) : 'Author Not Available' ?></strong>
                         </p>
 
-                        <?php if (!empty(trim($book['genre']))): ?>
-                            <p class="text-sm text-gray-600"><strong>Genre:</strong> <?= htmlspecialchars(trim($book['genre'])) ?></p>
+                        <?php if (!empty(trim($book['genres']))): ?>
+                            <p class="text-sm text-gray-600"><strong>Genre:</strong> <?= esc(trim($book['genres'])) ?></p>
                         <?php endif; ?>
 
                         <p class="text-sm text-gray-600">
-                            <strong>Date Published:</strong> <?= !empty(trim($book['date_published'])) ? htmlspecialchars(trim($book['date_published'])) : 'N/A' ?>
+                            <strong>Date Published:</strong> <?= !empty(trim($book['published_date'])) ? esc(trim($book['published_date'])) : 'N/A' ?>
                         </p>
 
                         <p class="text-sm text-gray-600">
-                            <strong>Date Added to Library:</strong> <?= !empty(trim($book['date_added'])) ? htmlspecialchars(trim($book['date_added'])) : 'N/A' ?>
+                            <strong>Date Added to Library:</strong> <?= !empty(trim($book['added_at'])) ? esc(trim($book['added_at'])) : 'N/A' ?>
                         </p>
 
-                        <?php if (isset($book['totalPages']) && intval($book['totalPages']) > 0): ?>
+                        <?php if (isset($book['total_pages']) && intval($book['total_pages']) > 0): ?>
                             <div class="my-4 pt-2">
                                 <h3 class="text-md font-semibold text-gray-800 mb-1">Reading Progress</h3>
                                 <p class="text-sm text-gray-600">
-                                    Read: <?= isset($book['readPages']) ? intval($book['readPages']) : 0 ?> / <?= intval($book['totalPages']) ?> pages
+                                    Read: <?= isset($book['read_page']) ? esc(intval($book['read_page'])) : 0 ?> / <?= esc(intval($book['total_pages'])) ?> pages
                                 </p>
                                 <?php
-                                    $readPages = isset($book['readPages']) ? intval($book['readPages']) : 0;
-                                    $totalPages = intval($book['totalPages']);
+                                    $readPages = isset($book['read_page']) ? intval($book['read_page']) : 0;
+                                    $totalPages = intval($book['total_pages']);
                                     $progressPercentage = ($totalPages > 0) ? ($readPages / $totalPages) * 100 : 0;
                                 ?>
                                 <div class="mt-2 w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -100,20 +100,20 @@ $book = [
                             </div>
                         <?php endif; ?>
 
-                        <?php if (!empty(trim($book['desc']))): ?>
+                        <?php if (!empty(trim($book['description']))): ?>
                             <div class="pt-2">
                                 <h3 class="text-md font-semibold text-gray-800 mb-1">Description</h3>
                                 <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
-                                    <?= nl2br(htmlspecialchars(trim($book['desc']))) ?>
+                                    <?= nl2br(esc(trim($book['description']))) ?>
                                 </div>
                             </div>
                         <?php endif; ?>
 
-                        <?php if (!empty(trim($book['rate']))): ?>
+                        <?php if (!empty(trim($book['rating']))): ?>
                             <div class="pt-2">
                                 <h3 class="text-md font-semibold text-gray-800 mb-1">Your Rating</h3>
                                 <div class="flex items-center">
-                                    <?php $rating = intval($book['rate']); ?>
+                                    <?php $rating = intval($book['rating']); ?>
                                     <?php for ($i = 1; $i <= 5; $i++): ?>
                                         <i class="fa-star <?= $i <= $rating ? 'fas text-yellow-400' : 'far text-gray-300' ?> mr-1"></i>
                                     <?php endfor; ?>
@@ -127,7 +127,7 @@ $book = [
                                 <h3 class="text-md font-semibold text-gray-800 mb-1">Your Review</h3>
                                 <blockquote class="border-l-4 border-gray-300 pl-4 py-2 my-2 bg-gray-50 rounded">
                                     <p class="text-gray-700 text-sm italic leading-relaxed">
-                                        <?= nl2br(htmlspecialchars(trim($book['review']))) ?>
+                                        <?= nl2br(esc(trim($book['review']))) ?>
                                     </p>
                                 </blockquote>
                             </div>
