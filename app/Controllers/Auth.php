@@ -12,13 +12,13 @@ class Auth extends BaseController {
     private $tmpRegisterModel;
     
     public function __construct() {
-        $this->userModel = new UserModel();
-        $this->profileModel = new ProfileModel();
-        $this->tmpRegisterModel = new TmpRegisterProcessModel();
+        $this -> userModel = new UserModel();
+        $this -> profileModel = new ProfileModel();
+        $this -> tmpRegisterModel = new TmpRegisterProcessModel();
     }
     
-    public function index()    {
-        $this->destroyRegisterSession();
+    public function index(){
+        $this -> destroyRegisterSession();
         return redirect() -> to(base_url('auth/login'));
     }
     
@@ -27,7 +27,7 @@ class Auth extends BaseController {
             return redirect() -> to(base_url('dashboard'));
         }
         
-        $this->destroyRegisterSession();
+        $this -> destroyRegisterSession();
         return view('auth/login');
     }
     
@@ -36,7 +36,7 @@ class Auth extends BaseController {
             return redirect() -> to(base_url('dashboard'));
         }
         
-        $this->destroyRegisterSession();
+        $this -> destroyRegisterSession();
 
         return view('auth/register');
     }
@@ -46,10 +46,10 @@ class Auth extends BaseController {
             return redirect() -> to(base_url('dashboard'));
         }
 
-        $registerData = session()->get('register_data');
+        $registerData = session() -> get('register_data');
 
         if(!$registerData || $registerData['step'] !== 'detail') {
-            return redirect()->to(base_url('auth/register'));
+            return redirect() -> to(base_url('auth/register'));
         }
 
         return view('auth/detail');
@@ -60,19 +60,19 @@ class Auth extends BaseController {
             return redirect() -> to(base_url('dashboard'));
         }
 
-        $registerData = session()->get('register_data');
+        $registerData = session() -> get('register_data');
 
         if(!$registerData || $registerData['step'] !== 'success') {
-            return redirect()->to(base_url('auth/register'));
+            return redirect() -> to(base_url('auth/register'));
         }
 
         
         $tmpId = $registerData['tmp_id'];
 
-        $tmp = $this->tmpRegisterModel->find($tmpId);
+        $tmp = $this -> tmpRegisterModel -> find($tmpId);
 
         if (!$tmp) {
-            return redirect()->to(base_url('auth/register'))->with('error', 'Data registrasi tidak ditemukan.');
+            return redirect() -> to(base_url('auth/register'))->with('error', 'Data registrasi tidak ditemukan.');
         }
 
         $userData = [
@@ -81,8 +81,8 @@ class Auth extends BaseController {
             'password' => $tmp['password'],
         ];
 
-        $this->userModel->insert($userData);
-        $userId = $this->userModel->getInsertID();
+        $this -> userModel -> insert($userData);
+        $userId = $this -> userModel -> getInsertID();
 
         $profileData = [
             'user_id' => $userId,
@@ -94,10 +94,10 @@ class Auth extends BaseController {
             'picture' => $tmp['picture']
         ];
 
-        $this->profileModel->insert($profileData);
-        $this->destroyRegisterSession();
+        $this -> profileModel -> insert($profileData);
+        $this -> destroyRegisterSession();
 
-        session()->set([
+        session() -> set([
             'isLoggedIn' => true,
             'user_id'    => $userId, 
             'username'   => $tmp['username']
@@ -108,43 +108,41 @@ class Auth extends BaseController {
     
     public function processLogin() {
         $session = session();
-        $identity = $this->request->getPost('identity'); 
-        $password = $this->request->getPost('password');
+        $identity = $this -> request -> getPost('identity'); 
+        $password = $this -> request -> getPost('password');
 
-        $user = $this->userModel
-            ->where('username', $identity)
-            ->orWhere('email', $identity)
-            ->first();
+        $user = $this -> userModel
+            -> where('username', $identity)
+            -> orWhere('email', $identity)
+            -> first();
 
         if ($user && password_verify($password, $user['password'])) {
-            $session->set([
+            $session -> set([
                 'isLoggedIn' => true,
                 'user_id'    => $user['id'], 
-                'username'   => $user['username']
+                'username'   => $user['username'],
             ]);
-
-            return redirect()-> to(base_url());
+            return redirect() -> to(base_url());
         } else {
-
-            return redirect()->back()->with('error', 'Username/email atau password salah!');
+            return redirect() -> back() -> with('error', 'Username/email atau password salah!');
         }
     }
     
     public function processRegister() {
-        $username = $this->request->getPost('username');
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-        $confirmPassword = $this->request->getPost('confirmPassword');
+        $username = $this -> request -> getPost('username');
+        $email = $this -> request -> getPost('email');
+        $password = $this -> request -> getPost('password');
+        $confirmPassword = $this -> request -> getPost('confirmPassword');
 
-        $rules = $this->userModel->getValidationRules();
-        $messageValidate = $this->userModel->getValidationMessages();
+        $rules = $this -> userModel -> getValidationRules();
+        $messageValidate = $this -> userModel -> getValidationMessages();
 
-        if(!$this->validate($rules, $messageValidate)){
-            return redirect()->back()->with('errors', $this->validator->getErrors());
+        if(!$this -> validate($rules, $messageValidate)){
+            return redirect() -> back() -> with('errors', $this -> validator -> getErrors());
         }
 
         if($password != $confirmPassword){
-            return redirect()->back()->with('error', 'konfirmasi Password Gagal');
+            return redirect() -> back() -> with('error', 'konfirmasi Password Gagal');
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -155,10 +153,10 @@ class Auth extends BaseController {
             'password' => $hashedPassword
         ];
 
-        $this->tmpRegisterModel->insert($userData);
-        $newTmpId = $this->tmpRegisterModel->getInsertID();
+        $this -> tmpRegisterModel -> insert($userData);
+        $newTmpId = $this -> tmpRegisterModel -> getInsertID();
 
-        session()->set('register_data', [
+        session() -> set('register_data', [
             'step' => 'detail',
             'tmp_id' => $newTmpId,
             'username' => $username
@@ -197,21 +195,21 @@ class Auth extends BaseController {
         }
 
 
-        $fullName = $this->request->getPost('full_name') ?? null;
-        $location = $this->request->getPost('city') ?? null;
+        $fullName = $this -> request -> getPost('fullName') ?? null;
+        $location = $this -> request -> getPost('city') ?? null;
         $province = null;
         $city = null;
         if ($location && substr_count($location, ',') === 1) {
             [$city, $province] = array_map('trim', explode(',', $location));
         } else {
-            return redirect()->back()->with('error', 'Format lokasi harus "Kota, Provinsi" dan hanya boleh satu koma.');
+            return redirect() -> back() -> with('error', 'Format lokasi harus "Kota, Provinsi" dan hanya boleh satu koma.');
         }
-        $bio = $this->request->getPost('bio') ?? null;
-        $favoriteGenresArray = $this->request->getPost('genres'); 
+        $bio = $this -> request -> getPost('bio') ?? null;
+        $favoriteGenresArray = $this -> request -> getPost('genres'); 
         $favoriteGenresJson = $favoriteGenresArray ? json_encode($favoriteGenresArray) : null;
 
         $profileData = [
-            'full_name' => $fullName,
+            'fullName' => $fullName,
             'city' => $city,
             'province' => $province,
             'description' => $bio,

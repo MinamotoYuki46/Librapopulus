@@ -1,4 +1,6 @@
 <?php
+
+
 // Dummy notifications for demo (replace with DB fetch)
 $notifications = [
     [
@@ -35,6 +37,9 @@ $notifications = [
         'read' => true
     ],
 ];
+
+
+
 
 function time_ago($timestamp) {
     $diff = time() - $timestamp;
