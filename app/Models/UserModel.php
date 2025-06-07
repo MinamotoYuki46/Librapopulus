@@ -11,6 +11,12 @@ class UserModel extends Model
         'username',
         'email',
         'password',
+        'full_name',
+        'city',
+        'province',
+        'description',
+        'favorite_genres',
+        'picture',
         'created_at',
         'updated_at'
     ];
