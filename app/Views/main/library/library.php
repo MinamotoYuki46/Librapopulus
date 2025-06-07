@@ -146,9 +146,9 @@
                 </div>
             </div>
 
-            <?php if (!empty($user_collection)): ?>
+            <?php if (!empty($userCollection)): ?>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <?php foreach ($user_collection as $book): ?>
+                <?php foreach ($userCollection as $book): ?>
                     <a class="book-card bg-gray-100 rounded-lg p-4 hover:bg-gray-300 transition-colors cursor-pointer flex flex-col" 
                         data-book-id="<?= esc($book['collection_id']) ?> " href="<?= base_url('/library/book/' . $book['collection_id'] . '/' . $book['slug']) ?>">
                         <div class="bg-gray-300 rounded-lg mb-3 aspect-[2/3] overflow-hidden">

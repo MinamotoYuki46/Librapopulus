@@ -9,7 +9,7 @@ class Book extends BaseController {
     private $bookCollectionModel;
 
     public function __construct() {
-        $this->bookCollectionModel = new BookCollectionModel();
+        $this -> bookCollectionModel = new BookCollectionModel();
     }
 
 

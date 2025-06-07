@@ -27,7 +27,7 @@ class MainController extends BaseController {
 
         $data = [
             'userId'         => $userId,
-            'username'       => $user['username'] ?? 'Guest',
+            'username'       => $user['username'] ?? null,
             'photoProfile'   => $user['picture'] ?? null,
             'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($userId)
         ];
@@ -40,13 +40,14 @@ class MainController extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $userId = session()->get('user_id');
-        $username = session()->get('username');
+        $userId = session() -> get('user_id');
+        $user = $this -> userModel -> find($userId);
 
         $data = [
             'user_id' => $userId,
-            'username' => $username,
-            'user_collection' => $this->bookCollectionModel->getBookCollectionByUserId($userId)
+            'username' => $user['username'] ?? null,
+            'photoProfile'   => $user['picture'] ?? null,
+            'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($userId)
         ];
 
         return view('main/library/library', $data);

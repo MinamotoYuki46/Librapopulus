@@ -23,16 +23,24 @@ $routes -> group('auth', function($routes) {
 });
 
 
-$routes -> get('/library', 'MainController::library');
-$routes -> get('library/book/(:num)/(:segment)', 'Book::index/$1/$2');
-$routes -> get('library/book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
-$routes -> get('/library/book/loanrequest', "Book::loanRequest");
-$routes -> get('library/book/acceptloan', "Book::acceptLoan");
+$routes -> group('library', function($routes) {
+    $routes -> get('/', 'MainController::library'); 
+    $routes -> get('user/(:segment)', 'MainController::userLibrary/$1');
+    $routes -> get('book/(:num)/(:segment)', 'Book::index/$1/$2');
+    $routes -> get('book/user/(:num)/(:segment)', 'Book::userBookDetail/$1/$2');
+    $routes -> get('book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
+    $routes -> get('book/loanrequest', 'Book::loanRequest');
+    $routes -> get('book/acceptloan', 'Book::acceptLoan');
+});
 
-$routes -> get("profile", "Profile::index");
-$routes -> get("profile other", "Profile::otherProfile");
-$routes -> get("profile/message", "Profile::message");
-$routes -> get("profile/friend", "Profile::friend");
+
+$routes -> group('profile', function($routes) {
+    $routes -> get('message', 'Profile::message');
+    $routes -> get('friend', 'Profile::friend');
+    $routes -> get('edit', 'Profile::edit');
+    $routes -> get('(:segment)', 'Profile::index/$1');
+});
+
 
 $routes -> get("search", "MainController::search");
 

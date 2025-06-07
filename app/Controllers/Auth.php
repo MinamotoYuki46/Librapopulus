@@ -111,7 +111,11 @@ class Auth extends BaseController {
         if ($user && password_verify($password, $user['password'])) {
             $session -> set([
                 'isLoggedIn' => true,
+<<<<<<< Updated upstream
                 'userId'    => $user['id']
+=======
+                'user_id'    => $user['id']
+>>>>>>> Stashed changes
             ]);
             return redirect() -> to(base_url());
         } else {
