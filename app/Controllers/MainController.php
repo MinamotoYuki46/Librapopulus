@@ -22,7 +22,7 @@ class MainController extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $userId = session() -> get('user_id');
+        $userId = session() -> get('userId');
         $user = $this -> userModel -> find($userId);
 
         $data = [
@@ -40,7 +40,7 @@ class MainController extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $userId = session() -> get('user_id');
+        $userId = session() -> get('userId');
         $user = $this -> userModel -> find($userId);
 
         $data = [

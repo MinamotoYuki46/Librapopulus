@@ -76,11 +76,11 @@ class Auth extends BaseController {
             'username' => $tmp['username'],
             'email'    => $tmp['email'],
             'password' => $tmp['password'],
-            'full_name' => $tmp['full_name'],
+            'fullName' => $tmp['full_name'],
             'city' => $tmp['city'],
             'province' => $tmp['province'],
             'description' => $tmp['description'],
-            'favorite_genres' => $tmp['favorite_genres'],
+            'favoriteGenres' => $tmp['favorite_genres'],
             'picture' => $tmp['picture']
         ];
 
@@ -91,7 +91,7 @@ class Auth extends BaseController {
 
         session() -> set([
             'isLoggedIn' => true,
-            'user_id'    => $userId, 
+            'userId'    => $userId, 
             'username'   => $tmp['username'],
             'picture'    => $tmp['picture']
         ]);

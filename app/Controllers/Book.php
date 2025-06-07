@@ -18,7 +18,7 @@ class Book extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $book = $this->bookCollectionModel->findBookCollectionDetail($collectionId);
+        $book = $this -> bookCollectionModel -> findBookCollectionDetail($collectionId);
 
         if (!$book) {
             throw new PageNotFoundException('Buku tidak ditemukan.');
@@ -38,7 +38,7 @@ class Book extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $book = $this->bookCollectionModel->findBookCollectionDetail($collectionId);
+        $book = $this -> bookCollectionModel->findBookCollectionDetail($collectionId);
 
         if (!$book) {
             throw new PageNotFoundException('Buku tidak ditemukan.');

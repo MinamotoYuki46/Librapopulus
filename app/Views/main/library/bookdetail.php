@@ -1,21 +1,3 @@
-<?php
-
-// $book = [
-//     'id' => 10,
-//     'title' => 'Wuthering Heights',
-//     'author' => 'Emily Brontë',
-//     'genre' => 'Gothic Fiction',
-//     'readPages' => 10,
-//     'totalPages' => 416,
-//     'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg',
-//     'desc' => 'Wuthering Heights is a classic novel of intense passion and revenge, set on the bleak Yorkshire moors. It tells the tragic story of Heathcliff and Catherine Earnshaw, and explores themes of love, class, and destiny.',
-//     'rate' => '5',
-//     'review' => 'A haunting and powerful story with unforgettable characters. A must-read for fans of classic literature.',
-//     'date_published' => '1847-12-01',
-//     'date_added' => date('Y-m-d'),
-// ];
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +50,7 @@
                         </h1>
 
                         <p class="text-lg lg:text-xl text-gray-700">
-                            by <strong><?= isset($book['author']) ? esc($book['author']) : 'Author Not Available' ?></strong>
+                            oleh <strong><?= isset($book['author']) ? esc($book['author']) : 'Author Not Available' ?></strong>
                         </p>
 
                         <?php if (!empty(trim($book['genres']))): ?>
@@ -76,18 +58,18 @@
                         <?php endif; ?>
 
                         <p class="text-sm text-gray-600">
-                            <strong>Date Published:</strong> <?= !empty(trim($book['published_date'])) ? esc(trim($book['published_date'])) : 'N/A' ?>
+                            <strong>Tanggal Publikasi:</strong> <?= !empty(trim($book['published_date'])) ? esc(trim($book['published_date'])) : 'N/A' ?>
                         </p>
 
                         <p class="text-sm text-gray-600">
-                            <strong>Date Added to Library:</strong> <?= !empty(trim($book['added_at'])) ? esc(trim($book['added_at'])) : 'N/A' ?>
+                            <strong>Tanggal Ditambahkan:</strong> <?= !empty(trim($book['added_at'])) ? esc(trim($book['added_at'])) : 'N/A' ?>
                         </p>
 
                         <?php if (isset($book['total_pages']) && intval($book['total_pages']) > 0): ?>
                             <div class="my-4 pt-2">
-                                <h3 class="text-md font-semibold text-gray-800 mb-1">Reading Progress</h3>
+                                <h3 class="text-md font-semibold text-gray-800 mb-1">Progres Membaca</h3>
                                 <p class="text-sm text-gray-600">
-                                    Read: <?= isset($book['read_page']) ? esc(intval($book['read_page'])) : 0 ?> / <?= esc(intval($book['total_pages'])) ?> pages
+                                    Terbaca: <?= isset($book['read_page']) ? esc(intval($book['read_page'])) : 0 ?> / <?= esc(intval($book['total_pages'])) ?> halaman
                                 </p>
                                 <?php
                                     $readPages = isset($book['read_page']) ? intval($book['read_page']) : 0;
@@ -102,7 +84,7 @@
 
                         <?php if (!empty(trim($book['description']))): ?>
                             <div class="pt-2">
-                                <h3 class="text-md font-semibold text-gray-800 mb-1">Description</h3>
+                                <h3 class="text-md font-semibold text-gray-800 mb-1">Deskripsi</h3>
                                 <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                                     <?= nl2br(esc(trim($book['description']))) ?>
                                 </div>
@@ -111,20 +93,20 @@
 
                         <?php if (!empty(trim($book['rating']))): ?>
                             <div class="pt-2">
-                                <h3 class="text-md font-semibold text-gray-800 mb-1">Your Rating</h3>
+                                <h3 class="text-md font-semibold text-gray-800 mb-1">Penilaianmu</h3>
                                 <div class="flex items-center">
                                     <?php $rating = intval($book['rating']); ?>
                                     <?php for ($i = 1; $i <= 5; $i++): ?>
                                         <i class="fa-star <?= $i <= $rating ? 'fas text-yellow-400' : 'far text-gray-300' ?> mr-1"></i>
                                     <?php endfor; ?>
-                                    <span class="ml-2 text-sm text-gray-600">(<?= $rating ?> out of 5)</span>
+                                    <span class="ml-2 text-sm text-gray-600">(<?= $rating ?> dari 5)</span>
                                 </div>
                             </div>
                         <?php endif; ?>
 
                         <?php if (!empty(trim($book['review']))): ?>
                             <div class="pt-2">
-                                <h3 class="text-md font-semibold text-gray-800 mb-1">Your Review</h3>
+                                <h3 class="text-md font-semibold text-gray-800 mb-1">Ulasanmu</h3>
                                 <blockquote class="border-l-4 border-gray-300 pl-4 py-2 my-2 bg-gray-50 rounded">
                                     <p class="text-gray-700 text-sm italic leading-relaxed">
                                         <?= nl2br(esc(trim($book['review']))) ?>
@@ -138,6 +120,6 @@
             </div>
         </div>
     </main>
-    <?php include __DIR__ . '/../layout/footer.php'; ?>
+    <?php include __DIR__ . '/../layout/navbar.php'; ?>
 </body>
 </html>
