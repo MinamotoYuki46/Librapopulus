@@ -1,5 +1,7 @@
 <?php
 
+$photoProfile = session()->get('picture') ?? null;
+$username = session()->get('username') ?? 'Guest';
 // Dummy notifications for demo (replace with DB fetch)
 $notifications = [
     [
