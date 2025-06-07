@@ -68,4 +68,4 @@ $navigationItems = [
     <?php endforeach; ?>
 </nav>
 
-<script src="<?= base_url('assets/js/sideBarToggle.js') ?>"></script>
+<script src="<?= base_url('assets/js/navBar.js') ?>"></script>

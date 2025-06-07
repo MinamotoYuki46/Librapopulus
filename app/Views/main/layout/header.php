@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\UserModel;
+
+$currentUser = (new UserModel()) -> find($_SESSION['user_id']);
+
 
 // Dummy notifications for demo (replace with DB fetch)
 $notifications = [
@@ -74,19 +78,23 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
 
         <!-- Profile Button -->
         <div class="relative">
-            <button id="profileBtn" class="p-2 hover:bg-gray-300 rounded-lg transition-colors">
-                <i class="fas fa-user-circle text-gray-700 text-4xl"></i>
+            <button id="profileBtn" class="p-1 hover:bg-gray-300 rounded-full transition-colors">
+                <img 
+                    src="<?= $currentUser['picture'] ?? 'https://i.pravatar.cc/150?u=default_user' ?>" 
+                    alt="Profile Picture" 
+                    class="w-10 h-10 rounded-full object-cover"
+                >
             </button>
 
             <!-- Dropdown Menu -->
             <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
-                <a href="?page=profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                 <a href="<?= base_url('auth/logout') ?>" 
                     class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                    <i class="fas fa-sign-out-alt mr-1"></i> Keluar
                 </a>
             </div>
         </div>
+        
     </div>
 </header>
 
@@ -106,5 +114,5 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
 
 
 
-<!-- Add top margin so content doesn’t go under the fixed header -->
 <div class="h-[88px]"></div>
+<script src="<?= base_url("assets/js/header.js")?>"></script>

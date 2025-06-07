@@ -168,8 +168,6 @@
             </section>
         </main>
 
-        <?php include 'layout/footer.php'?>
-
-        <script src="<?= base_url(relativePath: 'assets/js/main.js')?>"></script>
+        <?php include 'layout/navbar.php'?>
     </body>
 </html>

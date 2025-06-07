@@ -61,7 +61,7 @@
                         <p class="text-gray-600">Selamat datang</p>
                     </div>
                     
-                    <?php if(session()->getFlashdata('error')): ?>
+                    <?php if(session() -> getFlashdata('error')): ?>
                         <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
                             <div class="flex">
                                 <div class="flex-shrink-0">
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm text-red-700">
-                                        <?= session()->getFlashdata('error') ?>
+                                        <?= session() -> getFlashdata('error') ?>
                                     </p>
                                 </div>
                             </div>
