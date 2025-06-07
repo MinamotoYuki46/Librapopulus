@@ -158,7 +158,7 @@ function formatTimeSpent($minutes) {
             <?php endforeach; ?>
         </section>
 
-        <?php include 'layout/footer.php' ?>
+        <?php include 'layout/navbar.php' ?>
     </main>
 </body>
 </html>

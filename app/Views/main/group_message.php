@@ -79,6 +79,6 @@ $currentUserId = 1;
         </form>
     </main>
 
-    <?php include 'layout/footer.php'; ?>
+    <?php include 'layout/navbar.php'; ?>
 </body>
 </html>

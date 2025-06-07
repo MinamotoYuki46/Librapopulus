@@ -62,6 +62,6 @@ function timeShort($datetime) {
         </ul>
     </main>
 
-    <?php include __DIR__ . '/../layout/footer.php' ?>
+    <?php include __DIR__ . '/../layout/navbar.php' ?>
 </body>
 </html>

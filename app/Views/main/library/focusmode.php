@@ -84,7 +84,7 @@
         </div>
     </main>
     
-    <?php include __DIR__ . '/../layout/footer.php'; ?>
+    <?php include __DIR__ . '/../layout/navbar.php'; ?>
     <script src="<?= base_url(relativePath: 'assets/js/main.js')?>"></script>
     <script src="<?= base_url(relativePath: 'assets/js/focus.js')?>"></script>
 </body>

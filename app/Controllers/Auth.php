@@ -91,7 +91,7 @@ class Auth extends BaseController {
 
         session() -> set([
             'isLoggedIn' => true,
-            'user_id'    => $userId, 
+            'userId'    => $userId, 
             'username'   => $tmp['username'],
             'picture'    => $tmp['picture']
         ]);

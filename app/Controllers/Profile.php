@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\BookCollectionModel;
 use App\Models\FriendshipModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 
 class Profile extends BaseController {
@@ -18,12 +19,17 @@ class Profile extends BaseController {
         $this -> friendshipModel = new FriendshipModel();
     }
 
-    public function index(){
+    public function index(string $username){
         if (!session() -> get('isLoggedIn')) {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $userId = session()->get('user_id');
+        if ($username !== session()->get('username')){
+            //untuk saat ini beri halaman error dulu karena rute other profile tidak ada
+            throw new PageNotFoundException('User tidak ditemukan.');
+        }
+
+        $userId = session()->get('userId');
 
         $dataUser = $this->userModel->getDataUser($userId);
         $dataUser['book_count'] = $this->bookCollectionModel->getBookCount($userId);

@@ -1,11 +1,12 @@
 <?php
+$username = session()->get('username') ?? 'Guest';
 $currentPage = $_GET['page'] ?? 'dashboard';
 $navigationItems = [
     ['icon' => 'fas fa-home', 'label' => 'Home', 'page' => '/'],
     ['icon' => 'fas fa-search', 'label' => 'Search', 'page' => '/search'],
     ['icon' => 'fas fa-book', 'label' => 'Library', 'page' => '/library'],
     ['icon' => 'fas fa-users', 'label' => 'Community', 'page' => '/group'],
-    ['icon' => 'fas fa-user', 'label' => 'Profile', 'page' => '/profile'],
+    ['icon' => 'fas fa-user', 'label' => 'Profile', 'page' => '/profile/' . $username],
 ];
 ?>
 
