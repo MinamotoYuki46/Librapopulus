@@ -92,7 +92,8 @@ class Auth extends BaseController {
         session() -> set([
             'isLoggedIn' => true,
             'user_id'    => $userId, 
-            'username'   => $tmp['username']
+            'username'   => $tmp['username'],
+            'picture'    => $tmp['picture']
         ]);
 
         return view('auth/success');
@@ -111,7 +112,9 @@ class Auth extends BaseController {
         if ($user && password_verify($password, $user['password'])) {
             $session -> set([
                 'isLoggedIn' => true,
-                'userId'    => $user['id']
+                'userId'    => $user['id'],
+                'username' => $user['username'],
+                'picture' => $user['picture']
             ]);
             return redirect() -> to(base_url());
         } else {

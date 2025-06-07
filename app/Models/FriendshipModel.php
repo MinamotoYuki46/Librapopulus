@@ -40,4 +40,12 @@ class FriendshipModel extends Model
         ->findAll();
     }
 
+    public function getFriendCount(int $userId){
+        return $this->where('status', self::STATUS_ACCEPTED)
+                    ->groupStart() 
+                        ->where('user_one_id', $userId)
+                        ->orWhere('user_two_id', $userId)
+                    ->groupEnd()
+                    ->countAllResults();
+    }
 }

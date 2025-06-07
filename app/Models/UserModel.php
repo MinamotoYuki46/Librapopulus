@@ -40,4 +40,20 @@ class UserModel extends Model
         ],
         'password' => ['required' => 'password wajib diisi!']
     ];
+
+
+    function getDataUser(int $userId){
+        return $this->select('
+            username,
+            full_name,
+            city,
+            province,
+            description,
+            favorite_genres,
+            picture
+        ')
+        ->where('id', $userId)
+        ->asArray()
+        ->first();
+    }
 }
