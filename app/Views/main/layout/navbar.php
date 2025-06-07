@@ -1,11 +1,11 @@
 <?php
 $currentPage = $_GET['page'] ?? 'dashboard';
 $navigationItems = [
-    ['icon' => 'fas fa-home', 'label' => 'Home', 'page' => ''],
-    ['icon' => 'fas fa-search', 'label' => 'Search', 'page' => 'search'],
-    ['icon' => 'fas fa-book', 'label' => 'Library', 'page' => 'library'],
-    ['icon' => 'fas fa-users', 'label' => 'Community', 'page' => 'community'],
-    ['icon' => 'fas fa-user', 'label' => 'Profile', 'page' => 'profile'],
+    ['icon' => 'fas fa-home', 'label' => 'Home', 'page' => '/'],
+    ['icon' => 'fas fa-search', 'label' => 'Search', 'page' => '/search'],
+    ['icon' => 'fas fa-book', 'label' => 'Library', 'page' => '/library'],
+    ['icon' => 'fas fa-users', 'label' => 'Community', 'page' => '/group'],
+    ['icon' => 'fas fa-user', 'label' => 'Profile', 'page' => '/profile'],
 ];
 ?>
 
@@ -38,15 +38,16 @@ $navigationItems = [
 <!-- Desktop Sidebar Navigation -->
 <nav id="sidebar" class="fixed top-21.5 bottom-0 left-0 w-48 bg-white px-4 py-6 hidden md:flex flex-col justify-between z-50">
     <div>
+        <!-- container tombol burger dan label (jika ada) -->
         <div class="flex items-center justify-between mb-8">
-            <button id="toggleSidebar" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <i class="fas fa-bars text-gray-600"></i>
+            <button id="toggleSidebar" class="pl-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center">
+                <i class="fas fa-bars text-gray-600 text-lg"></i>
             </button>
         </div>
         
-        <div class="space-y-2">
+        <div class="space-y-2 flex flex-col">
             <?php foreach ($navigationItems as $item): ?>
-                <a href="<?= base_url('/' . $item['page']) ?>"
+                <a href="<?= base_url( $item['page']) ?>"
                    class="nav-item flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 <?= $currentPage == $item['page'] ? 'bg-purple-100 text-purple-600' : 'text-gray-600 hover:bg-gray-100 hover:text-purple-600' ?>">
                     <i class="<?= $item['icon'] ?> text-lg flex-shrink-0"></i>
                     <span class="nav-text transition-opacity duration-300"><?= $item['label'] ?></span>
@@ -56,6 +57,7 @@ $navigationItems = [
     </div>
     <div class="footer-text text-xs text-gray-400 transition-opacity duration-300">© 2025 Librapopulus</div>
 </nav>
+
 
 <!-- Mobile Bottom Navigation -->
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 px-6 py-3 flex md:hidden justify-around items-center z-50">

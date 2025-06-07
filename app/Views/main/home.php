@@ -157,7 +157,7 @@
                                     <div class="bg-gray-300 rounded-full h-1">
                                         <div class="bg-purple-600 h-1 rounded-full" style="width: <?= esc($progress) ?>%"></div>
                                     </div>
-                                    <p class="text-base text-gray-600 mt-1"><?= esc($progress) ?>% complete</p>
+                                    <p class="text-base text-gray-600 mt-1"><?= esc($progress) ?>% selssai</p>
                                 </div>
                             </div>
                         </a>

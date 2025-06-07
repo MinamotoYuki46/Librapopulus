@@ -208,12 +208,12 @@ class Auth extends BaseController {
             'picture' => $picture
         ];
 
-        $this->tmpRegisterModel->update($newTmpId, $profileData);
+        $this -> tmpRegisterModel->update($newTmpId, $profileData);
 
         $registerData['step'] = 'success';
-        session()->set('register_data', $registerData);
+        session() -> set('register_data', $registerData);
 
-        return redirect()->to(base_url('auth/success'));
+        return redirect() -> to(base_url('auth/success'));
     }
     
     public function logout() {
