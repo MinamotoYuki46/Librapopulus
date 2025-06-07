@@ -1,10 +1,5 @@
 <?php
 
-use App\Models\UserModel;
-
-$currentUser = (new UserModel()) -> find($_SESSION['user_id']);
-
-
 // Dummy notifications for demo (replace with DB fetch)
 $notifications = [
     [
@@ -64,7 +59,7 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
     </div>
     <div class="flex items-center space-x-4 relative">
         <!-- Notification Button -->
-        <button class="p-2 hover:bg-gray-300 rounded-lg transition-colors relative" onclick="toggleNotifications(event)">
+        <button class="p-2 hover:bg-gray-300 rounded-lg transition-colors relative">
             <i class="fas fa-bell text-gray-700 text-4xl"></i>
             <?php 
             $notificationCount = $notificationCount ?? 3;
@@ -76,18 +71,17 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
             <?php endif; ?>
         </button>
 
-        <!-- Profile Button -->
         <div class="relative">
             <button id="profileBtn" class="p-1 hover:bg-gray-300 rounded-full transition-colors">
                 <img 
-                    src="<?= $currentUser['picture'] ?? 'https://i.pravatar.cc/150?u=default_user' ?>" 
-                    alt="Profile Picture" 
-                    class="w-10 h-10 rounded-full object-cover"
-                >
+                    src="<?= base_url("uploads/" . $photoProfile) ?>"
+                    alt="Foto Profil"
+                    class="rounded-full w-10 h-10 object-cover"
+                />
             </button>
 
-            <!-- Dropdown Menu -->
             <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <p class="px-4 py-2 border-b border-gray-200 font-bold"><?= "@" . esc($username) ?></p>
                 <a href="<?= base_url('auth/logout') ?>" 
                     class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
                     <i class="fas fa-sign-out-alt mr-1"></i> Keluar
@@ -98,13 +92,9 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
     </div>
 </header>
 
-<!-- Notification Overlay -->
 <div id="notificationOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-md z-40 hidden overflow-y-auto">
-    <div class="max-w-2xl mx-auto py-8 px-4">
-        <button onclick="toggleNotifications(event)" class="text-sm text-gray-500 mb-6 hover:text-gray-800">
-            <i class="fas fa-times mr-1"></i> Close
-        </button>
-        <h1 class="text-3xl font-bold text-gray-900 mb-6 pt-10">Notifications</h1>
+    <div class="max-w-2xl mx-auto py-25 px-4">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6 pt-10">Notifikasi</h1>
 
         <div id="notificationContent" class="space-y-4">
             <?php include __DIR__ . '/../components/notification_cards.php'; ?>

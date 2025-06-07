@@ -17,26 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificationBtn = document.querySelector('.fa-bell').parentElement;
     const notificationOverlay = document.getElementById('notificationOverlay');
 
-    // Notifications button
     notificationBtn.addEventListener('click', function (event) {
         event.stopPropagation();
         console.log('Notifications clicked');
         notificationOverlay.classList.toggle('hidden');
     });
 
-    // Profile button click only toggles
     profileBtn.addEventListener('click', function (event) {
         event.stopPropagation(); // prevent bubbling to document
         profileDropdown.classList.toggle('hidden');
     });
 
-    // Clicking anywhere else hides dropdowns
     document.addEventListener('click', function (e) {
         if (!profileBtn.contains(e.target)) {
             profileDropdown.classList.add('hidden');
         }
 
-        // Optional: hide notification overlay if you want clicking outside to close it
         if (!notificationOverlay.contains(e.target) && !notificationBtn.contains(e.target)) {
             notificationOverlay.classList.add('hidden');
         }

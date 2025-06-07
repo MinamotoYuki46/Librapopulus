@@ -4,14 +4,17 @@ namespace App\Controllers;
 
 use App\Models\BookCollectionModel;
 use App\Models\BookModel;
+use App\Models\UserModel;
 
 class MainController extends BaseController {
     private $bookModel;
     private $bookCollectionModel;
+    private $userModel;
 
     public function __construct() {
-        $this->bookModel = new BookModel();
-        $this->bookCollectionModel = new BookCollectionModel();
+        $this -> bookModel = new BookModel();
+        $this -> bookCollectionModel = new BookCollectionModel();
+        $this -> userModel = new UserModel();
     }
 
     public function index() {
@@ -19,13 +22,14 @@ class MainController extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $userId = session()->get('user_id');
-        $username = session()->get('username');
+        $userId = session() -> get('userId');
+        $user = $this -> userModel -> find($userId);
 
         $data = [
-            'user_id' => $userId,
-            'username' => $username,
-            'user_collection' => $this->bookCollectionModel->getBookCollectionByUserId($userId)
+            'userId'         => $userId,
+            'username'       => $user['username'] ?? 'Guest',
+            'photoProfile'   => $user['picture'] ?? null,
+            'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($userId)
         ];
 
         return view('main/home', $data);

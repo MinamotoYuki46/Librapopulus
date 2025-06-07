@@ -111,8 +111,7 @@ class Auth extends BaseController {
         if ($user && password_verify($password, $user['password'])) {
             $session -> set([
                 'isLoggedIn' => true,
-                'user_id'    => $user['id'], 
-                'username'   => $user['username'],
+                'userId'    => $user['id']
             ]);
             return redirect() -> to(base_url());
         } else {
@@ -170,7 +169,7 @@ class Auth extends BaseController {
         $file = $this->request->getFile('profile_picture');
         $picture = null;
         if($file && $file->isValid() && !$file->hasMoved()) {
-            $folderPath = WRITEPATH . 'uploads/' . $username . '/profile_picture/';
+            $folderPath = FCPATH . 'uploads/' . $username . '/profile_picture/';
 
             if (is_dir($folderPath)) {
                 delete_files($folderPath);
