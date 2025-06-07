@@ -22,12 +22,12 @@ class MainController extends BaseController {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $userId = session() -> get('userId');
+        $userId = session() -> get('user_id');
         $user = $this -> userModel -> find($userId);
 
         $data = [
             'userId'         => $userId,
-            'username'       => $user['username'] ?? null,
+            'username'       => $user['username'] ?? 'Guest',
             'photoProfile'   => $user['picture'] ?? null,
             'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($userId)
         ];

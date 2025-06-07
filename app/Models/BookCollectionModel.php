@@ -70,4 +70,8 @@ class BookCollectionModel extends Model
             ->get()
             ->getFirstRow('array');
     }
+
+    function getBookCount(int $userId) {
+        return $this->where('user_id', $userId)->countAllResults();
+    }
 }

@@ -3,38 +3,39 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\BookCollectionModel;
 use App\Models\FriendshipModel;
-Use App\Models\BookCollectionModel;
+
 
 class Profile extends BaseController {
     private $userModel;
-    private $friendshipModel;
     private $bookCollectionModel;
+    private $friendshipModel;
 
     public function __construct() {
         $this -> userModel = new UserModel();
+        $this -> bookCollectionModel = new BookCollectionModel();
+        $this -> friendshipModel = new FriendshipModel();
     }
-    public function index($username) {
-        $userId = session() -> get('userId');
-        $user = $this -> userModel -> find($userId);
+
+    public function index(){
+        if (!session() -> get('isLoggedIn')) {
+            return redirect() -> to(base_url('auth/login'));
+        }
+
+        $userId = session()->get('user_id');
+
+        $dataUser = $this->userModel->getDataUser($userId);
+        $dataUser['book_count'] = $this->bookCollectionModel->getBookCount($userId);
+        $dataUser['friend_count'] = $this->friendshipModel->getFriendCount($userId);
 
         $data = [
-            "username"      => $user["username"],
-            "fullname"      => $user["fullname"],
-            'city'          => $user["city"],
-            'province'      => $user["province"],
-            'friend_count'  => $user[],
-            'book_count'    => 17,
-            'photo_url' => 'https://i.pravatar.cc/200?u=alice123',
-            'biodata' => "Penggembar buku klasik"
-        ]
+            'user' => $dataUser,
+            'photoProfile' => $dataUser['picture'],
+            'username' => $dataUser['username']
+        ];
 
-
-        if ($username === $user["username"]) {
-            return view("main/profile/selfprofile", $data);
-        } else {
-            return view("main/profile/otherprofile", $data);
-        }
+        return view("main/profile/selfprofile", $data);
     }
 
 
