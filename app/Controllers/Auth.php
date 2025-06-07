@@ -3,17 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
-use App\Models\ProfileModel;
 use App\Models\TmpRegisterProcessModel;
 
 class Auth extends BaseController {
     private $userModel;
-    private $profileModel;
     private $tmpRegisterModel;
     
     public function __construct() {
         $this -> userModel = new UserModel();
-        $this -> profileModel = new ProfileModel();
         $this -> tmpRegisterModel = new TmpRegisterProcessModel();
     }
     
@@ -79,13 +76,6 @@ class Auth extends BaseController {
             'username' => $tmp['username'],
             'email'    => $tmp['email'],
             'password' => $tmp['password'],
-        ];
-
-        $this -> userModel -> insert($userData);
-        $userId = $this -> userModel -> getInsertID();
-
-        $profileData = [
-            'user_id' => $userId,
             'full_name' => $tmp['full_name'],
             'city' => $tmp['city'],
             'province' => $tmp['province'],
@@ -94,7 +84,9 @@ class Auth extends BaseController {
             'picture' => $tmp['picture']
         ];
 
-        $this -> profileModel -> insert($profileData);
+        $this -> userModel -> insert($userData);
+        $userId = $this -> userModel -> getInsertID();
+
         $this -> destroyRegisterSession();
 
         session() -> set([
@@ -195,7 +187,7 @@ class Auth extends BaseController {
         }
 
 
-        $fullName = $this -> request -> getPost('fullName') ?? null;
+        $fullName = $this -> request -> getPost('full_name') ?? null;
         $location = $this -> request -> getPost('city') ?? null;
         $province = null;
         $city = null;
@@ -209,7 +201,7 @@ class Auth extends BaseController {
         $favoriteGenresJson = $favoriteGenresArray ? json_encode($favoriteGenresArray) : null;
 
         $profileData = [
-            'fullName' => $fullName,
+            'full_name' => $fullName,
             'city' => $city,
             'province' => $province,
             'description' => $bio,

@@ -26,6 +26,35 @@ class CreateUserTable extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255'
             ],
+            'full_name' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
+            'city' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
+            'province' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
+            'description' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
+            'favorite_genres' => [
+                'type' => 'JSON',
+                'null' => true
+            ],
+            'picture' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true
