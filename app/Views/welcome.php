@@ -35,7 +35,6 @@
         </style>
     </head>
     <body class="bg-gray-50">
-        <!-- Navigation -->
         <nav class="absolute top-0 w-full z-50 px-6 py-4">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <div class="flex items-center space-x-2">
@@ -47,9 +46,7 @@
             </div>
         </nav>
 
-        <!-- Hero Section -->
         <section class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
-            <!-- Floating Books Background -->
             <div class="absolute inset-0 overflow-hidden">
                 <div class="floating-animation absolute top-20 left-10 opacity-20">
                     <i class="fas fa-book text-6xl text-white"></i>
@@ -129,7 +126,6 @@
         </section>
 
         <script>
-            // Add scroll effect to navigation
             window.addEventListener('scroll', function() {
                 const nav = document.querySelector('nav');
                 if (window.scrollY > 100) {

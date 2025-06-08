@@ -54,7 +54,8 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
 ?>
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-blue-200/90 backdrop-blur-sm border-b border-white/40 shadow-sm px-6 py-4 flex justify-between items-center md:pl-20">
-    <div>
+    <div class="flex space-x-2">
+        <i class="fas fa-book-open text-white text-4xl"></i>
         <h1 class="text-4xl font-bold text-gray-900">
             <?= $headerTitle ?? 'Librapopulus' ?>
         </h1>
