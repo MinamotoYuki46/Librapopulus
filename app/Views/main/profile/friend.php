@@ -51,7 +51,7 @@ function timeShort($datetime) {
         <ul class="space-y-4">
             <?php foreach ($friends as $friend): ?>
                 <li class="flex items-center bg-white p-4 rounded-lg shadow hover:shadow-md transition">
-                    <a href="<?= base_url('profile/message/' . $friend['username']) ?>" class="flex items-center p-4 w-full h-full">
+                    <a href="<?= base_url('message/' . $friend['username']) ?>" class="flex items-center p-4 w-full h-full">
                         <img src="<?= base_url('uploads/' . $friend['picture']) ?>" alt="<?= esc($friend['username']) ?> avatar" class="w-12 h-12 rounded-full mr-4" />
                         <div class="flex-grow min-w-0">
                             <p class="font-semibold text-gray-900"><?= esc($friend['username']) ?></p>

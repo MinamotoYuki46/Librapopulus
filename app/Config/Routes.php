@@ -47,10 +47,8 @@ $routes -> group('library', function($routes) {
 $routes -> group('profile', function($routes) {
     $routes -> get('edit', 'Profile::editProfile');
     $routes -> post("update", "Profile::update");
-    $routes -> get('(:segment)', 'Profile::index/$1');
-
-    
     $routes -> get('friend', 'Profile::friend');
+    $routes -> get('(:segment)', 'Profile::index/$1');
     
 });
 
