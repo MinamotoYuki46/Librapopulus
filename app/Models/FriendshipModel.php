@@ -58,4 +58,37 @@ class FriendshipModel extends Model
                 ->groupEnd()
                 ->first();
     }
+
+    public function getFriendsWithLastMessage(int $userId) {
+        $subQueryMessage = "(
+            SELECT message_text FROM messages
+            WHERE (sender_id = user.id AND receiver_id = $userId)
+            OR (receiver_id = user.id AND sender_id = $userId)
+            ORDER BY created_at DESC
+            LIMIT 1
+        )";
+
+        $subQueryTime = "(
+            SELECT created_at FROM messages
+            WHERE (sender_id = user.id AND receiver_id = $userId)
+            OR (receiver_id = user.id AND sender_id = $userId)
+            ORDER BY created_at DESC
+            LIMIT 1
+        )";
+
+        return $this->select("
+                user.id, 
+                user.username,
+                user.picture,
+                $subQueryMessage as last_message,
+                $subQueryTime as last_message_time
+            ")
+            ->join('user', 'user.id = friendships.user_one_id OR user.id = friendships.user_two_id')
+            ->where('friendships.status', self::STATUS_ACCEPTED)
+            ->where("(friendships.user_one_id = $userId OR friendships.user_two_id = $userId)")
+            ->where('user.id !=', $userId)
+            ->groupBy('user.id')
+            ->orderBy('last_message_time', 'DESC')
+            ->findAll();
+    }
 }
