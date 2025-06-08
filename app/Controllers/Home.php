@@ -7,7 +7,7 @@ class Home extends BaseController {
         if (session() -> get('isLoggedIn')) {
             $main = new MainController;
 
-            return $main -> index();
+            return $main -> library();
         } else {
             return view('welcome');
         }

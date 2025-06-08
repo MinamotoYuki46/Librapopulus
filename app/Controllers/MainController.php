@@ -17,24 +17,6 @@ class MainController extends BaseController {
         $this -> userModel = new UserModel();
     }
 
-    public function index() {
-        if (!session() -> get('isLoggedIn')) {
-            return redirect() -> to(base_url('auth/login'));
-        }
-
-        $userId = session() -> get('userId');
-        $user = $this -> userModel -> find($userId);
-
-        $data = [
-            'userId'         => $userId,
-            'username'       => $user['username'] ?? 'Guest',
-            'photoProfile'   => $user['picture'] ?? null,
-            'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($userId)
-        ];
-
-        return view('main/home', $data);
-    }
-
     public function library() {
         if (!session() -> get('isLoggedIn')) {
             return redirect() -> to(base_url('auth/login'));
