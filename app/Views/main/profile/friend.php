@@ -51,12 +51,14 @@ function timeShort($datetime) {
         <ul class="space-y-4">
             <?php foreach ($friends as $friend): ?>
                 <li class="flex items-center bg-white p-4 rounded-lg shadow hover:shadow-md transition">
-                    <img src="<?= base_url('uploads/' . $friend['picture']) ?>" alt="<?= esc($friend['username']) ?> avatar" class="w-12 h-12 rounded-full mr-4" />
-                    <div class="flex-grow min-w-0">
-                        <p class="font-semibold text-gray-900"><?= esc($friend['username']) ?></p>
-                        <p class="text-gray-600 text-sm truncate"><?= esc($friend['last_message']) ?></p>
-                    </div>
-                    <span class="text-gray-400 text-xs ml-4 whitespace-nowrap"><?= timeShort($friend['last_message_time']) ?></span>
+                    <a href="<?= base_url('profile/message/' . $friend['username']) ?>" class="flex items-center p-4 w-full h-full">
+                        <img src="<?= base_url('uploads/' . $friend['picture']) ?>" alt="<?= esc($friend['username']) ?> avatar" class="w-12 h-12 rounded-full mr-4" />
+                        <div class="flex-grow min-w-0">
+                            <p class="font-semibold text-gray-900"><?= esc($friend['username']) ?></p>
+                            <p class="text-gray-600 text-sm truncate"><?= esc($friend['last_message']) ?></p>
+                        </div>
+                        <span class="text-gray-400 text-xs ml-4 whitespace-nowrap"><?= timeShort($friend['last_message_time']) ?></span>
+                    </a>
                 </li>
             <?php endforeach; ?>
         </ul>
