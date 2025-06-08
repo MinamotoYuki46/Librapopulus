@@ -38,9 +38,11 @@
             <div class="flex flex-col md:flex-row gap-x-6 lg:gap-x-8">
 
                 <div class="w-full md:w-2/5 lg:w-1/3 flex-shrink-0 mb-6 md:mb-0">
-                    <img src="<?= isset($book['book_cover']) ? esc($book['book_cover']) : 'https://via.placeholder.com/300x450.png?text=No+Image' ?>"
+                    <img src="<?= isset($book['book_cover']) 
+                        ? base_url('uploads/bookcover/' . esc($book['book_cover'])) 
+                        : 'https://via.placeholder.com/300x450.png?text=No+Image' ?>"
                         alt="Cover of <?= isset($book['title']) ? esc($book['title']) : 'Book Title' ?>"
-                        class="w-full h-auto object-cover  rounded-lg shadow-xl sticky top-6 md:max-h-[600px] lg:max-h-[800px]">
+                        class="w-full h-auto object-cover rounded-lg shadow-xl sticky top-6 md:max-h-[600px] lg:max-h-[800px]">
                 </div>
 
                 <div class="w-full md:w-3/5 lg:w-2/3">

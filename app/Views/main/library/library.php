@@ -130,19 +130,9 @@
                 <h2 class="text-3xl font-bold text-gray-900">Koleksi Bukuku</h2>
 
                 <div class="flex items-center gap-2 ml-auto">
-                    <!-- Filter Dropdown -->
-                    <select class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 bg-white shadow-sm">
-                        <option value="all">Semua</option>
-                        <option value="progress-asc">Progress Terendah</option>
-                        <option value="progress-desc">Progress Tertinggi</option>
-                        <option value="a-z">A-Z</option>
-                        <option value="z-a">Z-A</option>
-                    </select>
-
-                    <!-- Add Book Button -->
-                    <button class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow">
+                    <a href="<?= base_url('library/add') ?>" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow inline-flex items-center">
                         <i class="fas fa-plus mr-1"></i> Tambah Buku
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -153,7 +143,9 @@
                         data-book-id="<?= esc($book['collection_id']) ?> " href="<?= base_url('/library/book/' . $book['collection_id'] . '/' . $book['slug']) ?>">
                         <div class="bg-gray-300 rounded-lg mb-3 aspect-[2/3] overflow-hidden">
                             <?php if ($book['book_cover']): ?>
-                                <img src="<?= esc($book['book_cover']) ?>" alt="<?= esc($book['title']) ?>" 
+                                <img src="<?= isset($book['book_cover']) 
+                                    ? base_url('uploads/bookcover/' . esc($book['book_cover'])) 
+                                    : 'https://via.placeholder.com/300x450.png?text=No+Image' ?>" alt="<?= esc($book['title']) ?>" 
                                     class="w-full h-full object-cover rounded-lg">
                             <?php else: ?>
                                 <div class="w-full h-full flex items-center justify-center">
@@ -173,7 +165,7 @@
                                     <?php $progress = round(($book['read_page'] / $book['total_pages']) * 100, 2); ?>
                                     <div class="bg-purple-600 h-1 rounded-full" style="width: <?= esc($progress) ?>%"></div>
                                 </div>
-                                <p class="text-base text-gray-600 mt-1"><?= esc($progress) ?>% complete</p>
+                                <p class="text-base text-gray-600 mt-1"><?= esc($progress) ?>% selesai</p>
                             </div>
                         </div>
                     </a>
