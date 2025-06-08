@@ -51,46 +51,49 @@
                         <?php if ($status == \App\Models\FriendshipModel::STATUS_NONE || $status ==  \App\Models\FriendshipModel::STATUS_DECLINED) : ?>
                             <form method="POST" action="<?= base_url('/friends/request/' . $username) ?>">
                                 <button type="submit"
-                                    class="px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-semibold">
-                                    <i class="fa-solid fa-user-plus mr-2"></i> Tambah Teman
+                                    class="flex items-center px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-semibold">
+                                    <i class="fa-solid fa-user-plus mr-2"></i>
+                                    Tambah Teman
                                 </button>
                             </form>
                         <?php elseif ($status == \App\Models\FriendshipModel::STATUS_PENDING && $friendship['user_one_id'] == $myId) : ?>
                             <form method="POST" action="<?= base_url('/friends/cancel/' . $username) ?>">
                                 <button type="submit"
-                                    class="px-5 py-2 bg-gray-400 text-gray-800 rounded-md hover:bg-gray-500 transition font-semibold">
+                                    class="flex items-center px-5 py-2 bg-gray-400 text-gray-800 rounded-md hover:bg-gray-500 transition font-semibold">
                                     <i class="fa-solid fa-xmark mr-2"></i> Batalkan Permintaan
                                 </button>
                             </form>
                         <?php elseif ($status == \App\Models\FriendshipModel::STATUS_PENDING && $friendship['user_one_id'] == $targetId) : ?>
                             <form method="POST" action="<?= base_url('/friends/accept/' . $username) ?>" class="inline-block">
                                 <button type="submit"
-                                    class="px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-semibold">
+                                    class="flex items-center px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-semibold">
                                     <i class="fa-solid fa-check mr-2"></i> Terima
                                 </button>
                             </form>
 
                             <form method="POST" action="<?= base_url('/friends/decline/' . $username) ?>" class="inline-block">
                                 <button type="submit"
-                                    class="px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-semibold">
+                                    class="flex items-center px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-semibold">
                                     <i class="fa-solid fa-ban mr-2"></i> Tolak
                                 </button>
                             </form>
                         <?php elseif ($status == \App\Models\FriendshipModel::STATUS_ACCEPTED) : ?>
                             <button disabled
-                                class="px-5 py-2 bg-gray-300 text-gray-600 rounded-md cursor-default font-semibold">
+                                class="flex items-center px-5 py-2 bg-gray-300 text-gray-600 rounded-md cursor-default font-semibold">
                                 <i class="fa-solid fa-user-check mr-2"></i> Teman
                             </button>
                         <?php endif; ?>
 
                         <a href="<?= base_url('/users/' . $targetUsername . '/books') ?>"
-                           class="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition">
-                            <i class="fa-solid fa-book"></i> Koleksi Buku
+                            class="inline-flex items-center px-5 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition font-semibold text-sm justify-center space-x-3">
+                            <i class="fa-solid fa-book text-lg"></i>
+                            <span class="align-middle">Koleksi Buku</span>
                         </a>
 
                         <a href="<?= base_url('/message/' . $targetUsername) ?>"
-                           class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
-                            <i class="fa-solid fa-message"></i> Pesan
+                            class="inline-flex items-center px-5 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition font-semibold text-sm justify-center space-x-3">
+                            <i class="fa-solid fa-message text-lg"></i>
+                            <span class="align-middle">Pesan</span>
                         </a>
                     </div>
 
