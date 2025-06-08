@@ -76,7 +76,7 @@
                     <!-- Tombol pengajuan pertemanan -->
                     <?php $status = ($friendship === null) ? \App\Models\FriendshipModel::STATUS_NONE : $friendship['status'];?>
                     <div class="mt-6 flex justify-center gap-4">
-                        <?php if ($status === \App\Models\FriendshipModel::STATUS_NONE || $status ===  \App\Models\FriendshipModel::STATUS_DECLINED) : ?>
+                        <?php if ($status == \App\Models\FriendshipModel::STATUS_NONE || $status ==  \App\Models\FriendshipModel::STATUS_DECLINED) : ?>
                             <form method="POST" action="<?= base_url('/friends/request/' . $username) ?>">
                                 <button type="submit"
                                     class="px-5 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition font-semibold">
