@@ -26,11 +26,8 @@
                         <i class="fas fa-glasses"></i>
                     </a>
 
-                    <!-- Edit Button -->
-                    <button aria-label="Edit Book" title="Edit Book"
-                        class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
-                        <i class="fas fa-pen"></i>
-                    </button>
+                  
+
                 </div>
             </div>
 

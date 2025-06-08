@@ -6,6 +6,7 @@ use App\Models\BookModel;
 use App\Models\BookCollectionModel;
 use App\Models\BookGenreModel;
 use App\Models\GenreModel;
+use App\Models\UserModel;
 
 use CodeIgniter\Exceptions\PageNotFoundException;
 
@@ -14,33 +15,73 @@ class Book extends BaseController {
     private $bookModel;
     private $bookGenreModel;
     private $genreModel;
+    private $userModel;
 
     public function __construct() {
         $this -> bookModel = new BookModel();
         $this -> bookCollectionModel = new BookCollectionModel();
         $this -> bookGenreModel = new BookGenreModel();
         $this -> genreModel = new GenreModel();
+        $this -> userModel = new UserModel();
     }
 
 
-    public function index(int $collectionId, string $slug){
-        if (!session() -> get('isLoggedIn')) {
-            return redirect() -> to(base_url('auth/login'));
+    public function index(string $username, string $slug) {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
         }
 
-        $book = $this -> bookCollectionModel -> findBookCollectionDetail($collectionId);
+        $user = $this -> userModel -> where('username', $username) -> first();
+        if (!$user) {
+            throw new PageNotFoundException('User tidak ditemukan.');
+        }
 
+        $book = $this -> bookModel -> where('slug', $slug) -> first();
         if (!$book) {
             throw new PageNotFoundException('Buku tidak ditemukan.');
         }
 
-        if ($slug !== $book['slug']) {
-            return redirect()->to(base_url('/library/book/' . $book['collection_id'] . '/' . $book['slug']), 301);
+        $bookCollection = $this -> bookCollectionModel
+            -> where('user_id', $user['id'])
+            -> where('book_id', $book['id'])
+            -> first();
+
+        if (!$bookCollection) {
+            throw new PageNotFoundException('Koleksi buku tidak ditemukan untuk user ini.');
         }
 
-        $data = ['book' => $book];
-        
-        return view("main/library/bookdetail", $data);
+        if ($slug !== $book['slug']) {
+            return redirect()->to(base_url('/library/book/' . $username . '/' . $book['slug']), 301);
+        }
+
+        $genre = $this -> bookGenreModel
+                    -> select('genres.genre_name')
+                    -> join('genres', 'genres.id = book_genres.genre_id')
+                    -> where('book_genres.book_id', $book['id'])
+                    -> first();
+
+        $data = [
+            'book' => [
+                'id'            => $book['id'],
+                'title'         => $book['title'],
+                'author'        => $book['author'],
+                'slug'          => $book['slug'],
+                'book_cover'    => $book['book_cover'],
+                'published_date'=> $book['published_date'],
+                'total_pages'   => $book['total_pages'],
+                'description'   => $book['description'],
+                'added_at'    => $book['created_at'],
+                'updated_at'    => $book['updated_at'],
+                'genres'        => $genre['genre_name'],
+
+                'collection_id' => $bookCollection['id'],
+                'read_page'     => $bookCollection['read_page'],
+                'rating'        => $bookCollection['rating'],
+                'review'        => $bookCollection['review'],
+            ],
+            'user' => $user,
+        ];
+        return view('main/library/bookdetail', $data);
     }
 
     public function addBook(){
@@ -72,11 +113,11 @@ class Book extends BaseController {
             'description' => $request -> getPost('description'),
         ];
 
-        $bookId = $this->bookModel->insert($bookData, true); // true = return inserted ID
+        $bookId = $this -> bookModel->insert($bookData, true); // true = return inserted ID
 
         $userId = session() -> get('userId');
 
-        $this->bookCollectionModel->insert([
+        $this -> bookCollectionModel->insert([
             'user_id' => $userId,
             'book_id' => $bookId,
             'read_page' => $request -> getPost('pages_read'),
@@ -90,8 +131,29 @@ class Book extends BaseController {
             'genre_id' => $request->getPost('genre_id'),
         ]);
 
-        return redirect()->to('/library')->with('success', 'Buku berhasil ditambahkan!');
+        return redirect() -> to('/library')->with('success', 'Buku berhasil ditambahkan!');
     }
+
+    public function editMyBook($userId, $slug){
+        $bookModel = new BookModel();
+        $genreModel = new GenreModel();
+
+        $book = $bookModel -> where('user_id', $userId)
+                        -> where('slug', $slug)
+                        -> first();
+
+        if (!$book) {
+            throw new PageNotFoundException("Buku tidak ditemukan.");
+        }
+
+        $genres = $genreModel->findAll();
+
+        return view('main/library/edit', [
+            'book' => $book,
+            'genres' => $genres
+        ]);
+    }
+
 
     public function focus(int $collectionId, string $slug) {
         if (!session() -> get('isLoggedIn')) {

@@ -26,14 +26,16 @@ $routes -> group('auth', function($routes) {
 $routes -> group('library', function($routes) {
     $routes -> get('/', 'MainController::library'); 
     $routes -> get('user/(:segment)', 'MainController::userLibrary/$1');
-    $routes -> get('book/(:num)/(:segment)', 'Book::index/$1/$2');
+
+    $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 
     $routes -> get('add', 'Book::addBook');
     $routes -> post('proceedAddBook', 'Book::proceedAddBook');
 
+    $routes -> get('book/user/(:num)/(:segment)/edit', 'Book::editMyBook/$1/$2');
 
-    $routes -> get('book/user/(:num)/(:segment)', 'Book::userBookDetail/$1/$2');
     $routes -> get('book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
+
     $routes -> get('book/loanrequest', 'Book::loanRequest');
     $routes -> get('book/acceptloan', 'Book::acceptLoan');
 });

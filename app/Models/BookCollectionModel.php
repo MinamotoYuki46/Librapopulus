@@ -74,4 +74,11 @@ class BookCollectionModel extends Model
     function getBookCount(int $userId) {
         return $this->where('user_id', $userId)->countAllResults();
     }
+
+    public function findBookByUserAndSlug($userId, $slug){
+        return $this -> where('user_id', $userId)
+                     -> where('slug', $slug)
+                     -> first();
+    }
+
 }
