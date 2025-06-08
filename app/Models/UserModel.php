@@ -56,4 +56,19 @@ class UserModel extends Model
         ->asArray()
         ->first();
     }
+
+    function getDataUserByUsername(int $username){
+        return $this->select('
+            id,
+            full_name,
+            city,
+            province,
+            description,
+            favorite_genres,
+            picture
+        ')
+        ->where('username', $username)
+        ->asArray()
+        ->first();
+    }
 }

@@ -37,24 +37,24 @@
                 <div class="flex flex-col items-center gap-6">
                     <!-- Profile Photo -->
                     <div class="w-32 h-32">
-                        <img src="<?= Base_url('uploads/' . $user['picture']) ?>" alt="Foto Profil"
+                        <img src="<?= Base_url('uploads/' . $photoProfile) ?>" alt="Foto Profil"
                              class="rounded-full w-full h-full object-cover border-4 border-gray-300">
                     </div>
 
                     <!-- Username & Name -->
                     <div class="text-center">
-                        <h2 class="text-2xl font-bold">@<?= esc($user['username']) ?></h2>
-                        <p class="text-lg text-gray-700 font-semibold"><?= esc($user['full_name']) ?></p>
+                        <h2 class="text-2xl font-bold">@<?= esc($username) ?></h2>
+                        <p class="text-lg text-gray-700 font-semibold"><?= esc($fullname) ?></p>
                     </div>
 
                     <!-- Stats -->
                     <div class="flex gap-10 text-center text-gray-700">
                         <div>
-                            <span class="block text-xl font-bold"><?= esc($user['friend_count']) ?></span>
+                            <span class="block text-xl font-bold"><?= esc($friendCount) ?></span>
                             <span class="text-sm">Teman</span>
                         </div>
                         <div>
-                            <span class="block text-xl font-bold"><?= esc($user['book_count']) ?></span>
+                            <span class="block text-xl font-bold"><?= esc($bookCount) ?></span>
                             <span class="text-sm">Buku</span>
                         </div>
                     </div>
@@ -62,23 +62,23 @@
                     <!-- Location -->
                     <div class="text-gray-600">
                         <i class="fa-solid fa-location-dot mr-1 text-red-500"></i>
-                        <?= esc($user['city']) ?>, <?= esc($user['province']) ?>
+                        <?= esc($user['city']) ?>, <?= esc($province) ?>
                     </div>
 
                     <div class="mt-6 text-gray-800">
                         <p class="text-sm text-gray-700">
-                            <?= !empty($user['description']) ? esc($user['description']) : 'Belum ada biodata yang ditambahkan.' ?>
+                            <?= !empty($user['description']) ? esc($description) : 'Belum ada biodata yang ditambahkan.' ?>
                         </p>
                     </div>
 
                     <div class="mt-6 flex justify-center gap-6">
-                        <a href="<?= base_url('/users/' . $user['username'] . '/books') ?>"
+                        <a href="<?= base_url('/users/' . $username . '/books') ?>"
                         class="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition">
                             <i class="fa-solid fa-book"></i> Koleksi Buku
                         </a>
-                        <a href="<?= base_url('/users/' . $user['username'] . '/discussions') ?>"
+                        <a href="<?= base_url('/users/' . $username . '/message') ?>"
                         class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
-                            <i class="fa-solid fa-comments"></i> Diskusi
+                            <i class="fa-solid fa-comments"></i> Pesan
                         </a>
                     </div>
                 </div>

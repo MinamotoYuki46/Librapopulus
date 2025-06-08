@@ -19,29 +19,64 @@ class Profile extends BaseController {
         $this -> friendshipModel = new FriendshipModel();
     }
 
-    public function index(string $username){
+    public function index(string $username) {
         if (!session() -> get('isLoggedIn')) {
             return redirect() -> to(base_url('auth/login'));
         }
 
-        if ($username !== session()->get('username')){
-            //untuk saat ini beri halaman error dulu karena rute other profile tidak ada
+        $currentUsername = session() -> get('username');
+
+        if ($username === $currentUsername) {
+            return $this -> selfProfile();
+        } else {
+            return $this -> otherProfile($username);
+        }
+    }
+
+    private function selfProfile() {
+        $userId = session() -> get('userId');
+        $dataUser = $this -> userModel -> getDataUser($userId);
+        $bookCount = $this -> bookCollectionModel -> getBookCount($userId);
+        $friendCount = $this -> friendshipModel -> getFriendCount($userId);
+
+        $data = [
+            'username'          => $dataUser['username'],
+            'fullname'          => $dataUser["full_name"],
+            'city'              => $dataUser["city"],
+            'province'          => $dataUser["province"],
+            'description'       => $dataUser["description"],
+            'favoriteGenres'    => $dataUser["favorite_genres"],
+            'photoProfile'      => $dataUser["picture"],
+            "friendCount"       => $friendCount,
+            "bookCount"         => $bookCount,
+        ];
+
+        return view('main/profile/selfprofile', $data);
+    }
+
+    private function otherProfile(string $username) {
+        $targetUser = $this -> userModel -> getDataUserByUsername($username);
+
+        if (!$targetUser) {
             throw new PageNotFoundException('User tidak ditemukan.');
         }
 
-        $userId = session()->get('userId');
-
-        $dataUser = $this->userModel->getDataUser($userId);
-        $dataUser['book_count'] = $this->bookCollectionModel->getBookCount($userId);
-        $dataUser['friend_count'] = $this->friendshipModel->getFriendCount($userId);
+        $bookCount = $this -> bookCollectionModel -> getBookCount($targetUser["id"]);
+        $friendCount = $this -> friendshipModel -> getFriendCount($targetUser["id"]);
 
         $data = [
-            'user' => $dataUser,
-            'photoProfile' => $dataUser['picture'],
-            'username' => $dataUser['username']
+            'username'          => $targetUser['username'],
+            'fullname'          => $targetUser["full_name"],
+            'city'              => $targetUser["city"],
+            'province'          => $targetUser["province"],
+            'description'       => $targetUser["description"],
+            'favoriteGenres'    => $targetUser["favorite_genres"],
+            'photoProfile'      => $targetUser["picture"],
+            "friendCount"       => $friendCount,
+            "bookCount"         => $bookCount,
         ];
 
-        return view("main/profile/selfprofile", $data);
+        return view('main/profile/otherprofile', $data);
     }
 
 
