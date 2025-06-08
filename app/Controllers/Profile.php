@@ -63,17 +63,23 @@ class Profile extends BaseController {
 
         $bookCount = $this -> bookCollectionModel -> getBookCount($targetUser["id"]);
         $friendCount = $this -> friendshipModel -> getFriendCount($targetUser["id"]);
+        $user1 = session() -> get('userId');
+        $user2 = $targetUser['id'];
+        $friendships = $this -> friendshipModel -> getFriendshipStatus($user1, $user2);
 
         $data = [
-            'username'          => $targetUser['username'],
+            'username'          => $username,
             'fullname'          => $targetUser["full_name"],
             'city'              => $targetUser["city"],
             'province'          => $targetUser["province"],
             'description'       => $targetUser["description"],
             'favoriteGenres'    => $targetUser["favorite_genres"],
-            'photoProfile'      => $targetUser["picture"],
+            'otherPhotoProfile' => $targetUser["picture"],
             "friendCount"       => $friendCount,
             "bookCount"         => $bookCount,
+            'friendship'        => $friendships,
+            'myId'              => $user1,
+            'targetId'          => $user2,
         ];
 
         return view('main/profile/otherprofile', $data);

@@ -48,4 +48,14 @@ class FriendshipModel extends Model
                     ->groupEnd()
                     ->countAllResults();
     }
+
+    public function getFriendshipStatus(int $user1, int $user2) {
+        return $this->groupStart()
+                        ->where(['user_one_id' => $user1, 'user_two_id' => $user2])
+                    ->orGroupStart()
+                        ->where(['user_one_id' => $user2, 'user_two_id' => $user1])
+                    ->groupEnd()
+                ->groupEnd()
+                ->first();
+    }
 }
