@@ -57,7 +57,7 @@ class UserModel extends Model
         ->first();
     }
 
-    function getDataUserByUsername(int $username){
+    function getDataUserByUsername(string $username){
         return $this->select('
             id,
             full_name,

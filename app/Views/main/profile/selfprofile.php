@@ -62,12 +62,12 @@
                     <!-- Location -->
                     <div class="text-gray-600">
                         <i class="fa-solid fa-location-dot mr-1 text-red-500"></i>
-                        <?= esc($user['city']) ?>, <?= esc($province) ?>
+                        <?= esc($city) ?>, <?= esc($province) ?>
                     </div>
 
                     <div class="mt-6 text-gray-800">
                         <p class="text-sm text-gray-700">
-                            <?= !empty($user['description']) ? esc($description) : 'Belum ada biodata yang ditambahkan.' ?>
+                            <?= !empty($description) ? esc($description) : 'Belum ada biodata yang ditambahkan.' ?>
                         </p>
                     </div>
 
