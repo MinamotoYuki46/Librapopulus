@@ -25,7 +25,7 @@ $routes -> group('auth', function($routes) {
 
 $routes -> group('library', function($routes) {
     $routes -> get('/', 'MainController::library'); 
-    // $routes -> get('user/(:segment)', 'MainController::userLibrary/$1');
+    $routes -> get('(:segment)', 'MainController::Library/$1');
 
     $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 

@@ -127,13 +127,23 @@
 
         <section class="mb-8">
             <div class="flex items-center justify-between mb-4 gap-4 flex-wrap">
-                <h2 class="text-3xl font-bold text-gray-900">Koleksi Bukuku</h2>
+                <h2 class="text-3xl font-bold text-gray-900">
+                    <?php if ($isOwnProfile): ?>
+                        Koleksi Bukuku
+                    <?php else: ?>
+                        Koleksi Buku <?= htmlspecialchars($fullname) ?>
+                    <?php endif; ?>
+                </h2>
 
-                <div class="flex items-center gap-2 ml-auto">
-                    <a href="<?= base_url('library/add') ?>" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow inline-flex items-center">
-                        <i class="fas fa-plus mr-1"></i> Tambah Buku
-                    </a>
-                </div>
+
+                <?php if ($isOwnProfile): ?>
+                    <div class="flex items-center gap-2 ml-auto">
+                        <a href="<?= base_url('library/add') ?>" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow inline-flex items-center">
+                            <i class="fas fa-plus mr-1"></i> Tambah Buku
+                        </a>
+                    </div>
+                <?php endif; ?>
+
             </div>
 
             <?php if (!empty($userCollection)): ?>

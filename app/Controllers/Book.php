@@ -113,7 +113,7 @@ class Book extends BaseController {
             'description' => $request -> getPost('description'),
         ];
 
-        $bookId = $this -> bookModel->insert($bookData, true); // true = return inserted ID
+        $bookId = $this -> bookModel->insert($bookData, true);
 
         $userId = session() -> get('userId');
 
