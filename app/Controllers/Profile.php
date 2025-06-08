@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\BookCollectionModel;
 use App\Models\FriendshipModel;
+use App\Models\MessageModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
 
 
@@ -12,11 +13,13 @@ class Profile extends BaseController {
     private $userModel;
     private $bookCollectionModel;
     private $friendshipModel;
+    private $messageModel;
 
     public function __construct() {
         $this -> userModel = new UserModel();
         $this -> bookCollectionModel = new BookCollectionModel();
         $this -> friendshipModel = new FriendshipModel();
+        $this -> messageModel = new MessageModel();
     }
 
     public function index(string $username) {
@@ -86,11 +89,47 @@ class Profile extends BaseController {
     }
 
 
-    public function message() {
-        return view("main/profile/message");
+    public function message(string $username) {
+        $targetUser = $this -> userModel -> getDataUserByUsername($username);
+        
+
+        if (!$targetUser) {
+            throw new PageNotFoundException('User tidak ditemukan.');
+        }
+
+        $targetUser['username'] = $username;
+        $myUser = [
+            'id' => session()->get('userId'),
+            'username' => session()->get('username'),
+            'picture' => session()->get('picture')
+        ];
+        
+
+        $data = [
+            'recipient' => $targetUser,
+            'messages' => $this->messageModel->getConversation($myUser['id'], $targetUser['id']),
+            'currentUser' => $myUser
+        ];
+
+        return view("main/profile/message", $data);
     }
 
     public function friend() {
         return view("main/profile/friend");
+    }
+
+    public function send(){
+        $senderId = session()->get('userId');
+        $receiverId = $this->request->getPost('receiverId');
+        $messageText = $this->request->getPost('message');
+        $targetUsername = $this->request->getPost('username');
+
+        $this->messageModel->insert([
+            'sender_id' => $senderId,
+            'receiver_id' => $receiverId,
+            'message_text' => $messageText
+        ]);
+
+        return redirect()->to(base_url('profile/message/' . $targetUsername));
     }
 }

@@ -73,15 +73,17 @@ class Auth extends BaseController {
         }
 
         $userData = [
+            //TOLONG UNTUK FAUZAN JANGAN DIUBAH NAMA INI KARENA INI UNTUK NAMA KOLOM DI DATABASE
             'username' => $tmp['username'],
             'email'    => $tmp['email'],
             'password' => $tmp['password'],
-            'fullName' => $tmp['full_name'],
+            'full_name' => $tmp['full_name'],
             'city' => $tmp['city'],
             'province' => $tmp['province'],
             'description' => $tmp['description'],
-            'favoriteGenres' => $tmp['favorite_genres'],
+            'favorite_genres' => $tmp['favorite_genres'],
             'picture' => $tmp['picture']
+            //JANGAN DIUBAH NAMANYA LAGI
         ];
 
         $this -> userModel -> insert($userData);

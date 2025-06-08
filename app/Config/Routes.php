@@ -45,10 +45,11 @@ $routes -> group('library', function($routes) {
 
 
 $routes -> group('profile', function($routes) {
-    $routes -> get('message', 'Profile::message');
     $routes -> get('friend', 'Profile::friend');
     $routes -> get('edit', 'Profile::edit');
     $routes -> get('(:segment)', 'Profile::index/$1');
+    $routes -> get('message/(:segment)', 'Profile::message/$1');
+    $routes -> post('message/send', 'Profile::send');
 });
 
 
