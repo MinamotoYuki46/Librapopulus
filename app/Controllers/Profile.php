@@ -147,7 +147,7 @@ class Profile extends BaseController {
         $friendships = $this -> friendshipModel -> getFriendshipStatus($user1, $user2);
 
         $data = [
-            'username'          => $username,
+            'targetUsername'    => $username,
             'fullname'          => $targetUser["full_name"],
             'city'              => $targetUser["city"],
             'province'          => $targetUser["province"],

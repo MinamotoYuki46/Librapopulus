@@ -52,9 +52,13 @@ $routes -> group('profile', function($routes) {
     
     $routes -> get('friend', 'Profile::friend');
     
-    $routes -> get('message/(:segment)', 'Profile::message/$1');
-    $routes -> post('message/send', 'Profile::send');
 });
+
+$routes -> group("message", function($routes) {
+    $routes -> get('(:segment)', 'Message::index/$1');
+    $routes -> post('send', 'Message::send');
+});
+
 
 
 $routes -> get("search", "MainController::search");
