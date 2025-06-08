@@ -135,7 +135,7 @@ class Book extends BaseController {
     }
 
     public function editMyBook($username, $slug){
-       if (!session()->get('isLoggedIn')) {
+        if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('auth/login'));
         }
 
@@ -217,6 +217,37 @@ class Book extends BaseController {
         ]);
 
         return redirect() -> to(base_url('/library'))->with('success', 'Koleksi buku berhasil diperbarui.');
+    }
+
+    public function deleteBook($username, $slug){
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+
+        $user = $this -> userModel -> where('username', $username) -> first();
+        if (!$user) {
+            throw new PageNotFoundException('User tidak ditemukan.');
+        }
+
+        $book = $this -> bookModel -> where('slug', $slug) -> first();
+        if (!$book) {
+            throw new PageNotFoundException('Buku tidak ditemukan.');
+        }
+
+        $bookCollection = $this -> bookCollectionModel
+                                -> where('user_id', $user['id'])
+                                -> where('book_id', $book['id'])
+                                -> first();
+
+        if (!$bookCollection) {
+            return redirect()->back()->with('error', 'Koleksi buku tidak ditemukan.');
+        }
+
+        // Hapus dari koleksi
+        $this-> bookCollectionModel -> delete($bookCollection['id']);
+
+        return redirect() -> to(base_url('/library/' . $username))
+                        -> with('success', 'Buku berhasil dihapus dari katalogmu.');
     }
 
 

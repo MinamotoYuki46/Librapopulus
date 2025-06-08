@@ -35,6 +35,8 @@ $routes -> group('library', function($routes) {
     $routes -> get('(:segment)/(:segment)/edit', 'Book::editMyBook/$1/$2');
     $routes -> post('proceedEditBook/(:num)', 'Book::proceedEditBook/$1');
 
+    $routes -> post('(:segment)/(:segment)/delete', 'Book::deleteBook/$1/$2');
+
     $routes -> get('book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
 
     $routes -> get('book/loanrequest', 'Book::loanRequest');

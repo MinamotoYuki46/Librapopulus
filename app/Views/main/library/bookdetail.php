@@ -33,6 +33,15 @@
                         <i class="fas fa-pen"></i>
                     </a>
 
+                    <!-- Delete Button -->
+                    <form method="POST" action="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/delete') ?>" 
+                        onsubmit="return confirm('Apakah kamu yakin ingin menghapus buku ini?')">
+                        <button type="submit"
+                            aria-label="Delete Book" title="Delete Book"
+                            class="p-3 rounded-full hover:bg-red-100 transition text-red-600 text-3xl">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
 
