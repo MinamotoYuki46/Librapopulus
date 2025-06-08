@@ -191,7 +191,13 @@ class Profile extends BaseController {
     }
 
     public function friend() {
-        return view("main/profile/friend");
+        $myId = session()->get('userId');
+        
+        $friends = $this->friendshipModel->getFriendsWithLastMessage($myId);
+        
+        $data = ['friends' => $friends];
+
+        return view("main/profile/friend", $data);
     }
 
     public function send(){

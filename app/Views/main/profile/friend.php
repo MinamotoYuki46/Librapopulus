@@ -1,33 +1,33 @@
 <?php
-$friends = [
-    [
-        'id' => 1,
-        'name' => 'Alice Johnson',
-        'avatar' => 'https://i.pravatar.cc/100?u=alice',
-        'last_message' => [
-            'content' => 'Hey! Are you still reading The Hobbit?',
-            'timestamp' => '2025-06-07 10:35'
-        ]
-    ],
-    [
-        'id' => 2,
-        'name' => 'Bob Smith',
-        'avatar' => 'https://i.pravatar.cc/100?u=bob',
-        'last_message' => [
-            'content' => 'Sure, I’ll lend you the book tomorrow after lunch.',
-            'timestamp' => '2025-06-07 08:20'
-        ]
-    ],
-    [
-        'id' => 3,
-        'name' => 'Charlie Davis',
-        'avatar' => 'https://i.pravatar.cc/100?u=charlie',
-        'last_message' => [
-            'content' => 'Can you recommend a fantasy book for this weekend?',
-            'timestamp' => '2025-06-06 22:14'
-        ]
-    ],
-];
+// $friends = [
+//     [
+//         'id' => 1,
+//         'name' => 'Alice Johnson',
+//         'avatar' => 'https://i.pravatar.cc/100?u=alice',
+//         'last_message' => [
+//             'content' => 'Hey! Are you still reading The Hobbit?',
+//             'timestamp' => '2025-06-07 10:35'
+//         ]
+//     ],
+//     [
+//         'id' => 2,
+//         'name' => 'Bob Smith',
+//         'avatar' => 'https://i.pravatar.cc/100?u=bob',
+//         'last_message' => [
+//             'content' => 'Sure, I’ll lend you the book tomorrow after lunch.',
+//             'timestamp' => '2025-06-07 08:20'
+//         ]
+//     ],
+//     [
+//         'id' => 3,
+//         'name' => 'Charlie Davis',
+//         'avatar' => 'https://i.pravatar.cc/100?u=charlie',
+//         'last_message' => [
+//             'content' => 'Can you recommend a fantasy book for this weekend?',
+//             'timestamp' => '2025-06-06 22:14'
+//         ]
+//     ],
+// ];
 
 function timeShort($datetime) {
     return date('H:i', strtotime($datetime));
@@ -51,12 +51,14 @@ function timeShort($datetime) {
         <ul class="space-y-4">
             <?php foreach ($friends as $friend): ?>
                 <li class="flex items-center bg-white p-4 rounded-lg shadow hover:shadow-md transition">
-                    <img src="<?= htmlspecialchars($friend['avatar']) ?>" alt="<?= htmlspecialchars($friend['name']) ?> avatar" class="w-12 h-12 rounded-full mr-4" />
-                    <div class="flex-grow min-w-0">
-                        <p class="font-semibold text-gray-900"><?= htmlspecialchars($friend['name']) ?></p>
-                        <p class="text-gray-600 text-sm truncate"><?= htmlspecialchars($friend['last_message']['content']) ?></p>
-                    </div>
-                    <span class="text-gray-400 text-xs ml-4 whitespace-nowrap"><?= timeShort($friend['last_message']['timestamp']) ?></span>
+                    <a href="<?= base_url('profile/message/' . $friend['username']) ?>" class="flex items-center p-4 w-full h-full">
+                        <img src="<?= base_url('uploads/' . $friend['picture']) ?>" alt="<?= esc($friend['username']) ?> avatar" class="w-12 h-12 rounded-full mr-4" />
+                        <div class="flex-grow min-w-0">
+                            <p class="font-semibold text-gray-900"><?= esc($friend['username']) ?></p>
+                            <p class="text-gray-600 text-sm truncate"><?= esc($friend['last_message']) ?></p>
+                        </div>
+                        <span class="text-gray-400 text-xs ml-4 whitespace-nowrap"><?= timeShort($friend['last_message_time']) ?></span>
+                    </a>
                 </li>
             <?php endforeach; ?>
         </ul>
