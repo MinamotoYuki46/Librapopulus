@@ -1,24 +1,16 @@
-<?php
-    // $user = [
-    //     'username' => 'alice123',
-    //     'full_name' => 'Alice Liddell',
-    //     'city' => 'Jakarta',
-    //     'province' => 'DKI Jakarta',
-    //     'friend_count' => 42,
-    //     'book_count' => 17,
-    //     'photo_url' => 'https://i.pravatar.cc/200?u=alice123',
-    //     'biodata' => "Penggembar buku klasik"
-    // ];
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
-    <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        
 </head>
 <body class="bg-gray-100 text-gray-900">
     <?php include __DIR__ . '/../layout/header.php'; ?>
@@ -27,7 +19,7 @@
         <div class="max-w-lg mx-auto relative">
             <!-- Settings Icon -->
             <div class="absolute top-5 right-5">
-                <a href="<?= base_url('/settings') ?>" class="text-gray-600 hover:text-gray-800 text-2xl">
+                <a href="<?= base_url('profile/edit') ?>" class="text-gray-600 hover:text-gray-800 text-2xl">
                     <i class="fa-solid fa-gear"></i>
                 </a>
             </div>
@@ -72,13 +64,9 @@
                     </div>
 
                     <div class="mt-6 flex justify-center gap-6">
-                        <a href="<?= base_url('/users/' . $username . '/books') ?>"
+                        <a href="<?= base_url('/library/') ?>"
                         class="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition">
                             <i class="fa-solid fa-book"></i> Koleksi Buku
-                        </a>
-                        <a href="<?= base_url('/users/' . $username . '/message') ?>"
-                        class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
-                            <i class="fa-solid fa-comments"></i> Pesan
                         </a>
                     </div>
                 </div>

@@ -57,6 +57,82 @@ class Profile extends BaseController {
         return view('main/profile/selfprofile', $data);
     }
 
+    public function editProfile() {
+        $userId = session() -> get("userId");
+        $dataUser = $this -> userModel -> getDataUser($userId);
+
+        $user = [
+            'username'          => $dataUser['username'],
+            'fullname'          => $dataUser["full_name"],
+            'city'              => $dataUser["city"],
+            'province'          => $dataUser["province"],
+            'description'       => $dataUser["description"],
+            'favoriteGenres'    => $dataUser["favorite_genres"],
+            'photoProfile'      => $dataUser["picture"],
+        ];
+
+        return view("main/profile/editprofile", ['user' => $user]);
+    }
+
+    public function update() {
+        $userId = session()->get("userId");
+
+        $user = $this -> userModel->find($userId);
+        $newUsername = $this -> request -> getPost('username');
+
+        $validationRules = [
+            'fullname'  => 'required',
+            'city'      => 'permit_empty',
+            'province'  => 'permit_empty',
+            'description' => 'permit_empty',
+            'photoProfile' => 'if_exist|is_image[photoProfile]|max_size[photoProfile,2048]',
+        ];
+
+        if ($newUsername !== $user['username']) {
+            $validationRules['username'] = 'required|is_unique[user.username]';
+        } else {
+            $validationRules['username'] = 'required';
+        }
+
+        $validation = \Config\Services::validation();
+        $validation -> setRules($validationRules);
+
+        if (!$this->validate($validation->getRules())) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $data = [
+            'full_name'     => $this->request->getPost('fullname'),
+            'city'          => $this->request->getPost('city'),
+            'province'      => $this->request->getPost('province'),
+            'description'   => $this->request->getPost('description'),
+        ];
+
+        if ($newUsername !== $user['username']) {
+            $data['username'] = $newUsername;
+        } 
+
+        $file = $this -> request -> getFile('photoProfile');
+        if ($file && $file -> isValid() && !$file -> hasMoved()) {
+            $newName = $file -> getRandomName();
+            $file->move('uploads/', $newName);
+            $data['picture'] = $newName;
+
+            $oldPhoto = $user['picture'];
+            if ($oldPhoto && file_exists("uploads/$oldPhoto")) {
+                unlink("uploads/$oldPhoto");
+            }
+        }
+
+        $this->userModel->update($userId, $data);
+
+        return redirect()->to(base_url('profile/' . $user['username']))->with('success', 'Profil berhasil diperbarui.');
+    }
+
+
+
+
+
     private function otherProfile(string $username) {
         $targetUser = $this -> userModel -> getDataUserByUsername($username);
 
