@@ -44,7 +44,7 @@ class MainController extends BaseController {
         $user = $this -> userModel -> find($userId);
 
         $data = [
-            'user_id' => $userId,
+            'userId' => $userId,
             'username' => $user['username'] ?? null,
             'photoProfile'   => $user['picture'] ?? null,
             'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($userId)
