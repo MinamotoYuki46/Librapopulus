@@ -134,25 +134,91 @@ class Book extends BaseController {
         return redirect() -> to('/library')->with('success', 'Buku berhasil ditambahkan!');
     }
 
-    public function editMyBook($userId, $slug){
-        $bookModel = new BookModel();
-        $genreModel = new GenreModel();
-
-        $book = $bookModel -> where('user_id', $userId)
-                        -> where('slug', $slug)
-                        -> first();
-
-        if (!$book) {
-            throw new PageNotFoundException("Buku tidak ditemukan.");
+    public function editMyBook($username, $slug){
+       if (!session()->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
         }
 
-        $genres = $genreModel->findAll();
+        $user = $this -> userModel -> where('username', $username) -> first();
+        if (!$user) {
+            throw new PageNotFoundException('User tidak ditemukan.');
+        }
 
-        return view('main/library/edit', [
-            'book' => $book,
+        $book = $this -> bookModel -> where('slug', $slug) -> first();
+        if (!$book) {
+            throw new PageNotFoundException('Buku tidak ditemukan.');
+        }
+
+        $bookCollection = $this -> bookCollectionModel
+            -> where('user_id', $user['id'])
+            -> where('book_id', $book['id'])
+            -> first();
+
+        if (!$bookCollection) {
+            throw new PageNotFoundException('Koleksi buku tidak ditemukan untuk user ini.');
+        }
+
+        if ($slug !== $book['slug']) {
+            return redirect()->to(base_url('/library/book/' . $username . '/' . $book['slug']), 301);
+        }
+
+        $genre = $this -> bookGenreModel
+                    -> select('genres.genre_name')
+                    -> join('genres', 'genres.id = book_genres.genre_id')
+                    -> where('book_genres.book_id', $book['id'])
+                    -> first();
+        
+        $genres = $this -> bookGenreModel
+                    -> select('genres.genre_name')
+                    -> join('genres', 'genres.id = book_genres.genre_id')
+                    -> where('book_genres.book_id', $book['id'])
+                    -> findAll();
+
+        $data = [
+            'book' => [
+                'id'            => $book['id'],
+                'title'         => $book['title'],
+                'author'        => $book['author'],
+                'slug'          => $book['slug'],
+                'book_cover'    => $book['book_cover'],
+                'published_date'=> $book['published_date'],
+                'total_pages'   => $book['total_pages'],
+                'description'   => $book['description'],
+                'added_at'    => $book['created_at'],
+                'updated_at'    => $book['updated_at'],
+                'genres'        => $genre['genre_name'],
+
+                'collection_id' => $bookCollection['id'],
+                'read_page'     => $bookCollection['read_page'],
+                'rating'        => $bookCollection['rating'],
+                'review'        => $bookCollection['review'],
+            ],
+            'user' => $user,
             'genres' => $genres
-        ]);
+        ];
+        return view('main/library/edit', $data);
     }
+
+    public function proceedEditBook($collectionId) {
+        if (!session() -> get('isLoggedIn')) {
+            return redirect() -> to(base_url('auth/login'));
+        }
+
+        $bookCollection = $this -> bookCollectionModel -> find($collectionId);
+
+        if (!$bookCollection || $bookCollection['user_id'] !== session()->get('userId')) {
+            throw new PageNotFoundException('Koleksi tidak ditemukan atau bukan milik Anda.');
+        }
+
+        $this -> bookCollectionModel->update($collectionId, [
+            'read_page' => $this -> request -> getPost('read_page'),
+            'rating' => $this -> request -> getPost('rating'),
+            'review' => $this -> request -> getPost('review'),
+        ]);
+
+        return redirect() -> to(base_url('/library'))->with('success', 'Koleksi buku berhasil diperbarui.');
+    }
+
 
 
     public function focus(int $collectionId, string $slug) {
