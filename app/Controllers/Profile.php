@@ -78,6 +78,8 @@ class Profile extends BaseController {
         $userId = session()->get("userId");
 
         $user = $this -> userModel->find($userId);
+
+        $oldUsername = $user['username'];
         $newUsername = $this -> request -> getPost('username');
 
         $validationRules = [
@@ -88,7 +90,7 @@ class Profile extends BaseController {
             'photoProfile' => 'if_exist|is_image[photoProfile]|max_size[photoProfile,2048]',
         ];
 
-        if ($newUsername !== $user['username']) {
+        if ($newUsername !== $oldUsername) {
             $validationRules['username'] = 'required|is_unique[user.username]';
         } else {
             $validationRules['username'] = 'required';
@@ -97,8 +99,8 @@ class Profile extends BaseController {
         $validation = \Config\Services::validation();
         $validation -> setRules($validationRules);
 
-        if (!$this->validate($validation->getRules())) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        if (!$this -> validate($validation->getRules())) {
+            return redirect() -> back() -> withInput() -> with('errors', $validation -> getErrors());
         }
 
         $data = [
@@ -108,8 +110,21 @@ class Profile extends BaseController {
             'description'   => $this->request->getPost('description'),
         ];
 
-        if ($newUsername !== $user['username']) {
+        if ($newUsername !== $oldUsername) {
             $data['username'] = $newUsername;
+
+            $oldFolder = FCPATH . "uploads/$oldUsername";
+            $newFolder = FCPATH . "uploads/$newUsername";
+
+            if (is_dir($oldFolder)) {
+                rename($oldFolder, $newFolder);
+
+                if (!empty($user['picture'])) {
+                    $oldPath = $user['picture'];
+                    $newPath = str_replace($oldUsername, $newUsername, $oldPath);
+                    $data['picture'] = $newPath;
+                }
+            }
         } 
 
         $file = $this -> request -> getFile('photoProfile');
@@ -124,7 +139,7 @@ class Profile extends BaseController {
             }
         }
 
-        $this->userModel->update($userId, $data);
+        $this -> userModel -> update($userId, $data);
 
         return redirect()->to(base_url('profile/' . $user['username']))->with('success', 'Profil berhasil diperbarui.');
     }

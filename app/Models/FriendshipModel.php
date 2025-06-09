@@ -22,7 +22,7 @@ class FriendshipModel extends Model
     
 
     public function getFriends(int $userId){
-        return $this->select('user.id, user.username')
+        return $this->select('user.id, user.username, user.full_name, user.picture')
         ->join('user', 'user.id = friendships.user_one_id OR user.id = friendships.user_two_id')
         ->where('status', self::STATUS_ACCEPTED)
         ->where("(user_one_id = $userId or user_two_id = $userId)")

@@ -65,9 +65,10 @@
                 <!-- Deskripsi Diri -->
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi Diri</label>
-                    <textarea id="description" name="description" rows="4" placeholder="<?= $user['description'] ?? '' ?>"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"><?= $user['deskripsi'] ?? '' ?></textarea>
-                </div>
+                    <textarea id="description" name="description" rows="4"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Tulis sesuatu tentang dirimu..."><?= old('description', $user['description'] ?? '') ?></textarea>
+                    </div>
 
                 <!-- Tombol Aksi -->
                 <div class="flex justify-center space-x-4 pt-4">

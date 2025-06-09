@@ -1,5 +1,5 @@
 <?php if (empty($notifications)): ?>
-    <p class="text-gray-500 text-center py-10">You have no new notifications.</p>
+    <p class="text-gray-500 text-center py-10">Kamu tidak punya notifikasi baru.</p>
 <?php else: ?>
     <?php foreach ($notifications as $notification): 
         $bgColor = !$notification['read'] ? 'bg-blue-50' : 'bg-white'; ?>

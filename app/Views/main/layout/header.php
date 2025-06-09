@@ -15,16 +15,15 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
     <div class="flex space-x-2">
         <i class="fas fa-book-open text-white text-4xl"></i>
         <h1 class="text-4xl font-bold text-gray-900">
-            <?= $headerTitle ?? 'Librapopulus' ?>
+            Librapopulus
         </h1>
     </div>
     <div class="flex items-center space-x-4 relative">
-        <!-- Notification Button -->
-        <button class="p-2 hover:bg-gray-300 rounded-lg transition-colors relative">
+        <button class="p-2 hover:bg-blue-300 rounded-lg transition-colors relative">
             <i class="fas fa-bell text-gray-700 text-4xl"></i>
             <?php 
-            $notificationCount = $notificationCount ?? 3;
-            if ($notificationCount > 0): 
+                $notificationCount = $notificationCount ?? 3;
+                if ($notificationCount > 0): 
             ?>
                 <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     <?= $notificationCount > 9 ? '9+' : $notificationCount ?>
@@ -41,20 +40,19 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
                 />
             </button>
 
-            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
-                <p class="px-4 py-2 border-b border-gray-200 font-bold"><?= "@" . esc($username) ?></p>
+            <div id="profileDropdown" class="hidden absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <p class="px-4 py-2 border-b border-gray-200 font-bold whitespace-nowrap"><?= "@" . esc($username) ?></p>
                 <form action="<?= base_url('auth/logout') ?>" method="POST" class="w-full">
                     <?= csrf_field() ?>
-                    <input type ="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" 
-                            class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
+                            class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer whitespace-nowrap"
                             style="background: none; border: none;">
                         <i class="fas fa-sign-out-alt mr-1"></i> Keluar
                     </button>
                 </form>
             </div>
         </div>
-        
     </div>
 </header>
 
