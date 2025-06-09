@@ -25,7 +25,7 @@ class UserModel extends Model
     protected $useTimestamps = true;
 
     protected $validationRules    = [
-        'username' => 'required|string|is_unique[user.username]',
+        'username' => 'required|string|is_unique[user.username]|min_length[1]|max_length[30]|regex_match[/^(?!.*[.]{2})(?!.*[_.]$)(?!^[_.])[a-zA-Z0-9._]+$/]',
         'email' => 'required|string|is_unique[user.email]',
         'password' => 'required|string'
     ];
@@ -33,7 +33,10 @@ class UserModel extends Model
     protected $validationMessages = [
         'username' => [
             'required' => 'username wajib diisi!',
-            'is_unique' => 'username sudah ada, silahkan masukkan username yang lain'
+            'is_unique' => 'username sudah ada, silahkan masukkan username yang lain',
+            'min_length' => 'username minimal 1 karakter',
+            'max_length' => 'username maksimal 30 karakter',
+            'regex_match' => 'username hanya boleh huruf, angka, titik, dan underscore. Tidak boleh diawali/diakhiri titik/underscore atau dua titik berurutan'
         ],
         'email' => [
             'required' => 'email wajib diisi!',
