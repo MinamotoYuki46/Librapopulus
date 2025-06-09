@@ -47,12 +47,15 @@ $routes -> group('library', function($routes) {
 $routes -> group('profile', function($routes) {
     $routes -> get('edit', 'Profile::editProfile');
     $routes -> post("update", "Profile::update");
-    $routes -> get('(:segment)', 'Profile::index/$1');
-
-    
     $routes -> get('friend', 'Profile::friend');
+    $routes -> get('(:segment)', 'Profile::index/$1');
     
 });
+
+$routes->post('friends/add/(:num)', 'Friendship::add/$1');
+$routes->post('friends/accept/(:num)', 'Friendship::accept/$1');
+$routes->post('friends/decline/(:num)', 'Friendship::decline/$1');
+$routes->post('friends/cancel/(:num)', 'Friendship::cancel/$1');
 
 $routes -> group("message", function($routes) {
     $routes -> get('(:segment)', 'Message::index/$1');

@@ -8,6 +8,7 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use App\Models\NotificationModel;
 
 /**
  * Class BaseController
@@ -52,7 +53,25 @@ abstract class BaseController extends Controller
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.
-
+         $this->injectGlobalData();
         // E.g.: $this->session = service('session');
+    }
+
+    private function injectGlobalData(){
+        $userId = session()->get('userId');
+        $viewData = [
+            'username' => session()->get('username') ?? 'Guest',
+            'photoProfile' => session()->get('picture') ?? null, // Sediakan default
+            'notificationCount' => 0,
+            'notifications' => []
+        ];
+
+        if ($userId) {
+            $notificationModel = new NotificationModel();
+            $viewData['notificationCount'] = $notificationModel->getUnreadCount($userId);
+            $viewData['notifications'] = $notificationModel->getNotifications($userId, 10);
+        }
+
+        \Config\Services::renderer()->setData($viewData);
     }
 }

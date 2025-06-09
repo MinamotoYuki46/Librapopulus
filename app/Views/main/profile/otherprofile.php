@@ -49,7 +49,8 @@
                     <?php $status = ($friendship === null) ? \App\Models\FriendshipModel::STATUS_NONE : $friendship['status'];?>
                     <div class="mt-6 flex justify-center gap-4">
                         <?php if ($status == \App\Models\FriendshipModel::STATUS_NONE || $status ==  \App\Models\FriendshipModel::STATUS_DECLINED) : ?>
-                            <form method="POST" action="<?= base_url('/friends/request/' . $username) ?>">
+                            <form method="POST" action="<?= base_url('/friends/add/' . $targetId) ?>">
+                                <?= csrf_field() ?>
                                 <button type="submit"
                                     class="flex items-center px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-semibold">
                                     <i class="fa-solid fa-user-plus mr-2"></i>
@@ -57,21 +58,24 @@
                                 </button>
                             </form>
                         <?php elseif ($status == \App\Models\FriendshipModel::STATUS_PENDING && $friendship['user_one_id'] == $myId) : ?>
-                            <form method="POST" action="<?= base_url('/friends/cancel/' . $username) ?>">
+                            <form method="POST" action="<?= base_url('/friends/cancel/' . $friendship['id']) ?>">
+                                <?= csrf_field() ?>
                                 <button type="submit"
                                     class="flex items-center px-5 py-2 bg-gray-400 text-gray-800 rounded-md hover:bg-gray-500 transition font-semibold">
                                     <i class="fa-solid fa-xmark mr-2"></i> Batalkan Permintaan
                                 </button>
                             </form>
                         <?php elseif ($status == \App\Models\FriendshipModel::STATUS_PENDING && $friendship['user_one_id'] == $targetId) : ?>
-                            <form method="POST" action="<?= base_url('/friends/accept/' . $username) ?>" class="inline-block">
+                            <form method="POST" action="<?= base_url('/friends/accept/' . $friendship['id']) ?>" class="inline-block">
+                                <?= csrf_field() ?>
                                 <button type="submit"
                                     class="flex items-center px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-semibold">
                                     <i class="fa-solid fa-check mr-2"></i> Terima
                                 </button>
                             </form>
 
-                            <form method="POST" action="<?= base_url('/friends/decline/' . $username) ?>" class="inline-block">
+                            <form method="POST" action="<?= base_url('/friends/decline/' . $friendship['id']) ?>" class="inline-block">
+                                <?= csrf_field() ?>
                                 <button type="submit"
                                     class="flex items-center px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-semibold">
                                     <i class="fa-solid fa-ban mr-2"></i> Tolak
