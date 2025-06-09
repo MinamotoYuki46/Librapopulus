@@ -62,6 +62,14 @@ class BookLoan extends BaseController{
             return redirect() -> to(base_url('/library/' . $username . '/' . $book['slug']), 301);
         }
 
+        $activeLoan = $this->bookLoanModel
+        ->where('book_id', $book['id'])
+        ->where('lender_id', $owner['id'])
+        ->where('borrower_id', session()->get('userId'))
+        ->whereIn('status', [BookLoanModel::STATUS_PENDING, BookLoanModel::STATUS_APPROVED])
+        ->first();
+
+
         $data = [
             "owner"             => $owner,
             'book' => [
@@ -73,7 +81,8 @@ class BookLoan extends BaseController{
                 'collection_id' => $bookCollection['id'],
             ],
             "currentUser"       => $currentUser,
-            'date_now'          => Time::now()->format('Y-m-d')
+            'date_now'          => Time::now()->format('Y-m-d'),
+            'activeLoan'        => $activeLoan
         ];
 
         return view("main/library/requestloan", $data);
@@ -157,6 +166,10 @@ class BookLoan extends BaseController{
         }
 
         $this->bookLoanModel->delete($loanId);
+        
+        $this->notificationModel->where('related_id', $loanId)
+                        ->where('type', 'loan_request')
+                        ->delete();
 
         $this->notificationModel->insert([
             'user_id' => $loan['borrower_id'],
@@ -183,6 +196,15 @@ class BookLoan extends BaseController{
         $this->notificationModel->where('related_id', $loanId)
                         ->where('type', 'loan_request')
                         ->delete();
+
+
+        $this->notificationModel->insert([
+            'user_id' => $loan['lender_id'],
+            'sender_id' => $loan['borrower_id'],
+            'type' => 'loan_canceled',
+            'related_id' => $loanId,
+            'message' => 'telah membatalkan peminjaman'
+        ]);
         
         return redirect()->back()->with('info', 'Permintaan peminjaman telah berhasil dibatalkan.');
     }

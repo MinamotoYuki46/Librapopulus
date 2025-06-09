@@ -50,6 +50,7 @@ $routes -> group('library', function($routes) {
     $routes -> post('loan/request', 'BookLoan::request');
     $routes -> post('loan/approve/(:num)', 'BookLoan::approve/$1');
     $routes -> post('loan/decline/(:num)', 'BookLoan::decline/$1');
+    $routes -> post('loan/cancel/(:num)', 'BookLoan::cancel/$1');
     $routes -> post('loan/return/(:num)', 'BookLoan::markAsReturned/$1');
 
 });
