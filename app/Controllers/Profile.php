@@ -141,6 +141,15 @@ class Profile extends BaseController {
 
         $this -> userModel -> update($userId, $data);
 
+        $newSessionData = [
+            'userId'     => $userId,
+            'username'   => $data['username'],
+            'picture'    => $data['picture'],
+            'isLoggedIn' => true
+        ];
+        
+        session() -> set($newSessionData);
+
         return redirect()->to(base_url('profile/' . $user['username']))->with('success', 'Profil berhasil diperbarui.');
     }
 

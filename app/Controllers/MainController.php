@@ -17,7 +17,7 @@ class MainController extends BaseController {
         $this -> userModel = new UserModel();
     }
 
-    public function library($username = null){
+    public function library($ownerUsername = null){
         $session = session();
         if (!$session->get('isLoggedIn')) {
             return redirect()->to(base_url('auth/login'));
@@ -26,13 +26,13 @@ class MainController extends BaseController {
         $loggedInUserId = $session->get('userId');
         $loggedInUser = $this->userModel->find($loggedInUserId);
 
-        if ($username === null) {
+        if ($ownerUsername === null) {
             $user = $loggedInUser;
         } else {
-            $user = $this->userModel->where('username', $username)->first();
+            $user = $this->userModel->where('username', $ownerUsername)->first();
 
             if (!$user) {
-                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("User $username not found.");
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("User $ownerUsername not found.");
             }
 
             // Jika username sama dengan yang login, redirect ke /library tanpa username
@@ -42,14 +42,11 @@ class MainController extends BaseController {
         }
 
         $data = [
-            'userId'         => $user['id'],
-            'username'       => $user['username'],
-            'photoProfile'   => $user['picture'] ?? null,
-            'userCollection' => $this->bookCollectionModel->getBookCollectionByUserId($user['id'])
+            'isOwnProfile' => $user['id'] == $loggedInUserId,
+            'fullname' => $user['full_name'],
+            'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($user['id'])
         ];
 
-        $data['isOwnProfile'] = ($user['id'] == $loggedInUserId);
-        $data['fullname'] = $user['full_name'];
 
         return view('main/library/library', $data);
     }
