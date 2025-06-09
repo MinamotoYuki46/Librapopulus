@@ -24,6 +24,8 @@ $routes -> group('auth', function($routes) {
     $routes -> delete('logout', 'Auth::logout');
 });
 
+$routes -> post("notification/mark-read", "Notification::markRead");
+
 
 $routes -> group('library', function($routes) {
     $routes -> get('/', 'MainController::library'); 

@@ -44,7 +44,7 @@ class NotificationModel extends Model
                     'name' => $row['sender_username'],
                     'picture' => base_url('uploads/' . $row['sender_picture']) 
                 ],
-                'details' => [] // Defaultnya array kosong
+                'details' => []
             ];
 
             if ($row['type'] === 'loan_request') {
@@ -67,10 +67,10 @@ class NotificationModel extends Model
                     ->countAllResults();
     }
 
-    public function markAllAsRead(int $userId) {
-        return $this->where('user_id', $userId)
-                    ->where('read_at', null)
-                    ->set(['read_at' => date('Y-m-d H:i:s')])
-                    ->update();
+    public function markAllAsRead(int $userId): bool {
+        return $this-> where('user_id', $userId)
+                    -> where('read_at', null)
+                    -> set(['read_at' => date('Y-m-d H:i:s')])
+                    -> update();
     }
 }

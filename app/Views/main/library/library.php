@@ -1,85 +1,3 @@
-<?php
-
-
-// $books = [
-//     [
-//         'id' => 1,
-//         'title' => 'The Great Gatsby',
-//         'author' => 'F. Scott Fitzgerald',
-//         'progress' => 65,
-//         'image' => 'https://m.media-amazon.com/images/I/81af+MCATTL.jpg'
-//     ],
-//     [
-//         'id' => 2,
-//         'title' => 'To Kill a Mockingbird',
-//         'author' => 'Harper Lee',
-//         'progress' => 32,
-//         'image' => 'https://m.media-amazon.com/images/I/71FxgtFKcQL._SY522_.jpg'
-//     ],
-//     [
-//         'id' => 3,
-//         'title' => '1984',
-//         'author' => 'George Orwell',
-//         'progress' => 78,
-//         'image' => 'https://m.media-amazon.com/images/I/71kxa1-0mfL.jpg'
-//     ],
-//     [
-//         'id' => 4,
-//         'title' => 'Pride and Prejudice',
-//         'author' => 'Jane Austen',
-//         'progress' => 45,
-//         'image' => 'https://m.media-amazon.com/images/I/81a3sr-RgdL._SY425_.jpg'
-//     ],
-//     [
-//         'id' => 5,
-//         'title' => 'The Catcher in the Rye',
-//         'author' => 'J.D. Salinger',
-//         'progress' => 12,
-//         'image' => 'https://m.media-amazon.com/images/I/81OthjkJBuL.jpg'
-//     ],
-//     [
-//         'id' => 6,
-//         'title' => 'Moby Dick',
-//         'author' => 'Herman Melville',
-//         'progress' => 50,
-//         'image' => 'https://m.media-amazon.com/images/I/61cGr2j9KFL._SY522_.jpg'
-//     ],
-//     [
-//         'id' => 7,
-//         'title' => 'Jane Eyre',
-//         'author' => 'Charlotte Brontë',
-//         'progress' => 38,
-//         'image' => 'https://m.media-amazon.com/images/I/81eB+7+CkUL.jpg'
-//     ],
-//     [
-//         'id' => 8,
-//         'title' => 'Brave New World',
-//         'author' => 'Aldous Huxley',
-//         'progress' => 80,
-//         'image' => 'https://m.media-amazon.com/images/I/71GNqqXuN3L._SY466_.jpg'
-//     ],
-//     [
-//         'id' => 9,
-//         'title' => 'Frankenstein',
-//         'author' => 'Mary Shelley',
-//         'progress' => 27,
-//         'image' => 'https://m.media-amazon.com/images/I/81z7E0uWdtL._SY466_.jpg'
-//     ],
-//     [
-//         'id' => 10,
-//         'title' => 'Wuthering Heights',
-//         'author' => 'Emily Brontë',
-//         'progress' => 59,
-//         'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg'
-//     ]
-// ]
-
-
-
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +7,6 @@
 
     <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

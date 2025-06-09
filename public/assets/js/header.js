@@ -1,8 +1,3 @@
-document.querySelector('.fa-bell').parentElement.addEventListener('click', function() {
-    console.log('Notifications clicked');
-});
-
-
 function toggleNotifications(event) {
     event?.stopPropagation();
     const overlay = document.getElementById('notificationOverlay');
@@ -16,15 +11,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileDropdown = document.getElementById('profileDropdown');
     const notificationBtn = document.querySelector('.fa-bell').parentElement;
     const notificationOverlay = document.getElementById('notificationOverlay');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    notificationBtn.addEventListener('click', function (event) {
+
+    notificationBtn.addEventListener('click', async function (event) {
         event.stopPropagation();
         console.log('Notifications clicked');
-        notificationOverlay.classList.toggle('hidden');
+        const isHidden = notificationOverlay.classList.toggle('hidden');
+        // notificationOverlay.classList.toggle('hidden');
+
+
+        if (!isHidden){
+            console.log('Starting fetch...');
+            try {
+                const response = await fetch ("<?= base_url('notification/mark-read') ?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (response.ok){
+                    console.log("Notifikasi telah dibaca");
+
+                    const badge = notificationBtn.querySelector("span");
+                    if (badge) badge.remove();
+                }
+                else {
+                    console.error("Gagal menandai notifikasi");
+                }
+            } catch (error) {
+                console.error("Gagal fetch", error);
+                
+            }
+        }
     });
 
     profileBtn.addEventListener('click', function (event) {
-        event.stopPropagation(); // prevent bubbling to document
+        event.stopPropagation();
         profileDropdown.classList.toggle('hidden');
     });
 
