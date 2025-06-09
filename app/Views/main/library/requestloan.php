@@ -58,7 +58,9 @@
 
 
                 <form action="<?= base_url('/loan/request') ?>" method="POST" class="space-y-4 pt-6">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+                    <input type="hidden" name="onwer_id" value="<?= $owner['id'] ?>">
 
                     <div>
                         <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>
@@ -74,7 +76,7 @@
 
                     <div>
                         <label for="start_date" class="block text-3xl font-bold text-gray-700">Tanggal Mulai</label>
-                        <input type="date" id="start_date" name="start_date" required
+                        <input type="date" id="start_date" name="start_date" value="<?= esc($date_now) ?>" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
                     </div>
 

@@ -7,14 +7,12 @@
             <img src="<?= esc($notification['sender']['picture']) ?>" alt="Avatar" class="w-12 h-12 rounded-full mr-4">
             <div class="flex-grow">
                 <p class="text-gray-800">
-                    <strong class="font-semibold"><?= htmlspecialchars($notification['sender']['name']) ?></strong>
+                    <strong class="font-semibold"><?= esc($notification['sender']['name']) ?></strong>
                     <?php 
-                        if ($notification['type'] === 'friend_request') {
-                            echo 'mengirimi Anda permintaan pertemanan.';
-                        } elseif ($notification['type'] === 'request_accepted') {
-                            echo 'menerima permintaan pertemanan Anda.'; 
-                        } elseif ($notification['type'] === 'loan_request') {
-                            echo 'mengajukan permintaan peminjaman untuk buku <em>' . esc($notification['details']['book_title']) . '</em>.';
+                        if ($notification['type'] === 'loan_request') {
+                            echo esc($notification['message']) . ' ' . esc($notification['details']['book_title']) . '</em>.';
+                        } else {
+                            echo esc($notification['message']);
                         }
                     ?>
                 </p>
@@ -30,7 +28,7 @@
                             <button type="submit" class="px-4 py-1.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300">Tolak</button>
                         </form>
                     <?php elseif ($notification['type'] === 'loan_request'): ?>
-                        <a href="/loan_details.php?id=<?= $notification['id'] ?>" class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600">View Details</a>
+                        <a href= "<?= base_url('requestedLoan/'. $notification['related_id']) ?>" class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600">View Details</a>
                     <?php endif; ?>
                 </div>
             </div>

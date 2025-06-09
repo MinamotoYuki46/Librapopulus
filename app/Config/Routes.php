@@ -30,8 +30,7 @@ $routes -> post("notification/mark-read", "Notification::markRead");
 $routes -> group('library', function($routes) {
     $routes -> get('/', 'MainController::library'); 
     $routes -> get('(:segment)', 'MainController::Library/$1');
-    $routes -> get('book/acceptloan', 'Book::acceptLoan');
-
+    $routes -> get('requestedloan/(:num)', 'BookLoan::ownerViewLoan/$1');
     $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 
     $routes -> get('add', 'Book::addBook');
@@ -44,7 +43,7 @@ $routes -> group('library', function($routes) {
 
     $routes -> get('book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
 
-    $routes -> get('(:segment)/(:segment)/requestloan', 'Book::requestLoan/$1/$2');
+    $routes -> get('(:segment)/(:segment)/requestloan', 'BookLoan::requestLoanForm/$1/$2');
 });
 
 

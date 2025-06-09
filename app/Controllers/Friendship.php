@@ -37,7 +37,7 @@ class Friendship extends BaseController {
             'sender_id'   => $senderId,
             'type'        => 'friend_request',
             'related_id'  => $friendshipId,
-            'message'     => esc($senderUsername) . ' mengirimi Anda permintaan pertemanan.'
+            'message'     => 'mengirimi Anda permintaan pertemanan.'
         ]);
 
         return redirect()->back()->with('success', 'Permintaan pertemanan berhasil dikirim.');
@@ -46,7 +46,6 @@ class Friendship extends BaseController {
 
     public function accept(int $requestId) {
         $receiverId = session()->get('userId');
-        $receiverUsername = session()->get('username');
 
         $request = $this->friendshipModel->find($requestId);
 
@@ -61,7 +60,7 @@ class Friendship extends BaseController {
             'sender_id'   => $receiverId,
             'type'        => 'request_accepted',
             'related_id'  => $requestId,
-            'message'     => esc($receiverUsername) . ' menerima permintaan pertemanan Anda.'
+            'message'     => 'menerima permintaan pertemanan Anda.'
         ]);
 
         $this->notificationModel->where('related_id', $requestId)
