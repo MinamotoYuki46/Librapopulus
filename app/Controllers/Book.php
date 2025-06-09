@@ -7,6 +7,7 @@ use App\Models\BookCollectionModel;
 use App\Models\BookGenreModel;
 use App\Models\GenreModel;
 use App\Models\UserModel;
+use CodeIgniter\I18n\Time;
 
 use CodeIgniter\Exceptions\PageNotFoundException;
 
@@ -266,57 +267,5 @@ class Book extends BaseController {
         $data = ['book' => $book];
 
         return view("main/library/focusmode", $data);
-    }
-
-    public function requestLoan(string $username, $slug){
-        if (!session() -> get('isLoggedIn')) {
-            return redirect() -> to(base_url('auth/login'));
-        }
-        $owner = $this -> userModel -> getDataUserByUsername($username); 
-        $currentUser = $this -> userModel -> getDataUser(session() -> get("userId"));
-
-        $book = $this -> bookModel -> where('slug', $slug) -> first();
-        if (!$book) {
-            throw new PageNotFoundException('Buku tidak ditemukan.');
-        }
-
-        $bookCollection = $this -> bookCollectionModel
-            -> where('user_id', $owner['id'])
-            -> where('book_id', $book['id'])
-            -> first();
-
-        if (!$bookCollection) {
-            throw new PageNotFoundException('Koleksi buku tidak ditemukan untuk user ini.');
-        }
-
-        if ($slug !== $book['slug']) {
-            return redirect() -> to(base_url('/library/' . $username . '/' . $book['slug']), 301);
-        }
-
-        $data = [
-            "owner"             => $owner,
-            "owner" => [
-                "username"      => $username
-            ],
-            'book' => [
-                'id'            => $book['id'],
-                'title'         => $book['title'],
-                'author'        => $book['author'],
-                'slug'          => $book['slug'],
-                'book_cover'    => $book['book_cover'],
-                'collection_id' => $bookCollection['id'],
-            ],
-            "currentUser"       => $currentUser
-        ];
-
-        return view("main/library/requestloan", $data);
-    }
-
-    public function acceptLoan() {
-        if (!session() -> get('isLoggedIn')) {
-            return redirect() -> to(base_url('auth/login'));
-        }
-
-        return view("main/library/acceptloan");
     }
 }
