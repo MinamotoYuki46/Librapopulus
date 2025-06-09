@@ -57,10 +57,10 @@
                 <p class="text-lg lg:text-xl text-gray-700">oleh <strong><?= esc($book['author']) ?></strong></p>
 
 
-                <form action="<?= base_url('/loan/request') ?>" method="POST" class="space-y-4 pt-6">
+                <form action="<?= base_url('library/loan/request') ?>" method="POST" class="space-y-4 pt-6">
                     <?= csrf_field() ?>
                     <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
-                    <input type="hidden" name="onwer_id" value="<?= $owner['id'] ?>">
+                    <input type="hidden" name="owner_id" value="<?= $owner['id'] ?>">
 
                     <div>
                         <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>

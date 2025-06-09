@@ -47,7 +47,7 @@
     <div class="flex flex-col md:flex-row gap-x-6 lg:gap-x-8 relative">
         <!-- Book Image -->
         <div class="w-full md:w-2/5 lg:w-1/3 mb-6">
-            <img src="<?= esc($loan['book_cover']) ?>"
+            <img src="<?= base_url('uploads/bookcover/' . $loan['book_cover']) ?>"
                 alt="Cover of <?= esc($loan['book_title']) ?>"
                 class="w-full h-auto object-cover rounded-lg shadow-xl sticky top-6 max-h-[800px]">
         </div>
@@ -56,60 +56,53 @@
         <div class="w-full md:w-3/5 lg:w-2/3">
             <div class="space-y-5 md:max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide pr-2 pb-8">
                 <h1 class="text-3xl lg:text-4xl font-bold text-gray-900"><?= esc($loan['book_title']) ?></h1>
-                <p class="text-lg lg:text-xl text-gray-700">by <strong><?= htmlspecialchars($loan['book_author']) ?></strong></p>
+                <p class="text-lg lg:text-xl text-gray-700">oleh <strong><?= esc($loan['book_author']) ?></strong></p>
 
 
                 <!-- Loan Request Form -->
-                <form action="<?= base_url('/loan/request') ?>" method="POST" class="space-y-4 pt-6">
-                    <?= csrf_field() ?>
+                <div class="space-y-4 pt-6">
                     <input type="hidden" name="book_id" value="<?= $loan['book_id'] ?>">
-
+                    
                     <div>
-                        <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>
-                        <input type="text" id="from_user" name="from_user" value="<?= esc($loan['borrower_name']) ?>" readonly
-                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
+                        <label class="block text-3xl font-bold text-gray-700">Dari</label>
+                        <p class="mt-1 block w-full rounded-md bg-gray-100 p-4 shadow-sm text-2xl font-bold"><?= esc($loan['borrower_name']) ?></p>
                     </div>
-
                     <div>
-                        <label for="to_user" class="block text-3xl font-bold text-gray-700">Kepada</label>
-                        <input type="text" id="to_user" name="to_user" value="<?= esc($loan['owner_name']) ?>" readonly
-                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
+                        <label class="block text-3xl font-bold text-gray-700">Kepada</label>
+                        <p class="mt-1 block w-full rounded-md bg-gray-100 p-4 shadow-sm text-2xl font-bold"><?= esc($loan['owner_name']) ?></p>
                     </div>
-
                     <div>
-                        <label for="start_date" class="block text-3xl font-bold text-gray-700">Tanggal Mulai</label>
-                        <input type="date" id="start_date" name="start_date" required value="<?= esc($loan['start_date'])?>"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
+                        <label class="block text-3xl font-bold text-gray-700">Tanggal Mulai</label>
+                        <p class="mt-1 block w-full rounded-md bg-gray-100 p-4 shadow-sm text-2xl font-bold"><?= date('d F Y', strtotime($loan['loan_start_date'])) ?></p>
                     </div>
-
                     <div>
-                        <label for="end_date" class="block text-3xl font-bold text-gray-700">Tanggal Selesai</label>
-                        <input type="date" id="end_date" name="end_date" required value="<?= esc($loan['end_date'])?>"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
+                        <label class="block text-3xl font-bold text-gray-700">Tanggal Selesai</label>
+                        <p class="mt-1 block w-full rounded-md bg-gray-100 p-4 shadow-sm text-2xl font-bold"><?= date('d F Y', strtotime($loan['loan_end_date'])) ?></p>
                     </div>
-
-                    <div class="flex justify-start gap-4 pt-4">
-                        <button type="submit" name="action" value="accept"
-                            class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-bold text-white hover:bg-green-700 transition">
+                </div>
+                
+                <div class="flex justify-start gap-4 pt-8">
+                    <form action="<?= site_url('library/loan/approve/' . $loan['id']) ?>" method="POST">
+                        <?= csrf_field() ?>
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-bold text-white hover:bg-green-700 transition">
                             <i class="fa-solid fa-check mr-2"></i> Terima
                         </button>
+                    </form>
 
-                        <button type="submit" name="action" value="suggest"
-                            class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-bold text-white hover:bg-yellow-600 transition">
-                            <i class="fa-solid fa-pen mr-2"></i> Sarankan Perubahan
-                        </button>
-
-                        <button type="submit" name="action" value="reject"
-                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-bold text-white hover:bg-red-700 transition">
+                    <form action="<?= site_url('library/loan/decline/' . $loan['id']) ?>" method="POST">
+                        <?= csrf_field() ?>
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-bold text-white hover:bg-red-700 transition">
                             <i class="fa-solid fa-xmark mr-2"></i> Tolak
                         </button>
+                    </form>
 
-                        <a href="<?= base_url('/books') ?>"
-                            class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400 transition">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> Batal
-                        </a>
-                    </div>
-                </form>
+                    <a href="<?= base_url('/books') ?>"
+                        class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400 transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
+                    </a>
+                </div>
             </div>
         </div>
     </div>

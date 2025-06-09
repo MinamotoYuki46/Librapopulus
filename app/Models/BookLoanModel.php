@@ -17,7 +17,7 @@ class BookLoanModel extends Model
         'approved_at',
         'returned_at'
     ];
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
 
     const STATUS_PENDING = 0;
     const STATUS_APPROVED = 1;
@@ -30,8 +30,8 @@ class BookLoanModel extends Model
             book_loans.*,
             book.id as book_id,
             book.title as book_title,
-            books.author as book_author, 
-            books.book_cover,
+            book.author as book_author, 
+            book.book_cover,
             borrower.username as borrower_name,
             owner.username as owner_name
         ')
