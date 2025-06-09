@@ -186,4 +186,21 @@ class BookLoan extends BaseController{
         
         return redirect()->back()->with('info', 'Permintaan peminjaman telah berhasil dibatalkan.');
     }
+
+
+    public function markAsReturned(int $loanId){
+        $ownerId = session()->get('userId');
+        $loan = $this->bookLoanModel->find($loanId);
+
+        if (!$loan || $loan['lender_id'] != $ownerId || $loan['status'] != BookLoanModel::STATUS_APPROVED) {
+            return redirect()->back()->with('error', 'Aksi tidak valid.');
+        }
+
+        $this->bookLoanModel->update($loanId, [
+            'status' => BookLoanModel::STATUS_RETURNED,
+            'returned_at' => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect()->to(base_url());
+    }
 }

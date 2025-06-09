@@ -81,25 +81,53 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-start gap-4 pt-8">
-                    <form action="<?= site_url('library/loan/approve/' . $loan['id']) ?>" method="POST">
-                        <?= csrf_field() ?>
-                        <button type="submit"
-                                class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-bold text-white hover:bg-green-700 transition">
-                            <i class="fa-solid fa-check mr-2"></i> Terima
-                        </button>
-                    </form>
+                <div class="flex justify-start items-center flex-wrap gap-4 pt-8">
+                    <?php 
+                    switch ($loan['status']):
+                        case \App\Models\BookLoanModel::STATUS_PENDING:
+                    ?>
+                            <form action="<?= base_url('library/loan/approve/' . $loan['id']) ?>" method="POST">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-bold text-white hover:bg-green-700 transition">
+                                    <i class="fa-solid fa-check mr-2"></i> Terima
+                                </button>
+                            </form>
 
-                    <form action="<?= site_url('library/loan/decline/' . $loan['id']) ?>" method="POST">
-                        <?= csrf_field() ?>
-                        <button type="submit"
-                                class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-bold text-white hover:bg-red-700 transition">
-                            <i class="fa-solid fa-xmark mr-2"></i> Tolak
-                        </button>
-                    </form>
+                            <form action="<?= base_url('library/loan/decline/' . $loan['id']) ?>" method="POST">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-bold text-white hover:bg-red-700 transition">
+                                    <i class="fa-solid fa-xmark mr-2"></i> Tolak
+                                </button>
+                            </form>
+                    <?php 
+                        break;
 
-                    <a href="<?= base_url('/books') ?>"
-                        class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400 transition">
+                        case \App\Models\BookLoanModel::STATUS_APPROVED:
+                    ?>
+                            <form action="<?= base_url('library/loan/return/' . $loan['id']) ?>" method="POST">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-bold text-white hover:bg-purple-700 transition">
+                                    <i class="fa-solid fa-check-double mr-2"></i> Tandai Sudah Kembali
+                                </button>
+                            </form>
+                            <div class="p-2 bg-green-100 text-green-800 rounded-md font-semibold">
+                                Status: Sedang Dipinjam
+                            </div>
+                    <?php 
+                        break;
+
+                        case \App\Models\BookLoanModel::STATUS_RETURNED:
+                    ?>
+                            <div class="p-2 bg-gray-200 text-gray-800 rounded-md font-semibold">
+                                <i class="fa-solid fa-book-bookmark mr-2"></i> Telah dikembalikan pada <?= date('d F Y', strtotime($loan['returned_at'])) ?>
+                            </div>
+                    <?php 
+                        break;
+
+                    endswitch; 
+                    ?>
+
+                    <a href="<?= base_url('/books') ?>" class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400 transition">
                         <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
                     </a>
                 </div>
