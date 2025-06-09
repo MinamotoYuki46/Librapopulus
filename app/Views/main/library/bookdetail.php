@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Detail</title>
+    <title>Detail Buku</title>
 
     <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -42,12 +42,12 @@
                         </form>
                     </div>
                 <?php else : ?>
-                    <form method="POST" action="<?= base_url('/borrow/request/' . $book['id']) ?>">
+                    <a href="<?= base_url('library/' . $user["username"] . '/' . $book['slug'] . '/requestloan') ?>">
                         <button type="submit"
                             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
                             <i class="fas fa-book-open-reader"></i> Pinjam Buku
                         </button>
-                    </form>
+                    </a>
                 <?php endif; ?>
             </div>
 
