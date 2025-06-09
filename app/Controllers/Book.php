@@ -207,7 +207,7 @@ class Book extends BaseController {
 
         $bookCollection = $this -> bookCollectionModel -> find($collectionId);
 
-        if (!$bookCollection || $bookCollection['user_id'] !== session()->get('userId')) {
+        if (!$bookCollection || $bookCollection['user_id'] != session()->get('userId')) {
             throw new PageNotFoundException('Koleksi tidak ditemukan atau bukan milik Anda.');
         }
 
