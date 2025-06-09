@@ -44,6 +44,7 @@ class MainController extends BaseController {
         $data = [
             'isOwnProfile' => $user['id'] == $loggedInUserId,
             'fullname' => $user['full_name'],
+            'otherUsername' => $user['username'],
             'userCollection' => $this -> bookCollectionModel -> getBookCollectionByUserId($user['id'])
         ];
 
