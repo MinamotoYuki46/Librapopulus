@@ -64,16 +64,16 @@
 
                 <!-- Action Buttons -->
                 <div class="space-y-4">
-                    <a href="<?= base_url('dashboard') ?>" 
+                    <a href="<?= base_url() ?>" 
                        class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
                         <i class="fas fa-home mr-2"></i>
                         Go to Dashboard
                     </a>
-                    <a href="<?= base_url('books') ?>" 
+                    <!-- <a href="<?= base_url('books') ?>" 
                        class="block w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200">
                         <i class="fas fa-book mr-2"></i>
                         Browse Books
-                    </a>
+                    </a> -->
                 </div>
 
                 <!-- Tips -->

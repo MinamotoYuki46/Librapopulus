@@ -45,15 +45,7 @@ class NotificationModel extends Model
                     'picture' => base_url('uploads/' . $row['sender_picture']) 
                 ],
                 'message' => $row['message'],
-                'details' => []
             ];
-
-            if ($row['type'] === 'loan_request') {
-                $book = $bookModel->find($row['related_id']);
-                if ($book) {
-                    $notificationData['details']['book_title'] = $book['title'];
-                }
-            }
             
             $formattedNotifications[] = $notificationData;
         }

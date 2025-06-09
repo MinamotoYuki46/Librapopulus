@@ -81,7 +81,6 @@ class Auth extends BaseController {
             'city' => $tmp['city'],
             'province' => $tmp['province'],
             'description' => $tmp['description'],
-            'favorite_genres' => $tmp['favorite_genres'],
             'picture' => $tmp['picture']
             //JANGAN DIUBAH NAMANYA LAGI
         ];
@@ -203,15 +202,12 @@ class Auth extends BaseController {
             return redirect() -> back() -> with('error', 'Format lokasi harus "Kota, Provinsi" dan hanya boleh satu koma.');
         }
         $bio = $this -> request -> getPost('bio') ?? null;
-        $favoriteGenresArray = $this -> request -> getPost('genres'); 
-        $favoriteGenresJson = $favoriteGenresArray ? json_encode($favoriteGenresArray) : null;
 
         $profileData = [
             'full_name' => $fullName,
             'city' => $city,
             'province' => $province,
             'description' => $bio,
-            'favorite_genres' => $favoriteGenresJson,
             'picture' => $picture
         ];
 

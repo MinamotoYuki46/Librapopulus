@@ -40,7 +40,9 @@
 <main class="px-6 py-6" id="mainContent">
     <div class="max-w-screen-3xl mx-auto px-4">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 mt-2 gap-3">
-            <h2 class="text-6xl font-bold text-gray-900">Ajukan Peminjaman Buku</h2>
+            <h2 class="text-6xl font-bold text-gray-900">
+                <?= ($activeLoan && $activeLoan['status'] == \App\Models\BookLoanModel::STATUS_PENDING) ? 'Status Permintaan' : 'Ajukan Peminjaman Buku' ?>
+            </h2>
         </div>
     </div>
 
@@ -52,53 +54,70 @@
         </div>
 
         <div class="w-full md:w-3/5 lg:w-2/3">
-            <div class="space-y-5 md:max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide pr-2 pb-8">
+            <div class="space-y-5">
                 <h1 class="text-3xl lg:text-4xl font-bold text-gray-900"><?= esc($book['title']) ?></h1>
                 <p class="text-lg lg:text-xl text-gray-700">oleh <strong><?= esc($book['author']) ?></strong></p>
 
+                <?php if ($activeLoan): ?>
 
-                <form action="<?= base_url('/loan/request') ?>" method="POST" class="space-y-4 pt-6">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
-                    <input type="hidden" name="onwer_id" value="<?= $owner['id'] ?>">
+                    <?php if ($activeLoan['status'] == \App\Models\BookLoanModel::STATUS_PENDING): ?>
+                        
+                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md mt-6" role="alert">
+                            <p class="font-bold text-xl">Peminjaman Sedang Ditinjau</p>
+                            <p>Anda telah mengajukan peminjaman buku ini pada tanggal <?= date('d M Y', strtotime($activeLoan['loan_start_date'])) ?> hingga <?= date('d M Y', strtotime($activeLoan['loan_end_date'])) ?>. Mohon tunggu persetujuan dari <?= esc($owner['username']) ?>.</p>
+                        </div>
+                        <div class="flex justify-start gap-4 pt-4">
+                            <form action="<?= site_url('/library/loan/cancel/' . $activeLoan['id']) ?>" method="POST">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-bold">
+                                    <i class="fa-solid fa-xmark mr-2"></i> Batalkan Permintaan
+                                </button>
+                            </form>
+                        </div>
 
-                    <div>
-                        <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>
-                        <input type="text" id="from_user" name="from_user" value="<?= esc($currentUser["username"]) ?>" readonly
-                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
-                    </div>
+                    <?php elseif ($activeLoan['status'] == \App\Models\BookLoanModel::STATUS_APPROVED): ?>
+                        
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mt-6" role="alert">
+                            <p class="font-bold text-xl">Peminjaman Telah Disetujui</p>
+                            <p>Peminjaman buku ini telah disetujui oleh <?= esc($owner['username']) ?>. Periode peminjaman Anda adalah dari tanggal <?= date('d M Y', strtotime($activeLoan['loan_start_date'])) ?> hingga <?= date('d M Y', strtotime($activeLoan['loan_end_date'])) ?>.</p>
+                        </div>
 
-                    <div>
-                        <label for="to_user" class="block text-3xl font-bold text-gray-700">Kepada</label>
-                        <input type="text" id="to_user" name="to_user" value="<?= esc($owner["username"]) ?>" readonly
-                            class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
-                    </div>
+                    <?php endif; ?>
 
-                    <div>
-                        <label for="start_date" class="block text-3xl font-bold text-gray-700">Tanggal Mulai</label>
-                        <input type="date" id="start_date" name="start_date" value="<?= esc($date_now) ?>" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
-                    </div>
+                <?php else: // JIKA TIDAK ADA PEMINJAMAN AKTIF, TAMPILKAN FORM ?>
 
-                    <div>
-                        <label for="end_date" class="block text-3xl font-bold text-gray-700">Tanggal Selesai</label>
-                        <input type="date" id="end_date" name="end_date" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
-                    </div>
+                    <form action="<?= base_url('library/loan/request') ?>" method="POST" class="space-y-4 pt-6">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+                        <input type="hidden" name="owner_id" value="<?= $owner['id'] ?>">
+                        <div>
+                            <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>
+                            <input type="text" id="from_user" name="from_user" value="<?= esc($currentUser["username"]) ?>" readonly class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
+                        </div>
+                        <div>
+                            <label for="to_user" class="block text-3xl font-bold text-gray-700">Kepada</label>
+                            <input type="text" id="to_user" name="to_user" value="<?= esc($owner["username"]) ?>" readonly class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
+                        </div>
+                        <div>
+                            <label for="start_date" class="block text-3xl font-bold text-gray-700">Tanggal Mulai</label>
+                            <input type="date" id="start_date" name="start_date" value="<?= esc($date_now) ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
+                        </div>
+                        <div>
+                            <label for="end_date" class="block text-3xl font-bold text-gray-700">Tanggal Selesai</label>
+                            <input type="date" id="end_date" name="end_date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
+                        </div>
+                        <div class="flex justify-start gap-4 pt-4">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-sky-600 border border-transparent rounded-md font-bold font-3xl text-white hover:bg-sky-700 transition">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> Ajukan Peminjaman
+                            </button>
+                        </div>
+                    </form>
 
-                    <div class="flex justify-start gap-4 pt-4">
-                        <button type="submit"
-                            class="inline-flex items-center px-4 py-2 bg-sky-600 border border-transparent rounded-md font-bold font-3xl text-white hover:bg-sky-700 transition">
-                            <i class="fa-solid fa-paper-plane mr-2"></i> Ajukan Peminjaman
-                        </button>
-
-                        <a href="<?= base_url('/library/' . $owner["username"] . '/' . $book["slug"]) ?>"
-                            class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-3xl rounded-md hover:bg-gray-400 transition">
-                            <i class="fa-solid fa-xmark mr-2"></i> Batal
-                        </a>
-                    </div>
-                </form>
-            </div>
+                <?php endif; ?>
+                <a href="<?= base_url('/library/' . $owner["username"] . '/' . $book["slug"]) ?>" class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-3xl rounded-md hover:bg-gray-400 transition">
+                    <i class="fa fa-arrow-left mr-2"></i> Kembali
+                </a>
+                </div>
         </div>
     </div>
 </main>

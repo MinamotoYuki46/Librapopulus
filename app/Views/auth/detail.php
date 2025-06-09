@@ -158,7 +158,7 @@
                             <div class="text-center">
                                 <label class="block text-sm font-semibold text-gray-700 mb-4">
                                     <i class="fas fa-camera mr-2 text-gray-400"></i>
-                                    Foto Profil
+                                    Foto Profil (Opsional)
                                 </label>
                                 <div class="flex justify-center">
                                     <div class="profile-upload flex flex-col items-center justify-center cursor-pointer" id="profileUpload">
@@ -208,47 +208,8 @@
                                     placeholder="Katakan kepada dunia tentang dirimu"></textarea>
                                 <p class="text-xs text-gray-500 mt-1">Genre atau Topik Favoritmu?</p>
                             </div>
-
-                            <!-- Favorite Genres -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                    <i class="fas fa-heart mr-2 text-gray-400"></i>
-                                    Genre Favorit (Optional)
-                                </label>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="genres[]" value="fiction" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <span class="ml-2 text-sm text-gray-700">Fiksi</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="genres[]" value="non-fiction" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <span class="ml-2 text-sm text-gray-700">Non-Fiksi</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="genres[]" value="mystery" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <span class="ml-2 text-sm text-gray-700">Misteri</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="genres[]" value="romance" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <span class="ml-2 text-sm text-gray-700">Romansa</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="genres[]" value="sci-fi" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <span class="ml-2 text-sm text-gray-700">Sci-Fi</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="genres[]" value="fantasy" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                        <span class="ml-2 text-sm text-gray-700">Fantasi</span>
-                                    </label>
-                                </div>
-                            </div>
-
                             <!-- Action Buttons -->
                             <div class="flex gap-4">
-                                <button type="button" onclick="skipProfile()" 
-                                    class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200">
-                                    Lewati untuk Sekarang
-                                </button>
                                 <button type="submit" 
                                     class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
                                     <i class="fas fa-check mr-2"></i>
@@ -304,12 +265,6 @@
                 }
             });
 
-            // Skip profile function
-            function skipProfile() {
-                if (confirm('Are you sure you want to skip profile setup? You can complete it later in settings.')) {
-                    window.location.href = '<?= base_url('dashboard') ?>';
-                }
-            }
 
             // Form validation
             document.querySelector('form').addEventListener('submit', function(e) {

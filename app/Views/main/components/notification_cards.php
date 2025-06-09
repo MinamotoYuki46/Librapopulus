@@ -9,11 +9,7 @@
                 <p class="text-gray-800">
                     <strong class="font-semibold"><?= esc($notification['sender']['name']) ?></strong>
                     <?php 
-                        if ($notification['type'] === 'loan_request') {
-                            echo esc($notification['message']) . ' ' . esc($notification['details']['book_title']) . '</em>.';
-                        } else {
-                            echo esc($notification['message']);
-                        }
+                        echo $notification['message'];
                     ?>
                 </p>
                 <p class="text-sm text-blue-600 font-semibold"><?= time_ago($notification['timestamp']) ?></p>
@@ -28,7 +24,7 @@
                             <button type="submit" class="px-4 py-1.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300">Tolak</button>
                         </form>
                     <?php elseif ($notification['type'] === 'loan_request'): ?>
-                        <a href= "<?= base_url('requestedLoan/'. $notification['related_id']) ?>" class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600">View Details</a>
+                        <a href= "<?= base_url('library/requested-loan/'. $notification['related_id']) ?>" class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600">View Details</a>
                     <?php endif; ?>
                 </div>
             </div>
