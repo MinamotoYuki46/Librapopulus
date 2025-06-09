@@ -21,7 +21,7 @@
 
                 <?php if (session() -> get('userId') === $user['id']) : ?>
                     <div class="flex gap-3">
-                        <a aria-label="Focus Mode" title="Focus Mode" href="<?= base_url('/library/book/focus/' . $book['collection_id'] . '/' . $book['slug']) ?>"
+                        <a aria-label="Focus Mode" title="Focus Mode" href="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/focus') ?>"
                             class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
                             <i class="fas fa-glasses"></i>
                         </a>

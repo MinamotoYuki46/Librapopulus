@@ -13,6 +13,7 @@ class BookCollectionModel extends Model
         'read_page',
         'rating',
         'review',
+        'read_duration',
         'created_at',
         'updated_at'
     ];
@@ -75,10 +76,25 @@ class BookCollectionModel extends Model
         return $this->where('user_id', $userId)->countAllResults();
     }
 
-    public function findBookByUserAndSlug($userId, $slug){
+    public function findBookByUserAndSlug($userId, $bookId){
         return $this -> where('user_id', $userId)
-                     -> where('slug', $slug)
+                     -> where('slug', $bookId)
                      -> first();
+    }
+
+    public function updateReadingSession(int $bookCollectionId, int $newDuration, int $newPagesRead): bool {
+        $this   -> where ("id", $bookCollectionId)
+                -> set("read_duration", "read_duration + " . (int)$newDuration, false)
+                -> set("read_page", "read_page +" . (int)$newPagesRead, false)
+                -> update();
+
+        $dbError = $this -> db -> error();
+        if (!empty($dbError['message'])) {
+            log_message('error', 'DB Error on updating progress: ' . print_r($dbError, true));
+            return false;
+        }
+
+        return true;
     }
 
 }
