@@ -26,6 +26,7 @@ $routes -> group('auth', function($routes) {
 $routes -> group('library', function($routes) {
     $routes -> get('/', 'MainController::library'); 
     $routes -> get('(:segment)', 'MainController::Library/$1');
+    $routes -> get('book/acceptloan', 'Book::acceptLoan');
 
     $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 
@@ -40,7 +41,6 @@ $routes -> group('library', function($routes) {
     $routes -> get('book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
 
     $routes -> get('(:segment)/(:segment)/requestloan', 'Book::requestLoan/$1/$2');
-    $routes -> get('book/acceptloan', 'Book::acceptLoan');
 });
 
 
