@@ -39,7 +39,7 @@ $routes -> group('library', function($routes) {
 
     $routes -> get('book/focus/(:num)/(:segment)', 'Book::focus/$1/$2');
 
-    $routes -> get('book/loanrequest', 'Book::loanRequest');
+    $routes -> get('(:segment)/(:segment)/requestloan', 'Book::requestLoan/$1/$2');
     $routes -> get('book/acceptloan', 'Book::acceptLoan');
 });
 
