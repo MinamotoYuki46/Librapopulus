@@ -58,7 +58,7 @@ abstract class BaseController extends Controller
     }
 
     private function injectGlobalData(){
-        $userId = session()->get('userId');
+        $currentUserId = session()->get('userId');
         $viewData = [
             'username' => session()->get('username') ?? 'Guest',
             'photoProfile' => session()->get('picture') ?? null, // Sediakan default
@@ -66,10 +66,10 @@ abstract class BaseController extends Controller
             'notifications' => []
         ];
 
-        if ($userId) {
+        if ($currentUserId) {
             $notificationModel = new NotificationModel();
-            $viewData['notificationCount'] = $notificationModel->getUnreadCount($userId);
-            $viewData['notifications'] = $notificationModel->getNotifications($userId, 10);
+            $viewData['notificationCount'] = $notificationModel->getUnreadCount($currentUserId);
+            $viewData['notifications'] = $notificationModel->getNotifications($currentUserId, 10);
         }
 
         \Config\Services::renderer()->setData($viewData);

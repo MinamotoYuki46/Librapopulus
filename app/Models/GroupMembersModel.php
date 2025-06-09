@@ -48,4 +48,36 @@ class GroupMembersModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getGroupsByUserId($userId) {
+        return $this -> select(
+            'group_members.group_id, 
+                    groups.name as group_name, 
+                    groups.icon, groups.slug, 
+                    groups.description, 
+                    (SELECT COUNT(*) FROM group_members WHERE group_members.group_id = groups.id) as member_count'
+        )
+                    -> join('groups', 'groups.id = group_members.group_id')
+                    -> where('group_members.user_id', $userId)
+                    -> findAll();
+    }
+
+    public function getMembersByGroupId(int $groupId) {
+        return $this->select('user.id, user.username, user.picture')
+                    ->join('user', 'user.id = group_members.user_id')
+                    ->where('group_members.group_id', $groupId)
+                    ->findAll();
+    }
+
+    public function isMember($userId, $groupId) {
+        if (!$userId || !$groupId) {
+            return false;
+        }
+
+        $result = $this->where('user_id', $userId)
+                       ->where('group_id', $groupId)
+                       ->first();
+        
+        return $result !== null;
+    }
 }

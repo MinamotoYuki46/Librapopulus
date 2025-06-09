@@ -16,6 +16,10 @@ class CreateGroupsTable extends Migration {
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],
+            'slug' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
             'description' => [
                 'type' => 'TEXT',
                 'null' => true,
@@ -38,6 +42,7 @@ class CreateGroupsTable extends Migration {
 
         $this -> forge -> addKey('id', true);
         $this -> forge -> addForeignKey('created_by', 'user', 'id', 'CASCADE', 'CASCADE');
+        $this -> forge -> addUniqueKey('slug', 'slug_key');
         $this -> forge -> createTable('groups');
     }
 

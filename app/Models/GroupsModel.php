@@ -15,9 +15,9 @@ class GroupsModel extends Model
     protected $allowedFields    = [
         "name",
         "description",
+        "slug",
         "icon",
         "created_by",
-        "created_at"
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -27,7 +27,7 @@ class GroupsModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -49,4 +49,8 @@ class GroupsModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getGroupBySlug(string $slug) {
+        return $this -> where('slug', $slug)->first();
+    }
 }

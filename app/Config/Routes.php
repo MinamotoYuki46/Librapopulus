@@ -75,4 +75,9 @@ $routes -> get("group", "MainController::group");
 $routes -> get("group/message", "MainController::groupMessage");
 $routes -> get("groups", "MainController::groupList");
 
+
 $routes -> get("community", "Community::index");
+$routes -> get("group/create", "Community::createGroup");
+$routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup");
+$routes -> get("group/(:segment)", "Community::group/$1");
+$routes -> post("group/send", "Community::groupSendMessage");

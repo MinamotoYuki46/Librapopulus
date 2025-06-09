@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class GroupMessagesModel extends Model
 {
-    protected $table            = 'groupmessages';
+    protected $table            = 'group_messages';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -26,10 +26,10 @@ class GroupMessagesModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $updatedField  = '';
     protected $deletedField  = 'deleted_at';
 
     // Validation
@@ -48,4 +48,12 @@ class GroupMessagesModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getMessagesByGroup(int $groupId) {
+        return $this->select('group_messages.*, user.username as sender_username, user.picture as sender_picture')
+                    ->join('user', 'user.id = group_messages.sender_id')
+                    ->where('group_messages.group_id', $groupId)
+                    ->orderBy('group_messages.created_at', 'ASC')
+                    ->findAll();
+    }
 }

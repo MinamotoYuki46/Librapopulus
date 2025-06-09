@@ -35,7 +35,6 @@ class MainController extends BaseController {
                 throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("User $ownerUsername not found.");
             }
 
-            // Jika username sama dengan yang login, redirect ke /library tanpa username
             if ($user['username'] === $loggedInUser['username']) {
                 return redirect()->to(base_url('library'));
             }
