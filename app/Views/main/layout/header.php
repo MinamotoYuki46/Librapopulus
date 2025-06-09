@@ -1,8 +1,8 @@
 <?php
 
-$photoProfile = session()->get('picture') ?? null;
-$username = session()->get('username') ?? 'Guest';
-// Dummy notifications for demo (replace with DB fetch)
+$photoProfile = session() -> get('picture') ?? null;
+$username = session() -> get('username') ?? 'Guest';
+
 $notifications = [
     [
         'id' => 1,
@@ -38,9 +38,6 @@ $notifications = [
         'read' => true
     ],
 ];
-
-
-
 
 function time_ago($timestamp) {
     $diff = time() - $timestamp;
