@@ -29,13 +29,15 @@ $routes -> post("notification/mark-read", "Notification::markRead");
 
 $routes -> group('library', function($routes) {
     $routes -> get('/', 'MainController::library'); 
+
+    $routes -> get('add', 'Book::addBook');
+    $routes -> post('proceedAddBook', 'Book::proceedAddBook');
+
     $routes -> get('(:segment)', 'MainController::Library/$1');
     $routes -> get('book/acceptloan', 'Book::acceptLoan');
 
     $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 
-    $routes -> get('add', 'Book::addBook');
-    $routes -> post('proceedAddBook', 'Book::proceedAddBook');
 
     $routes -> get('(:segment)/(:segment)/edit', 'Book::editMyBook/$1/$2');
     $routes -> post('proceedEditBook/(:num)', 'Book::proceedEditBook/$1');
@@ -54,7 +56,6 @@ $routes -> group('profile', function($routes) {
     $routes -> post("update", "Profile::update");
     $routes -> get('friend', 'Profile::friend');
     $routes -> get('(:segment)', 'Profile::index/$1');
-    
 });
 
 $routes -> post('friends/add/(:num)', 'Friendship::add/$1');

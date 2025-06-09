@@ -69,9 +69,6 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DATA FROM PHP ---
-            // These values are passed from your controller to build the correct API request.
-            // Note: Your 'focusSend' controller method must pass 'owner_username' in the data array.
             const username = '<?= esc($username, 'js') ?>'; 
             const bookSlug = '<?= esc($book['slug'], 'js') ?>';
             let csrfToken = '<?= csrf_hash() ?>';
@@ -80,7 +77,6 @@
             const progressText = document.getElementById('progress-text');
             const progressBar = document.getElementById('progress-bar');
 
-            // --- DOM ELEMENTS ---
             const timerDisplay = document.getElementById('timer');
             const startBtn = document.getElementById('startBtn');
             const pauseBtn = document.getElementById('pauseBtn');
@@ -88,11 +84,9 @@
             const endBtn = document.getElementById('endBtn');
             const pagesReadInput = document.getElementById('pagesRead');
 
-            // --- TIMER STATE ---
             let elapsedSeconds = 0;
             let intervalId = null;
 
-            // --- HELPER FUNCTIONS ---
             function formatTime(seconds) {
                 const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
                 const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
@@ -105,7 +99,6 @@
                 timerDisplay.textContent = formatTime(elapsedSeconds);
             }
             
-            // --- INITIAL UI STATE ---
             function setButtonState(state) {
                 startBtn.style.display = (state === 'initial') ? 'inline-block' : 'none';
                 pauseBtn.style.display = (state === 'running') ? 'inline-block' : 'none';
@@ -114,7 +107,6 @@
             }
             setButtonState('initial');
 
-            // --- EVENT LISTENERS ---
             startBtn.addEventListener('click', () => {
                 intervalId = setInterval(updateTimer, 1000);
                 setButtonState('running');
@@ -130,17 +122,14 @@
                 setButtonState('running');
             });
 
-            // --- ASYNCHRONOUS SAVE LOGIC ---
             endBtn.addEventListener('click', async () => {
                 clearInterval(intervalId);
                 
                 const duration = elapsedSeconds;
                 const pagesRead = pagesReadInput.value;
 
-                // Build the dynamic URL for the API endpoint
                 const saveUrl = `<?= base_url('/library/' . $username . '/' . $book['slug'] . '/focus/update') ?>`;
 
-                // Provide visual feedback to the user
                 endBtn.disabled = true;
                 endBtn.textContent = 'Menyimpan...';
 
@@ -163,38 +152,29 @@
 
                     console.log('Data yang diterima dari server:', data);
 
-                    // IMPORTANT: Update the CSRF token for the next request
                     if (data.csrf_token) {
                         csrfToken = data.csrf_token;
                     }
 
                     if (!response.ok) {
-                        // Throw an error to be caught by the catch block
                         throw new Error(data.error || 'An unknown server error occurred.');
                     }
 
                     if (data.new_read_page !== undefined) {
-                        // 1. Update teks progres
                         progressText.textContent = `Terbaca: ${ data.new_read_page} / ${totalPages} halaman`;
 
-                        // 2. Hitung persentase baru
                         const newPercentage = (data.new_read_page / totalPages) * 100;
 
-                        // 3. Update lebar progress bar
                         progressBar.style.width = `${newPercentage}%`;
                     }
 
-                    // Success!
                     alert(`Sesi membaca berhasil disimpan!\nDurasi: ${formatTime(duration)}\nHalaman terbaca: ${pagesRead}`);
-                    // You could optionally update the progress bar here dynamically without a page reload.
                     
                 } catch (error) {
                     console.error('Failed to save session:', error);
                     alert('Gagal menyimpan sesi. Silakan coba lagi.\nError: ' + error.message);
                 } finally {
-                    // This block runs whether the save succeeded or failed, ensuring the UI is reset.
                     
-                    // Reset the timer state
                     elapsedSeconds = 0;
                     timerDisplay.textContent = '00:00:00';
                     pagesReadInput.value = '1';
