@@ -12,6 +12,7 @@ class UserModel extends Model
         'email',
         'password',
         'full_name',
+        'role',
         'city',
         'province',
         'description',

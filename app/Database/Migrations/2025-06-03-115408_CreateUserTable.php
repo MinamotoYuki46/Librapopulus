@@ -31,6 +31,11 @@ class CreateUserTable extends Migration
                 'constraint' => '255',
                 'null' => true
             ],
+            'role' => [
+                'type'       => 'ENUM',
+                'constraint' => ['user', 'admin'],
+                'default'    => 'user'
+            ],
             'city' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
