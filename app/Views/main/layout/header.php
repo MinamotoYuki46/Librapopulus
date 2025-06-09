@@ -83,7 +83,7 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
         const profileDropdown = document.getElementById('profileDropdown');
         const notificationBtn = document.querySelector('.fa-bell').parentElement;
         const notificationOverlay = document.getElementById('notificationOverlay');
-        const csrfToken = '<?= csrf_hash() ?>';
+        let csrfToken = '<?= csrf_hash() ?>';
         
         
         notificationBtn.addEventListener('click', async function (event) {
@@ -106,8 +106,14 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
                     });
 
                     console.log("fetch done, status:", response.status);
+                    const data = await response.json();
 
-                    if (response.ok){
+                    if(data.csrfToken){
+                        csrfToken = data.csrfToken;
+                        console.log("CSRF token updated.");
+                    }
+
+                    if (response.ok && data.success){
                         console.log("Notifikasi telah dibaca");
 
                         const badge = notificationBtn.querySelector("span");

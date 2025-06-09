@@ -12,8 +12,12 @@ class Notification extends BaseController {
     }
 
     public function markRead(){
-        if (!$this -> request -> isAJAX()) {
-            return $this -> response-> setStatusCode(403)->setJSON(['error' => 'Forbidden']);
+        if (!$this -> request -> isAJAX() || !session() -> get("userId")) {
+            $data = [
+                'error' => 'Forbidden',
+                'csrf_token' => csrf_hash() // Get the newest token
+            ];
+            return $this -> response -> setStatusCode(403)->setJSON($data);
         }
 
         $userId = session() -> get("userId");
@@ -21,14 +25,21 @@ class Notification extends BaseController {
             return $this -> response -> setStatusCode(401) -> setJSON(['error' => 'Unauthenticated']);
         }
 
-        log_message('error', '[DEBUG] AJAX call to markRead. UserID is: ' . ($userId ?? 'NULL'));
-
         $success = $this -> notificationModel -> markAllAsRead($userId);
 
         if ($success) {
-            return $this -> response -> setJSON(['success' => true]);
+            $data = [
+                'success' => true,
+                'message' => 'Notifications marked as read.',
+                'csrf_token' => csrf_hash() // Add the NEW token to the response
+            ];
+            return $this->response->setJSON($data);
         } else {
-            return $this -> response -> setStatusCode(500) -> setJSON(['error' => 'Update failed']);
+            $data = [
+                'error' => 'Update failed',
+                'csrf_token' => csrf_hash() // Also send a new token on failure
+            ];
+            return $this->response->setStatusCode(500)->setJSON($data);
         }
     }
 }
