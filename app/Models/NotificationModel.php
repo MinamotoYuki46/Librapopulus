@@ -47,17 +47,13 @@ class NotificationModel extends Model
                 'details' => [] // Defaultnya array kosong
             ];
 
-            // Tambahkan detail spesifik berdasarkan tipe notifikasi
             if ($row['type'] === 'loan_request') {
-                // Di sini Anda perlu logika untuk mengambil detail peminjaman
-                // Untuk contoh, kita asumsikan related_id merujuk ke book_id
                 $book = $bookModel->find($row['related_id']);
                 if ($book) {
                     $notificationData['details']['book_title'] = $book['title'];
                 }
             }
             
-            // Masukkan data yang sudah diformat ke array hasil
             $formattedNotifications[] = $notificationData;
         }
 

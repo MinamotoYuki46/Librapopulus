@@ -4,7 +4,7 @@ $currentPage = $_GET['page'] ?? 'dashboard';
 $navigationItems = [
     ['icon' => 'fas fa-book', 'label' => 'Katalog', 'page' => '/library'],
     ['icon' => 'fas fa-search', 'label' => 'Cari', 'page' => '/search'],
-    ['icon' => 'fas fa-users', 'label' => 'Komunitas', 'page' => '/group'],
+    ['icon' => 'fas fa-users', 'label' => 'Komunitas', 'page' => '/community'],
     ['icon' => 'fas fa-user', 'label' => 'Profil', 'page' => '/profile/' . $username],
 ];
 ?>

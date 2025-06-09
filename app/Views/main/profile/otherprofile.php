@@ -88,7 +88,7 @@
                             </button>
                         <?php endif; ?>
 
-                        <a href="<?= base_url('/users/' . $targetUsername . '/books') ?>"
+                        <a href="<?= base_url('/library/' . $targetUsername) ?>"
                             class="inline-flex items-center px-5 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition font-semibold text-sm justify-center space-x-3">
                             <i class="fa-solid fa-book text-lg"></i>
                             <span class="align-middle">Koleksi Buku</span>

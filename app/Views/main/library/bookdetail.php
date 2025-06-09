@@ -19,30 +19,36 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 mt-2 gap-3">
                 <h2 class="text-6xl font-bold text-gray-900">Detail Buku</h2>
 
-                <div class="flex gap-3">
-                    <!-- Focus Mode Button -->
-                    <a aria-label="Focus Mode" title="Focus Mode" href="<?= base_url('/library/book/focus/' . $book['collection_id'] . '/' . $book['slug']) ?>"
-                        class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
-                        <i class="fas fa-glasses"></i>
-                    </a>
+                <?php if (session() -> get('userId') === $user['id']) : ?>
+                    <div class="flex gap-3">
+                        <a aria-label="Focus Mode" title="Focus Mode" href="<?= base_url('/library/book/focus/' . $book['collection_id'] . '/' . $book['slug']) ?>"
+                            class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
+                            <i class="fas fa-glasses"></i>
+                        </a>
 
-                    <!-- Edit Button -->
-                    <a href="<?= base_url( '/library/'. $user["username"] . '/' . $book['slug'] . '/edit') ?>"
-                        aria-label="Edit Book" title="Edit Book"
-                        class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
-                        <i class="fas fa-pen"></i>
-                    </a>
+                        <a href="<?= base_url( '/library/'. $user["username"] . '/' . $book['slug'] . '/edit') ?>"
+                            aria-label="Edit Book" title="Edit Book"
+                            class="p-3 rounded-full hover:bg-gray-200 transition text-gray-600 text-3xl">
+                            <i class="fas fa-pen"></i>
+                        </a>
 
-                    <!-- Delete Button -->
-                    <form method="POST" action="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/delete') ?>" 
-                        onsubmit="return confirm('Apakah kamu yakin ingin menghapus buku ini?')">
+                        <form method="POST" action="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/delete') ?>" 
+                            onsubmit="return confirm('Apakah kamu yakin ingin menghapus buku ini?')">
+                            <button type="submit"
+                                aria-label="Delete Book" title="Delete Book"
+                                class="p-3 rounded-full hover:bg-red-100 transition text-red-600 text-3xl">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                <?php else : ?>
+                    <form method="POST" action="<?= base_url('/borrow/request/' . $book['id']) ?>">
                         <button type="submit"
-                            aria-label="Delete Book" title="Delete Book"
-                            class="p-3 rounded-full hover:bg-red-100 transition text-red-600 text-3xl">
-                            <i class="fas fa-trash"></i>
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                            <i class="fas fa-book-open-reader"></i> Pinjam Buku
                         </button>
                     </form>
-                </div>
+                <?php endif; ?>
             </div>
 
 
@@ -106,7 +112,11 @@
 
                         <?php if (!empty(trim($book['rating']))): ?>
                             <div class="pt-2">
-                                <h3 class="text-md font-semibold text-gray-800 mb-1">Penilaianmu</h3>
+                                <?php if (session() -> get('userId') === $user['id']) : ?>
+                                    <h3 class="text-md font-semibold text-gray-800 mb-1">Penilaianmu</h3>
+                                <?php else : ?>
+                                    <h3 class="text-md font-semibold text-gray-800 mb-1">Penilaian <?= $user["full_name"] ?></h3>
+                                <?php endif; ?>
                                 <div class="flex items-center">
                                     <?php $rating = intval($book['rating']); ?>
                                     <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -119,7 +129,11 @@
 
                         <?php if (!empty(trim($book['review']))): ?>
                             <div class="pt-2">
-                                <h3 class="text-md font-semibold text-gray-800 mb-1">Ulasanmu</h3>
+                                <?php if (session() -> get('userId') === $user['id']) : ?>
+                                    <h3 class="text-md font-semibold text-gray-800 mb-1">Ulasanmu</h3>
+                                <?php else : ?>
+                                    <h3 class="text-md font-semibold text-gray-800 mb-1">Ulasan <?= $user["full_name"] ?></h3>
+                                <?php endif; ?>
                                 <blockquote class="border-l-4 border-gray-300 pl-4 py-2 my-2 bg-gray-50 rounded">
                                     <p class="text-gray-700 text-sm italic leading-relaxed">
                                         <?= nl2br(esc(trim($book['review']))) ?>
@@ -127,7 +141,6 @@
                                 </blockquote>
                             </div>
                         <?php endif; ?>
-
                     </div>
                 </div>
             </div>
