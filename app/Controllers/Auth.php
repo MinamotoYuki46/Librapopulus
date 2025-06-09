@@ -91,6 +91,7 @@ class Auth extends BaseController {
 
         $this -> destroyRegisterSession();
 
+        session()->regenerate();
         session() -> set([
             'isLoggedIn' => true,
             'userId'    => $userId, 
@@ -112,6 +113,7 @@ class Auth extends BaseController {
             -> first();
 
         if ($user && password_verify($password, $user['password'])) {
+            session()->regenerate();
             $session -> set([
                 'isLoggedIn' => true,
                 'userId'    => $user['id'],
