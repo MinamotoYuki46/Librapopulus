@@ -1,22 +1,22 @@
 <?php 
 
-$book = [
-    'id' => 10,
-    'title' => 'Wuthering Heights',
-    'author' => 'Emily Brontë',
-    'genre' => 'Gothic Fiction',
-    'readPages' => 10,
-    'totalPages' => 416,
-    'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg',
-    'desc' => 'Wuthering Heights is a classic novel of intense passion and revenge, set on the bleak Yorkshire moors. It tells the tragic story of Heathcliff and Catherine Earnshaw, and explores themes of love, class, and destiny.',
-    'rate' => '5',
-    'review' => 'A haunting and powerful story with unforgettable characters. A must-read for fans of classic literature.',
-    'date_published' => '1847-12-01',
-    'date_added' => date('Y-m-d'),
-];
+// $book = [
+//     'id' => 10,
+//     'title' => 'Wuthering Heights',
+//     'author' => 'Emily Brontë',
+//     'genre' => 'Gothic Fiction',
+//     'readPages' => 10,
+//     'totalPages' => 416,
+//     'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg',
+//     'desc' => 'Wuthering Heights is a classic novel of intense passion and revenge, set on the bleak Yorkshire moors. It tells the tragic story of Heathcliff and Catherine Earnshaw, and explores themes of love, class, and destiny.',
+//     'rate' => '5',
+//     'review' => 'A haunting and powerful story with unforgettable characters. A must-read for fans of classic literature.',
+//     'date_published' => '1847-12-01',
+//     'date_added' => date('Y-m-d'),
+// ];
  
-$owner = "Fulan";
-$currentUser = "Alice";
+// $owner = "Fulan";
+// $currentUser = "Alice";
 
 ?>
 
@@ -47,43 +47,44 @@ $currentUser = "Alice";
     <div class="flex flex-col md:flex-row gap-x-6 lg:gap-x-8 relative">
         <!-- Book Image -->
         <div class="w-full md:w-2/5 lg:w-1/3 mb-6">
-            <img src="<?= htmlspecialchars($book['image']) ?>"
-                alt="Cover of <?= htmlspecialchars($book['title']) ?>"
+            <img src="<?= esc($loan['book_cover']) ?>"
+                alt="Cover of <?= esc($loan['book_title']) ?>"
                 class="w-full h-auto object-cover rounded-lg shadow-xl sticky top-6 max-h-[800px]">
         </div>
 
         <!-- Book Details and Form -->
         <div class="w-full md:w-3/5 lg:w-2/3">
             <div class="space-y-5 md:max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide pr-2 pb-8">
-                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900"><?= htmlspecialchars($book['title']) ?></h1>
-                <p class="text-lg lg:text-xl text-gray-700">by <strong><?= htmlspecialchars($book['author']) ?></strong></p>
+                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900"><?= esc($loan['book_title']) ?></h1>
+                <p class="text-lg lg:text-xl text-gray-700">by <strong><?= htmlspecialchars($loan['book_author']) ?></strong></p>
 
 
                 <!-- Loan Request Form -->
                 <form action="<?= base_url('/loan/request') ?>" method="POST" class="space-y-4 pt-6">
-                    <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="book_id" value="<?= $loan['book_id'] ?>">
 
                     <div>
                         <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>
-                        <input type="text" id="from_user" name="from_user" value="<?= htmlspecialchars($currentUser) ?>" readonly
+                        <input type="text" id="from_user" name="from_user" value="<?= esc($loan['borrower_name']) ?>" readonly
                             class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
                     </div>
 
                     <div>
                         <label for="to_user" class="block text-3xl font-bold text-gray-700">Kepada</label>
-                        <input type="text" id="to_user" name="to_user" value="<?= htmlspecialchars($owner) ?>" readonly
+                        <input type="text" id="to_user" name="to_user" value="<?= esc($loan['owner_name']) ?>" readonly
                             class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm text-2xl font-bold">
                     </div>
 
                     <div>
                         <label for="start_date" class="block text-3xl font-bold text-gray-700">Tanggal Mulai</label>
-                        <input type="date" id="start_date" name="start_date" required
+                        <input type="date" id="start_date" name="start_date" required value="<?= esc($loan['start_date'])?>"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
                     </div>
 
                     <div>
                         <label for="end_date" class="block text-3xl font-bold text-gray-700">Tanggal Selesai</label>
-                        <input type="date" id="end_date" name="end_date" required
+                        <input type="date" id="end_date" name="end_date" required value="<?= esc($loan['end_date'])?>"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-2xl font-bold">
                     </div>
 

@@ -44,6 +44,7 @@ class NotificationModel extends Model
                     'name' => $row['sender_username'],
                     'picture' => base_url('uploads/' . $row['sender_picture']) 
                 ],
+                'message' => $row['message'],
                 'details' => []
             ];
 

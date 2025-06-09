@@ -83,9 +83,10 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
         const profileDropdown = document.getElementById('profileDropdown');
         const notificationBtn = document.querySelector('.fa-bell').parentElement;
         const notificationOverlay = document.getElementById('notificationOverlay');
-        let csrfToken = '<?= csrf_hash() ?>';
-        
-        
+
+        const csrfHeaderName = '<?= csrf_header() ?>';
+        let csrfHash = '<?= csrf_hash() ?>';
+
         notificationBtn.addEventListener('click', async function (event) {
             event.stopPropagation();
             console.log('Notifications clicked');
@@ -93,38 +94,43 @@ $notificationCount = count(array_filter($notifications, fn($n) => !$n['read']));
 
 
             if (!isHidden){
-                console.log('Starting fetch...');
+                const payload = {}; 
+                
                 try {
-                    const response = await fetch ("<?= base_url('notification/mark-read') ?>", {
+                    const response = await fetch("<?= base_url('notification/mark-read') ?>", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-CSRF-TOKEN": csrfToken
+                            [csrfHeaderName]: csrfHash,
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-Requested-With": "XMLHttpRequest"
                         },
-                        body: JSON.stringify({})
+                        body: new URLSearchParams(payload)
                     });
-
+                    
                     console.log("fetch done, status:", response.status);
                     const data = await response.json();
 
-                    if(data.csrfToken){
-                        csrfToken = data.csrfToken;
-                        console.log("CSRF token updated.");
-                    }
+                    const newToken = data.csrf_token;
+                    csrfHash = newToken;
 
+                    const csrfTokenName = '<?= csrf_token() ?>'; 
+                    document.querySelectorAll(`input[name="${csrfTokenName}"]`).forEach(input => {
+                        input.value = newToken;
+                    });
+                    
+                    console.log('Semua token CSRF di form HTML telah diperbarui.');
+                    
                     if (response.ok && data.success){
                         console.log("Notifikasi telah dibaca");
-
+                        
                         const badge = notificationBtn.querySelector("span");
                         if (badge) badge.remove();
-                    }
-                    else {
+                    } else {
                         console.error("Gagal menandai notifikasi");
                     }
+                
                 } catch (error) {
                     console.error("Gagal fetch", error);
-                    
                 }
             }
         });

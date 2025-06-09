@@ -34,8 +34,7 @@ $routes -> group('library', function($routes) {
     $routes -> post('proceedAddBook', 'Book::proceedAddBook');
 
     $routes -> get('(:segment)', 'MainController::Library/$1');
-    $routes -> get('book/acceptloan', 'Book::acceptLoan');
-
+    $routes -> get('requestedloan/(:num)', 'BookLoan::ownerViewLoan/$1');
     $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 
 
@@ -47,7 +46,7 @@ $routes -> group('library', function($routes) {
     $routes -> get('(:segment)/(:segment)/focus', 'Book::focus/$1/$2');
     $routes -> post('(:segment)/(:segment)/focus/update', 'Book::focusSend/$1/$2');
 
-    $routes -> get('(:segment)/(:segment)/requestloan', 'Book::requestLoan/$1/$2');
+    $routes -> get('(:segment)/(:segment)/requestloan', 'BookLoan::requestLoanForm/$1/$2');
 });
 
 
