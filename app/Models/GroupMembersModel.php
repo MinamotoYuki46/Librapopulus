@@ -16,7 +16,6 @@ class GroupMembersModel extends Model
         "user_id",
         "group_id",
         "role",
-        "joined_at"
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -28,7 +27,7 @@ class GroupMembersModel extends Model
     // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
+    protected $createdField  = 'joined_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
