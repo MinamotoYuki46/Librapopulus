@@ -6,7 +6,6 @@
         <title>Register - Librapopulus</title>
         <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <!-- Inter Font -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -59,7 +58,6 @@
     </head>
     <body class="bg-gray-50 min-h-screen">
         <div class="flex min-h-screen">
-            <!-- Left Side - Image/Illustration -->
             <div class="hidden lg:flex lg:w-1/2 bg-library-register relative">
                 <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-12">
                     <div class="text-center max-w-md">
@@ -74,10 +72,8 @@
                 </div>
             </div>
 
-            <!-- Right Side - Register Form -->
             <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
                 <div class="max-w-md w-full">
-                    <!-- Progress Indicator -->
                     <div class="flex items-center justify-center mb-8">
                         <div class="flex items-center space-x-4">
                             <div class="progress-step active">1</div>
@@ -88,7 +84,6 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Header (visible on small screens) -->
                     <div class="lg:hidden text-center mb-8">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
                             <i class="fas fa-user-plus text-2xl text-green-600"></i>
@@ -96,13 +91,11 @@
                         <h1 class="text-2xl font-bold text-gray-900">Librapopulus</h1>
                     </div>
 
-                    <!-- Register Header -->
                     <div class="text-center mb-8">
                         <h1 class="text-3xl font-bold text-gray-900 mb-2">Buat Akun Baru</h1>
                         <p class="text-gray-600">Ayo bergabung ke komunitas dan baca bukunya</p>
                     </div>
                     
-                    <!-- Error Message -->
                     <?php 
                         $errors = session()->getFlashdata('errors');
                         $error  = session()->getFlashdata('error');
@@ -129,10 +122,8 @@
                         </div>
                     <?php endif; ?>
                     
-                    <!-- Register Form -->
                     <div class="glass-effect rounded-2xl shadow-xl p-8 border border-gray-200">
                         <form action="<?= base_url('auth/processRegister') ?>" method="post" class="space-y-5">  <?= csrf_field() ?>
-                            <!-- Username Field -->
                             <div>
                                 <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-user mr-2 text-gray-400"></i>
@@ -144,7 +135,6 @@
                                 <p class="text-xs text-gray-500 mt-1">Username ini akan muncul sebagai nama yang terlihat oleh pengguna lain</p>
                             </div>
 
-                            <!-- Email Field -->
                             <div>
                                 <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-envelope mr-2 text-gray-400"></i>
@@ -155,7 +145,6 @@
                                     required>
                             </div>
 
-                            <!-- Password Field -->
                             <div>
                                 <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-lock mr-2 text-gray-400"></i>
@@ -170,14 +159,13 @@
                                         <i class="fa-solid fa-eye" id="eyeIcon"></i>
                                     </button>
                                 </div>
-                                <!-- Password Strength Indicator -->
+
                                 <div class="mt-2">
                                     <div class="password-strength bg-gray-200" id="passwordStrength"></div>
                                     <p class="text-xs text-gray-500 mt-1">Minimal 8 karakter berupa kombinasi huruf, angka, dan simbol</p>
                                 </div>
                             </div>
 
-                            <!-- Confirm Password Field -->
                             <div>
                                 <label for="confirmPassword" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-lock mr-2 text-gray-400"></i>
@@ -200,7 +188,6 @@
                                 </div>
                             </div>
 
-                            <!-- Terms and Conditions -->
                             <div class="flex items-start">
                                 <input type="checkbox" id="terms" name="terms" required
                                     class="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
@@ -212,7 +199,6 @@
                                 </label>
                             </div>
                             
-                            <!-- Register Button -->
                             <div>
                                 <button type="submit" 
                                     class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
@@ -222,7 +208,6 @@
                             </div>
                         </form>
                         
-                        <!-- Login Link -->
                         <div class="mt-6 text-center">
                             <p class="text-gray-600">
                                 Sudah punya akun? 
@@ -233,7 +218,6 @@
                         </div>
                     </div>
                     
-                    <!-- Back to Home -->
                     <div class="text-center mt-8">
                         <a href="<?= base_url() ?>" class="inline-flex items-center text-gray-500 hover:text-green-600 text-sm font-medium transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>

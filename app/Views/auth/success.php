@@ -6,7 +6,6 @@
         <title>Welcome to Librapopulus!</title>
         <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <!-- Inter Font -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -33,20 +32,17 @@
     <body class="bg-gradient-to-br from-purple-600 via-blue-600 to-green-500 min-h-screen flex items-center justify-center">
         <div class="max-w-md w-full mx-4">
             <div class="bg-white rounded-3xl shadow-2xl p-8 text-center fade-in">
-                <!-- Success Icon -->
                 <div class="celebration-animation mb-6">
                     <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-check text-3xl text-green-600"></i>
                     </div>
                 </div>
 
-                <!-- Welcome Message -->
                 <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Librapopulus!</h1>
                 <p class="text-gray-600 mb-8 leading-relaxed">
                     Your profile has been successfully created. You're now ready to explore our community and discover amazing books!
                 </p>
 
-                <!-- Quick Stats -->
                 <div class="grid grid-cols-3 gap-4 mb-8">
                     <div class="text-center">
                         <div class="text-2xl font-bold text-purple-600">50K+</div>
@@ -62,21 +58,14 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="space-y-4">
                     <a href="<?= base_url() ?>" 
                        class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
                         <i class="fas fa-home mr-2"></i>
-                        Go to Dashboard
+                        Ke Dashboard
                     </a>
-                    <!-- <a href="<?= base_url('books') ?>" 
-                       class="block w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200">
-                        <i class="fas fa-book mr-2"></i>
-                        Browse Books
-                    </a> -->
                 </div>
 
-                <!-- Tips -->
                 <div class="mt-8 p-4 bg-blue-50 rounded-xl">
                     <h3 class="font-semibold text-blue-900 mb-2">
                         <i class="fas fa-lightbulb mr-2"></i>
@@ -91,7 +80,6 @@
             </div>
         </div>
 
-        <!-- Auto redirect after 10 seconds -->
         <script>
             let countdown = 10;
             const redirectTimer = setInterval(() => {
@@ -102,10 +90,8 @@
                 }
             }, 1000);
 
-            // Add some confetti effect (optional)
             setTimeout(() => {
-                // You can add a confetti library here for celebration effect
-                console.log('🎉 Welcome to Librapopulus! 🎉');
+                console.log('🎉 Selamat Datang di Librapopulus! 🎉');
             }, 500);
         </script>
     </body>
