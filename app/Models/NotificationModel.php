@@ -31,7 +31,6 @@ class NotificationModel extends Model
         }
 
         $formattedNotifications = [];
-        $bookModel = new \App\Models\BookModel(); 
 
         foreach ($dbResults as $row) {
             $notificationData = [
