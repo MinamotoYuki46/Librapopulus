@@ -117,6 +117,7 @@ class Auth extends BaseController {
                 'isLoggedIn' => true,
                 'userId'    => $user['id'],
                 'username' => $user['username'],
+                'fullname' => $user['full_name'],
                 'picture' => $user['picture']
             ]);
             return redirect() -> to(base_url());

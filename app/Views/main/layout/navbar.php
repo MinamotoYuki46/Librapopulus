@@ -59,10 +59,9 @@ $navigationItems = [
 </nav>
 
 
-<!-- Mobile Bottom Navigation -->
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 px-6 py-3 flex md:hidden justify-around items-center z-50">
     <?php foreach ($navigationItems as $item): ?>
-        <a href="?page=<?= $item['page'] ?>" 
+        <a href="<?= base_url( $item['page']) ?>" 
            class="flex flex-col items-center gap-1 <?= $currentPage == $item['page'] ? 'text-purple-600' : 'text-gray-500 hover:text-purple-600' ?> transition-colors">
             <i class="<?= $item['icon'] ?> text-lg"></i>
             <span class="text-xs"><?= $item['label'] ?></span>

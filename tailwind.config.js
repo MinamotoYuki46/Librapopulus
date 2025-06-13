@@ -5,9 +5,12 @@ module.exports = {
         './public/**/*.{html, css, js, php}',
         './app/Controllers/**/*.php',
         "./src/**/*.{html,js}",
+        "./node_modules/flowbite/**/*.js"
     ],
     theme: {
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        require("flowbite/plugin")
+    ],
 }

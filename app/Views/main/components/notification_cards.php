@@ -12,7 +12,7 @@
                         echo $notification['message'];
                     ?>
                 </p>
-                <p class="text-sm text-blue-600 font-semibold"><?= time_ago($notification['timestamp']) ?></p>
+                <p class="text-sm text-blue-600 font-semibold"><?= timeElapsed($notification['timestamp']) ?></p>
                 <div class="mt-3 flex space-x-2">
                     <?php if ($notification['type'] === 'friend_request'): ?>
                         <form action="<?= base_url('friends/accept/' . $notification['related_id']) ?>" method="post">

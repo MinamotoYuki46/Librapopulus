@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pesan dengan <?= esc($recipient['username']) ?></title>
+    <title>Pesan dengan @<?= esc($recipient['username']) ?></title>
     <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -27,13 +27,9 @@
                 ?>
                 <div class="flex <?= $isSentByCurrentUser ? 'justify-end' : 'justify-start' ?>">
                     <div class="flex items-start space-x-3 max-w-md <?= $isSentByCurrentUser ? 'flex-row-reverse text-right' : '' ?>">
-                        <img src="<?= base_url('uploads/' . $sender['picture']) ?>" class="w-10 h-10 rounded-full" alt="<?= $sender['username'] ?> avatar">
                         <div>
                             <div class="<?= $isSentByCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-900' ?> px-4 py-2 rounded-lg shadow-sm">
                                 <?= nl2br(esc($msg['message_text'])) ?>
-                            </div>
-                            <div class="text-xs text-gray-500 mt-1">
-                                <?= esc($sender['username']) ?> • <?= $dt -> format('M d, H:i') ?>
                             </div>
                         </div>
                     </div>

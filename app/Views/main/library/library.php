@@ -38,9 +38,9 @@
         }
     </style>
 </head>
-<body class="bg-gray-200 min-h-screen">
-    <?php include __DIR__ . '/../layout/header.php'; ?>
-    <main class="px-6 pb-6 py-6" id="mainContent">
+<body class="bg-gray-200 min-h-screen min-v-screen">
+    <?php include __DIR__ . '/../layout/layout.php'; ?>
+    <main class="px-6 py-6" id="mainContent">
 
         <section class="mb-8">
             <div class="flex items-center justify-between mb-4 gap-4 flex-wrap">
@@ -101,6 +101,6 @@
             <?php endif; ?>
         </section>
     </main>
-    <?php include __DIR__ . '/../layout/navbar.php'; ?>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>
