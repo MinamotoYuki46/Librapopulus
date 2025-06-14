@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-200 min-h-screen font-[Inter]">
-    <?php include __DIR__ . '/../layout/header.php' ?>
+    <?php include __DIR__ . '/../layout/layout.php' ?>
     
     <main class="px-6 pb-6 py-6" id="mainContent">
         <section class="max-w-5xl mx-auto mt-10 flex flex-col space-y-12">
@@ -79,8 +79,7 @@
             </div>
 
         </section>
-
-        <?php include __DIR__ . '/../layout/navbar.php' ?>
     </main>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

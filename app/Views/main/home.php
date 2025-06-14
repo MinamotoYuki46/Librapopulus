@@ -122,7 +122,7 @@
         </style>
     </head>
     <body class="bg-gray-200 min-h-screen">
-        <?php include 'layout/header.php' ?>
+        <?php include 'layout/layout.php' ?>
 
 
         <main class="px-6 pb-6 py-6" id="mainContent">
@@ -168,6 +168,6 @@
             </section>
         </main>
 
-        <?php include 'layout/navbar.php'?>
+        <script src="<?= base_url("flowbite.min.js") ?>"></script>
     </body>
 </html>

@@ -44,7 +44,7 @@ if ($query) {
      
 </head>
 <body class="bg-gray-50 min-h-screen px-4 py-8">
-    <?php include 'layout/header.php' ?>
+    <?php include 'layout/layout.php' ?>
     <main class="px-6 pb-6 py-6" id="mainContent">
 
         <div class="max-w-3xl mx-auto">
@@ -101,6 +101,6 @@ if ($query) {
             <?php endif; ?>
         </div>
     </main>
-    <?php include 'layout/navbar.php' ?>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

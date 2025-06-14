@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-[Inter]">
-    <?php include __DIR__ . '/../layout/header.php' ?>
+    <?php include __DIR__ . '/../layout/layout.php' ?>
     <div class="max-w-3xl mx-auto px-4 py-6">
         <div class="flex-grow overflow-y-auto">
             <header class="bg-white p-4 border-b border-gray-200 shadow-sm sticky top-0 z-10 flex items-center space-x-4">
@@ -108,9 +108,6 @@
                 </button>
             </form>
         </footer>
-
-        <?php include __DIR__ . '/../layout/navbar.php' ?>
-
     </div>
 
     <script>
@@ -121,6 +118,6 @@
             }
         });
     </script>
-
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

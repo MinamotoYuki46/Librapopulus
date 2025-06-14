@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-200 min-h-screen">
-    <?php include __DIR__ . '/../layout/header.php'; ?>
+    <?php include __DIR__ . '/../layout/layout.php'; ?>
     <main class="px-6 pb-6 py-6" id="mainContent">
         <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
             <h2 class="text-2xl font-semibold mb-4 text-center">Edit Profil</h2>
@@ -83,7 +83,7 @@
             </form>
         </div>
     </main>
-    <?php include __DIR__ . '/../layout/navbar.php'; ?>
+
 
     
     <script>
@@ -99,5 +99,6 @@
             }
         }
     </script>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

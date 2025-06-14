@@ -28,7 +28,7 @@ $groups = [
     <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <?php include 'layout/header.php'; ?>
+    <?php include 'layout/layout.php'; ?>
 
     <main class="max-w-3xl mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">Your Groups</h1>
@@ -50,6 +50,6 @@ $groups = [
         </div>
     </main>
 
-    <?php include 'layout/navbar.php'; ?>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

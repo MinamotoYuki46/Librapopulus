@@ -94,7 +94,7 @@ function formatTimeSpent($minutes) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-200 min-h-screen font-[Inter]">
-    <?php include 'layout/header.php' ?>
+    <?php include 'layout/layout.php' ?>
     <main class="px-6 pb-6 py-6" id="mainContent">
         <header class="max-w-5xl mx-auto mb-8">
             <h1 class="text-4xl font-bold text-gray-900"><?= htmlspecialchars($group['name']) ?></h1>
@@ -158,7 +158,7 @@ function formatTimeSpent($minutes) {
             <?php endforeach; ?>
         </section>
 
-        <?php include 'layout/navbar.php' ?>
+        <script src="<?= base_url("flowbite.min.js") ?>"></script>
     </main>
 </body>
 </html>

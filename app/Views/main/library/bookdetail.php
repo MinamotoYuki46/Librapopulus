@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php include __DIR__ . '/../layout/header.php'; ?>
+    <?php include __DIR__ . '/../layout/layout.php'; ?>
 
     <main class="px-6 pb-6 py-6" id="mainContent">
         <div class="max-w-screen-3xl w-full mx-auto px-4">
@@ -146,6 +146,6 @@
             </div>
         </div>
     </main>
-    <?php include __DIR__ . '/../layout/navbar.php'; ?>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

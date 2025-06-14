@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body class="bg-gray-200 min-h-screen font-inter">
-    <?php include __DIR__ . '/../layout/header.php'; ?>
+    <?php include __DIR__ . '/../layout/layout.php'; ?>
 
     <main class="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6 mt-6">
         <h1 class="text-2xl font-semibold mb-4 text-gray-800">
@@ -123,7 +123,7 @@
         </form>
     </main>
 
-    <?php include __DIR__ . '/../layout/navbar.php'; ?>
+
 
     <script>
         const totalPagesInput = document.getElementById('total_pages');
@@ -138,5 +138,6 @@
         totalPagesInput.addEventListener('input', validatePagesRead);
         pagesReadInput.addEventListener('input', validatePagesRead);
     </script>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

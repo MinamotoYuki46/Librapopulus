@@ -59,7 +59,7 @@
     </main>
 
 
-    <?php include __DIR__ . '/../layout/navbar.php'; ?>
+   
 
     <script>
         const totalPagesInput = document.getElementById('total_pages');
@@ -74,5 +74,6 @@
         totalPagesInput.addEventListener('input', validatePagesRead);
         pagesReadInput.addEventListener('input', validatePagesRead);
     </script>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body class="bg-gray-100 text-gray-900">
-    <?php include __DIR__ . '/../layout/header.php'; ?>
+    <?php include __DIR__ . '/../layout/layout.php'; ?>
 
     <main class="px-4 py-10" id="mainContent">
         <div class="max-w-lg mx-auto relative">
@@ -106,6 +106,6 @@
         </div>
     </main>
 
-    <?php include __DIR__ . '/../layout/navbar.php'; ?>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

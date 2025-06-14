@@ -35,7 +35,7 @@ $currentUserId = 1;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-[Inter]">
-    <?php include 'layout/header.php'; ?>
+    <?php include 'layout/layout.php'; ?>
     
     <main class="max-w-4xl mx-auto px-4 py-6">
         <header class="mb-6">
@@ -79,6 +79,6 @@ $currentUserId = 1;
         </form>
     </main>
 
-    <?php include 'layout/navbar.php'; ?>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>
