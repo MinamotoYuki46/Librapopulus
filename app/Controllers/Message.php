@@ -34,7 +34,7 @@ class Message extends BaseController {
 
         $data = [
             'recipient' => $targetUser,
-            'messages' => $this -> messageModel -> getConversation($myUser['id'], $targetUser['id']),
+            'messages' => [],
             'currentUser' => $myUser
         ];
 
@@ -42,17 +42,49 @@ class Message extends BaseController {
     }
 
     public function send(){
-        $senderId = session()->get('userId');
-        $receiverId = $this->request->getPost('receiverId');
-        $messageText = $this->request->getPost('message');
-        $targetUsername = $this->request->getPost('username');
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
 
-        $this -> messageModel -> insert([
-            'sender_id' => $senderId,
-            'receiver_id' => $receiverId,
-            'message_text' => $messageText
+        $this->messageModel->insert([
+            'sender_id'   => session()->get('userId'),
+            'receiver_id' => $this->request->getPost('receiverId'),
+            'message_text'=> $this->request->getPost('message')
         ]);
 
-        return redirect()->to(base_url('/message/' . $targetUsername));
+        return $this->response->setJSON(['status' => 'success']);
+    }
+
+    public function fetch($withUserId) {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $offset = (int) $this->request->getGet('offset') ?? 0;
+
+        $currentUserId = session()->get('userId');
+        $message = $this->messageModel->getConversation($currentUserId, $withUserId, 20, $offset);
+
+        $data = [
+        'messages' => $message,
+        'csrf_hash' => csrf_hash()
+    ];
+
+        return $this->response->setJSON($data);
+    }
+
+    public function fetchNew($withUserId) {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
+        
+        $sinceId = (int) $this->request->getGet('since') ?? 0;
+        $currentUserId = session()->get('userId');
+        $messages = $this->messageModel->getNewMessages($currentUserId, $withUserId, $sinceId);
+
+        return $this->response->setJSON([
+            'messages' => $messages,
+            'csrf_hash' => csrf_hash()
+        ]);
     }
 }

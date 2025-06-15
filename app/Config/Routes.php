@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Message;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -69,8 +70,10 @@ $routes -> post('friends/decline/(:num)', 'Friendship::decline/$1');
 $routes -> post('friends/cancel/(:num)', 'Friendship::cancel/$1');
 
 $routes -> group("message", function($routes) {
-    $routes -> get('(:segment)', 'Message::index/$1');
     $routes -> post('send', 'Message::send');
+    $routes -> get('fetch/(:num)', 'Message::fetch/$1');
+    $routes -> get('fetch_new/(:num)', 'Message::fetchNew/$1');
+    $routes -> get('(:segment)', 'Message::index/$1');
 });
 
 
