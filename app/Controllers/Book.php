@@ -217,7 +217,12 @@ class Book extends BaseController {
             'review' => $this -> request -> getPost('review'),
         ]);
 
-        return redirect() -> to(base_url('/library'))->with('success', 'Koleksi buku berhasil diperbarui.');
+        $book = $this -> bookModel -> find($bookCollection['book_id']);
+        $user = $this -> userModel -> find($bookCollection['user_id']);
+        $username = $user['username'];
+        $slug = $book['slug'];
+
+        return redirect() -> to(base_url('/library/' . $username . '/' . $slug ))->with('success', 'Koleksi buku berhasil diperbarui.');
     }
 
     public function deleteBook($username, $slug){
@@ -284,25 +289,26 @@ class Book extends BaseController {
 
         $data = [
             'book' => [
-                'id'            => $book['id'],
-                'title'         => $book['title'],
-                'author'        => $book['author'],
-                'slug'          => $book['slug'],
-                'book_cover'    => $book['book_cover'],
-                'published_date'=> $book['published_date'],
-                'total_pages'   => $book['total_pages'],
-                'description'   => $book['description'],
-                'added_at'      => $book['created_at'],
-                'updated_at'    => $book['updated_at'],
-                'genres'        => $genre['genre_name'],
+                'id'                    => $book['id'],
+                'title'                 => $book['title'],
+                'author'                => $book['author'],
+                'slug'                  => $book['slug'],
+                'book_cover'            => $book['book_cover'],
+                'published_date'        => $book['published_date'],
+                'total_pages'           => $book['total_pages'],
+                'description'           => $book['description'],
+                'added_at'              => $book['created_at'],
+                'updated_at'            => $book['updated_at'],
+                'genres'                => $genre['genre_name'],
+                'total_read_duration'   => $bookCollection['read_duration'],
 
-                'collection_id' => $bookCollection['id'],
-                'read_page'     => $bookCollection['read_page'],
-                'rating'        => $bookCollection['rating'],
-                'review'        => $bookCollection['review'],
+                'collection_id'         => $bookCollection['id'],
+                'read_page'             => $bookCollection['read_page'],
+                'rating'                => $bookCollection['rating'],
+                'review'                => $bookCollection['review'],
             ],
-            'user' => $user,
-            'genres' => $genres
+            'user'                      => $user,
+            'genres'                    => $genres
         ];
 
         return view("main/library/focusmode", $data);
@@ -337,12 +343,14 @@ class Book extends BaseController {
         if ($success) {
             $updatedBook = $this -> bookCollectionModel -> find($bookCollection["id"]);
             $newReadPage = $updatedBook['read_page'];
+            $newDuration = $updatedBook['read_duration'];
 
             $response = [
                 'success'       => true,
                 'message'       => 'Progress updated!',
                 'csrf_token'    => csrf_hash(),
-                'new_read_page' => (int)$newReadPage
+                'new_read_page' => (int)$newReadPage,
+                'new_total_duration' => (int)$newDuration
             ];
             return $this -> response -> setJSON($response);
         } else {

@@ -9,7 +9,7 @@ function timeElapsed($timestamp){
 }
 
 $navigationItems = [
-        ['icon' => 'fas fa-book', 'label' => 'Katalog', 'page' => '/library'],
+        ['icon' => 'fas fa-book', 'label' => 'Koleksi', 'page' => '/library'],
         ['icon' => 'fas fa-search', 'label' => 'Cari', 'page' => '/search'],
         ['icon' => 'fas fa-users', 'label' => 'Komunitas', 'page' => '/community'],
         ['icon' => 'fas fa-user', 'label' => 'Profil', 'page' => '/profile/' . $masterUsername],
@@ -58,10 +58,10 @@ $navigationItems = [
                         </div>
                         <ul class="py-1" role="none">
                             <li>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Koleksi Buku</a>
+                                <a href="<?= base_url("library/" . $masterUsername) ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Koleksi Buku</a>
                             </li>
                             <li>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Profil</a>
+                                <a href="<?= base_url("profile/" . $masterUsername)?> " class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Profil</a>
                             </li>
                             <li>
                                 <form action="<?= base_url('auth/logout') ?>" method="POST" class="w-full">

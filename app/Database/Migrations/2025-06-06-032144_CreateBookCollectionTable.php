@@ -33,8 +33,7 @@ class CreateBookCollectionTable extends Migration
                 'null' => true
             ],
             'review' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
+                'type' => 'TEXT',
                 'null' => true
             ],
             'created_at' => [

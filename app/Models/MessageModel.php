@@ -18,9 +18,9 @@ class MessageModel extends Model
 
 
     public function getConversation(int $userId1, int $userId2) {
-        return $this->whereIn('sender_id', [$userId1, $userId2])
-                    ->whereIn('receiver_id', [$userId1, $userId2])
-                    ->orderBy('created_at', 'ASC')
-                    ->findAll();
+        return $this -> whereIn('sender_id', [$userId1, $userId2])
+                    -> whereIn('receiver_id', [$userId1, $userId2])
+                    -> orderBy('created_at', 'ASC')
+                    -> findAll();
     }
 }
