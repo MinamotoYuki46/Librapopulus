@@ -11,8 +11,8 @@ function timeElapsed($timestamp){
 $navigationItems = [
         ['icon' => 'fas fa-book', 'label' => 'Koleksi', 'page' => '/library'],
         ['icon' => 'fas fa-search', 'label' => 'Cari', 'page' => '/search'],
-        ['icon' => 'fas fa-arrow-up',     'label' => 'Dipinjamkan',  'page' => '/borrowed'],      
-        ['icon' => 'fas fa-arrow-down',   'label' => 'Saya Pinjam',  'page' => '/loans'], 
+        ['icon' => 'fas fa-arrow-up',     'label' => 'Dipinjamkan',  'page' => '/loans'],      
+        ['icon' => 'fas fa-arrow-down',   'label' => 'Saya Pinjam',  'page' => '/borrowed'], 
         ['icon' => 'fas fa-users', 'label' => 'Komunitas', 'page' => '/community'],
         ['icon' => 'fas fa-user', 'label' => 'Profil', 'page' => '/profile/' . $masterUsername],
     ];
