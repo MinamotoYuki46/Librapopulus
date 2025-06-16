@@ -30,20 +30,18 @@
             padding: 20px;
         }
         .tab-flex-wrap {
-            flex-wrap: wrap; /* Allows tabs to wrap if screen is too small */
-            justify-content: center; /* Center tabs if they wrap */
+            flex-wrap: wrap; 
+            justify-content: center;
         }
-        /* Style for the book cover image */
         .book-cover {
             width: 100%;
-            height: 200px; /* Fixed height for consistent card appearance */
-            object-fit: cover; /* Ensures image covers the area without distortion */
+            height: 200px; 
+            object-fit: cover; 
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
-        /* Adjust card padding for image */
         .flowbite-card-with-image .p-5 {
-            padding-top: 0; /* Remove top padding if image is at the very top */
+            padding-top: 0; 
         }
     </style>
 </head>

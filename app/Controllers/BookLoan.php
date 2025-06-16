@@ -11,6 +11,7 @@ use App\Models\BookLoanModel;
 use App\Models\FriendshipModel;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use \DateTime;
 
 class BookLoan extends BaseController{
     private $userModel;
@@ -77,7 +78,7 @@ class BookLoan extends BaseController{
                 'collection_id' => $bookCollection['id'],
             ],
             "currentUser"       => $currentUser,
-            'date_now'          => Time::now()->format('Y-m-d'),
+            'date_now'          => Time::now()->format('d-m-Y'),
             'activeLoan'        => $activeLoan
         ];
 
@@ -87,9 +88,13 @@ class BookLoan extends BaseController{
     public function request() {
         $bookCollectionId = $this->request->getPost('book_collection_id');
         $ownerId = $this->request->getPost('owner_id');
-        $startDate = $this->request->getPost('start_date');
-        $endDate = $this->request->getPost('end_date');
+        $startDate = DateTime::createFromFormat('d-m-Y', $this->request->getPost('start_date'))->format('Y-m-d');
+        $endDate = DateTime::createFromFormat('d-m-Y', $this->request->getPost('end_date'))->format('Y-m-d');
+
         $borrowerId = session()->get('userId');
+
+        log_message('debug', 'POST data: ' . print_r($this->request->getPost(), true));
+
 
         $loanData = [
             'book_collection_id' => $bookCollectionId,
@@ -98,6 +103,7 @@ class BookLoan extends BaseController{
             'loan_end_date' => $endDate,
             'status' => BookLoanModel::STATUS_PENDING
         ];
+
         $loanId = $this -> bookLoanModel -> insert($loanData);
 
         $book = $this -> bookCollectionModel -> findBookCollectionDetail($bookCollectionId);
@@ -244,13 +250,13 @@ class BookLoan extends BaseController{
         $borrowData = $this -> bookLoanModel -> getDataBorrower($currentUserId);
 
         $requests = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_PENDING);
-        $lentOut  = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_APPROVED);
+        $borrowOut  = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_APPROVED);
         $history  = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_RETURNED);
 
 
         $data = [
             'requests' => $requests,
-            'lentOut'  => $lentOut,
+            'borrowOut'  => $borrowOut,
             'history'  => $history,
         ];
         return view("main/loanandborrow/borrowlist", $data);

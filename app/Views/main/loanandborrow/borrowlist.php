@@ -58,7 +58,7 @@
                     <button class="inline-block p-4 border-b-2 rounded-t-lg" id="requests-tab" data-tabs-target="#requests" type="button" role="tab" aria-controls="requests" aria-selected="true">Permintaan Peminjaman</button>
                 </li>
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="lent-out-tab" data-tabs-target="#lent-out" type="button" role="tab" aria-controls="lent-out" aria-selected="false">Buku Dipinjam</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="lent-out-tab" data-tabs-target="#lent-out" type="button" role="tab" aria-controls="lent-out" aria-selected="false">Buku yang Saya Pinjam</button>
                 </li>
                 <li class="me-2" role="presentation">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-lender-tab" data-tabs-target="#history-lender" type="button" role="tab" aria-controls="history-lender" aria-selected="false">Riwayat Pinjaman Saya</button>
@@ -88,15 +88,15 @@
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
-                    <p class="text-gray-500 dark:text-gray-400 text-center py-5">Belum ada permintaan peminjaman baru dari pengguna.</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-center py-5">Belum ada permintaan peminjaman baru dari Anda.</p>
                 <?php endif; ?>
             </div>
 
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 tab-content-section" id="lent-out" role="tabpanel" aria-labelledby="lent-out-tab">
-                <h3 class="text-lg font-bold mb-4">Buku Dipinjam</h3>
-                <?php if (!empty($lentOut)): ?>
+                <h3 class="text-lg font-bold mb-4">Buku yang Saya Pinjam</h3>
+                <?php if (!empty($borrowOut)): ?>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <?php foreach ($lentOut as $borrow): ?>
+                        <?php foreach ($borrowOut as $borrow): ?>
                             <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flowbite-card-with-image">
                                 <?php $coverPath = isset($borrow['book_cover']) && !empty($borrow['book_cover']) ? base_url($borrow['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
                                 <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($borrow['book_cover']))?>" alt="<?= esc($borrow['book_title']) ?> cover" />
@@ -105,10 +105,6 @@
                                     <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">pemilik: <strong><?= esc($borrow['owner_name']) ?></strong></p>
                                     <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Pinjam: <?= date('d M Y', strtotime($borrow['loan_start_date'])) ?></p>
                                     <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Jatuh Tempo: <?= date('d M Y', strtotime($borrow['loan_end_date'])) ?></p>
-                                    <a href="<?= base_url('library/requested-loan/' . $borrow['id']) ?>"
-                                        class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        Lihat Detail
-                                    </a>
                                 </div>
                             </div>
                         <?php endforeach; ?>
