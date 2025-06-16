@@ -14,7 +14,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 
     <style>
-        /* Custom scrollbar hide for the content section, if still desired */
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -22,7 +21,6 @@
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
-        /* Prose styling from your previous code, ensures readability for descriptions/reviews */
         .prose {
             color: #374151; /* gray-700 */
         }
