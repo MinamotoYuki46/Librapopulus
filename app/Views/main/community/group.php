@@ -50,40 +50,47 @@
                 <?php if (empty($messages)): ?>
                     <p class="text-center text-gray-500">Jadilah yang pertama mengirim pesan di grup ini! 🚀</p>
                 <?php else: ?>
+
                     <?php foreach ($messages as $msg): ?>
                         <?php
-                            $isOwnMessage = ($msg['sender_id'] == session() -> get("userId"));
-
+                            $isOwnMessage = ($msg['sender_id'] == $masterUserId);
                             $dt = new DateTime($msg['created_at'], new DateTimeZone('UTC'));
-                            $dt -> setTimezone(new DateTimeZone('Asia/Makassar'));
+                            $dt->setTimezone(new DateTimeZone('Asia/Makassar'));
                         ?>
-                        
-                        <div class="flex <?= $isOwnMessage ? 'justify-end' : 'justify-start' ?>">
-                            <div class="flex items-start space-x-3 max-w-md <?= $isOwnMessage ? 'flex-row-reverse space-x-reverse' : '' ?>">
-                                
-                                <img src="<?= base_url('uploads/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>" 
-                                    class="w-10 h-10 rounded-full" 
-                                    alt="<?= esc($isOwnMessage ? $username : $msg['sender_username']) ?> avatar">
-                                
-                                <div>
-                                    <div class="px-4 py-2 rounded-lg shadow-sm <?= $isOwnMessage ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-900' ?>">
-                                        <?php if (!$isOwnMessage): ?>
-                                            <p class="font-bold text-sm text-blue-600"><?= esc($msg['sender_username']) ?></p>
-                                        <?php endif; ?>
-                                        
-                                        <p class="text-base">
-                                            <?= nl2br(esc($msg['message_text'])) ?>
-                                        </p>
-                                    </div>
-                                    
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        <?= $dt->format('H:i') ?>
-                                    </div>
-                                </div>
 
+                        <div class="flex <?= $isOwnMessage ? 'justify-end' : 'justify-start' ?>">
+                            <div class="flex items-start gap-2.5 mb-4 <?= $isOwnMessage ? 'flex-row-reverse' : '' ?>">
+
+                                <!-- Avatar -->
+                                <img src="<?= base_url('uploads/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>"
+                                    alt="avatar"
+                                    class="w-8 h-8 rounded-full">
+
+                                <!-- Bubble -->
+                                <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200
+                                    <?= $isOwnMessage
+                                        ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto'
+                                        : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl' ?>">
+
+                                    <!-- Header (username dan waktu) -->
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm font-semibold <?= $isOwnMessage ? 'text-white' : 'text-blue-600' ?>">
+                                            <?= $isOwnMessage ? 'Anda' : esc($msg['sender_username']) ?>
+                                        </span>
+                                        <span class="text-sm font-normal <?= $isOwnMessage ? 'text-blue-100' : 'text-gray-500' ?>">
+                                            <?= $dt->format('d M H:i') ?>
+                                        </span>
+                                    </div>
+
+                                    <!-- Isi Pesan -->
+                                    <p class="text-sm font-normal py-2.5">
+                                        <?= nl2br(esc($msg['message_text'])) ?>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
+
                 <?php endif; ?>
             </section>
         </div>
@@ -104,7 +111,7 @@
                     autocomplete="off"
                 />
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    <i class="fas fa-paper-plane"></i>
+                    <i class="fas fa-paper-plane"></i> Kirim
                 </button>
             </form>
         </footer>
@@ -112,7 +119,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const chatArea = document.querySelector('.overflow-y-auto'); // Targetkan area scroll utama
+            const chatArea = document.querySelector('.overflow-y-auto');
             if (chatArea) {
                 chatArea.scrollTop = chatArea.scrollHeight;
             }

@@ -7,9 +7,9 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-$routes -> get('/', 'Home::index');
+$routes -> get('/', 'Home::index', ['filter' => 'userauth']);
 
-$routes -> get('/admin', 'Admin::index');
+$routes -> get('/admin', 'Admin::index', ['filter' => 'adminauth']);
 
 $routes -> group('auth', function($routes) {
     $routes -> get('/', 'Auth::index');
@@ -25,10 +25,10 @@ $routes -> group('auth', function($routes) {
     $routes -> delete('logout', 'Auth::logout');
 });
 
-$routes -> post("notification/mark-read", "Notification::markRead");
+$routes -> post("notification/mark-read", "Notification::markRead", ['filter' => 'userauth'], );
 
 
-$routes -> group('library', function($routes) {
+$routes -> group('library',['filter' => 'userauth'],  function($routes) {
     $routes -> get('/', 'MainController::library'); 
 
     $routes -> get('add', 'Book::addBook');
@@ -53,23 +53,24 @@ $routes -> group('library', function($routes) {
     $routes -> post('loan/decline/(:num)', 'BookLoan::decline/$1');
     $routes -> post('loan/cancel/(:num)', 'BookLoan::cancel/$1');
     $routes -> post('loan/return/(:num)', 'BookLoan::markAsReturned/$1');
+    $routes -> post('loan/report/(:num)', 'BookLoan::report/$1');
 
 });
 
 
-$routes -> group('profile', function($routes) {
+$routes -> group('profile', ['filter' => 'userauth'],  function($routes) {
     $routes -> get('edit', 'Profile::editProfile');
     $routes -> post("update", "Profile::update");
     $routes -> get('friend', 'Profile::friend');
     $routes -> get('(:segment)', 'Profile::index/$1');
 });
 
-$routes -> post('friends/add/(:num)', 'Friendship::add/$1');
-$routes -> post('friends/accept/(:num)', 'Friendship::accept/$1');
-$routes -> post('friends/decline/(:num)', 'Friendship::decline/$1');
-$routes -> post('friends/cancel/(:num)', 'Friendship::cancel/$1');
+$routes -> post('friends/add/(:num)', 'Friendship::add/$1', ['filter' => 'userauth']);
+$routes -> post('friends/accept/(:num)', 'Friendship::accept/$1', ['filter' => 'userauth']);
+$routes -> post('friends/decline/(:num)', 'Friendship::decline/$1', ['filter' => 'userauth']);
+$routes -> post('friends/cancel/(:num)', 'Friendship::cancel/$1', ['filter' => 'userauth']);
 
-$routes -> group("message", function($routes) {
+$routes -> group("message", ['filter' => 'userauth'],  function($routes) {
     $routes -> post('send', 'Message::send');
     $routes -> get('fetch/(:num)', 'Message::fetch/$1');
     $routes -> get('fetch_new/(:num)', 'Message::fetchNew/$1');
@@ -78,18 +79,14 @@ $routes -> group("message", function($routes) {
 
 
 
-$routes -> get("search", "MainController::search");
-
-$routes -> get("group", "MainController::group");
-$routes -> get("group/message", "MainController::groupMessage");
-$routes -> get("groups", "MainController::groupList");
+$routes -> get("search", "MainController::search", ['filter' => 'userauth']);
 
 
-$routes -> get("community", "Community::index");
-$routes -> get("group/create", "Community::createGroup");
-$routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup");
-$routes -> get("group/(:segment)", "Community::group/$1");
-$routes -> post("group/send", "Community::groupSendMessage");
+$routes -> get("community", "Community::index", ['filter' => 'userauth']);
+$routes -> get("group/create", "Community::createGroup", ['filter' => 'userauth'], );
+$routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup", ['filter' => 'userauth']);
+$routes -> get("group/(:segment)", "Community::group/$1", ['filter' => 'userauth']);
+$routes -> post("group/send", "Community::groupSendMessage", ['filter' => 'userauth']);
 
-$routes -> get("loans", "BookLoan::loanList");
-$routes -> get("borrowed", "BookLoan::borrowList");
+$routes -> get("loans", "BookLoan::loanList", ['filter' => 'userauth']);
+$routes -> get("borrowed", "BookLoan::borrowList", ['filter' => 'userauth']);

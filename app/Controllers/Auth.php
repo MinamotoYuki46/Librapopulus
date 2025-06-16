@@ -103,28 +103,43 @@ class Auth extends BaseController {
     
     public function processLogin() {
         $session = session();
-        $identity = $this -> request -> getPost('identity'); 
-        $password = $this -> request -> getPost('password');
+        $identity = $this->request->getPost('identity'); 
+        $password = $this->request->getPost('password');
 
         $user = $this -> userModel
-            -> where('username', $identity)
-            -> orWhere('email', $identity)
-            -> first();
+                    ->where('username', $identity)
+                    ->orWhere('email', $identity)
+                    ->first();
+        
+        log_message('info', 'Login berhasil. Data session: ' . print_r($user, true));
 
         if ($user && password_verify($password, $user['password'])) {
             session()->regenerate();
-            $session -> set([
+
+            $sessionData = [
                 'isLoggedIn' => true,
-                'userId'    => $user['id'],
-                'username' => $user['username'],
-                'fullname' => $user['full_name'],
-                'picture' => $user['picture']
-            ]);
-            return redirect() -> to(base_url());
-        } else {
-            return redirect() -> back() -> with('error', 'Username/email atau password salah!');
+                'userId'     => $user['id'],
+                'username'   => $user['username'],
+                'fullname'   => $user['full_name'],
+                'role'       => $user['role'],
+                'picture'    => $user['picture'] 
+            ];
+
+            $session->set($sessionData);
+
+            log_message('info', 'Login berhasil. Data session: ' . print_r($session->get(), true));
+
+            if ($session->get("role") === 'user') {
+                return redirect()->to(base_url());
+            } elseif ($session->get("role") === 'admin') {
+                return redirect()->to(base_url("/admin"));
+            }
         }
+
+
+        return redirect()->back()->with('error', 'Username/email atau password salah!');
     }
+
     
     public function processRegister() {
         $username = $this -> request -> getPost('username');

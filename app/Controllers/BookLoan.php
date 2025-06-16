@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\BookCollectionModel;
+use App\Models\ReportModel;
 use App\Models\UserModel;
 use App\Models\BookModel;
 use App\Models\NotificationModel;
@@ -20,6 +21,7 @@ class BookLoan extends BaseController{
     private $notificationModel;
     private $bookCollectionModel; 
     private $friendshipModel;
+    private $reportModel;
 
     public function __construct(){
         $this -> bookCollectionModel = new BookCollectionModel();
@@ -28,6 +30,7 @@ class BookLoan extends BaseController{
         $this -> notificationModel = new NotificationModel();
         $this -> bookLoanModel = new BookLoanModel();
         $this -> friendshipModel = new FriendshipModel();
+        $this -> reportModel = new ReportModel();
     }
 
     public function requestLoanForm(string $username, $slug){
@@ -225,6 +228,33 @@ class BookLoan extends BaseController{
         ]);
 
         return redirect()->to(base_url());
+    }
+
+    public function report(int $loanId){
+        $loanData = $this -> bookLoanModel -> getBookLoanDetail($loanId);
+
+        if (!$loanData){
+            return redirect()->back()->with('error', 'Peminjaman tidak ditemukan.');
+        }
+
+        $userId = session()->get('userId');
+        if ($loanData['lender_id'] != $userId) {
+            return redirect()->back()->with('error', 'Anda tidak berhak melaporkan ini.');
+        }
+
+        $reason = $this->request->getPost('report_reason');
+
+        if (!$reason || strlen(trim($reason)) < 10) {
+            return redirect()->back()->with('error', 'Alasan laporan minimal 10 karakter.');
+        }
+
+        $this -> reportModel -> insert([
+            'book_loan_id' => $loanId,
+            'message' => $reason
+        ]);
+
+
+        return redirect()->back()->with('success', 'Laporan Anda telah dikirim.');
     }
 
     public function loanList(){
