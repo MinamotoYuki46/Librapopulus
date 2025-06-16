@@ -30,9 +30,6 @@ class BookLoan extends BaseController{
     }
 
     public function requestLoanForm(string $username, $slug){
-        if (!session() -> get('isLoggedIn')) {
-            return redirect() -> to(base_url('auth/login'));
-        }
         $owner = $this -> userModel -> getDataUserByUsername($username);
 
         $owner['username'] = $username; 
@@ -62,10 +59,9 @@ class BookLoan extends BaseController{
             return redirect() -> to(base_url('/library/' . $username . '/' . $book['slug']), 301);
         }
 
-        $activeLoan = $this->bookLoanModel
-        ->where('book_id', $book['id'])
-        ->where('lender_id', $owner['id'])
-        ->where('borrower_id', session()->get('userId'))
+        $activeLoan = $this -> bookLoanModel
+        ->where('book_collection_id', $bookCollection['id'])
+        ->where('borrower_id', session() -> get("userId"))
         ->whereIn('status', [BookLoanModel::STATUS_PENDING, BookLoanModel::STATUS_APPROVED])
         ->first();
 
@@ -89,25 +85,24 @@ class BookLoan extends BaseController{
     }
 
     public function request() {
-        $bookId = $this->request->getPost('book_id');
+        $bookCollectionId = $this->request->getPost('book_collection_id');
         $ownerId = $this->request->getPost('owner_id');
         $startDate = $this->request->getPost('start_date');
         $endDate = $this->request->getPost('end_date');
         $borrowerId = session()->get('userId');
 
         $loanData = [
-            'book_id' => $bookId,
-            'lender_id' => $ownerId,
+            'book_collection_id' => $bookCollectionId,
             'borrower_id' => $borrowerId,
             'loan_start_date' => $startDate,
             'loan_end_date' => $endDate,
             'status' => BookLoanModel::STATUS_PENDING
         ];
-        $loanId = $this->bookLoanModel->insert($loanData);
+        $loanId = $this -> bookLoanModel -> insert($loanData);
 
-        $book = $this->bookModel->find($bookId);
+        $book = $this -> bookCollectionModel -> findBookCollectionDetail($bookCollectionId);
 
-        $this->notificationModel->insert([
+        $this -> notificationModel->insert([
             'user_id' => $ownerId,
             'sender_id' => $borrowerId,
             'type' => 'loan_request',
@@ -119,10 +114,10 @@ class BookLoan extends BaseController{
     }
 
     public function ownerViewLoan(int $loanId){
-        $loan = $this->bookLoanModel->getBookLoanDetail($loanId);
+        $loan = $this -> bookLoanModel -> getBookLoanDetail($loanId);
 
-         if (!$loan || $loan['lender_id'] != session()->get('userId')) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('Permintaan peminjaman tidak ditemukan.');
+        if (!$loan) {
+            throw new PageNotFoundException('Permintaan peminjaman tidak ditemukan.');
         }
 
         $data = ['loan' => $loan];
@@ -136,9 +131,9 @@ class BookLoan extends BaseController{
             return redirect() -> to(base_url('auth/login'));
         }
 
-        $loan = $this->bookLoanModel->find($loanId);
+        $loan = $this -> bookLoanModel -> getBookLoanDetail($loanId);
 
-        if (!$loan || $loan['lender_id'] != session()->get('userId') || $loan['status'] != BookLoanModel::STATUS_PENDING) {
+        if (!$loan || $loan['status'] != BookLoanModel::STATUS_PENDING) {
             return redirect()->back()->with('error', 'Aksi tidak valid.');
         }
 
@@ -159,7 +154,7 @@ class BookLoan extends BaseController{
     }
 
     public function decline(int $loanId) {
-        $loan = $this->bookLoanModel->find($loanId);
+        $loan = $this->bookLoanModel->getBookLoanDetail($loanId);
 
         if (!$loan || $loan['lender_id'] != session()->get('userId') || $loan['status'] != BookLoanModel::STATUS_PENDING) {
             return redirect()->back()->with('error', 'Aksi tidak valid.');
@@ -185,7 +180,7 @@ class BookLoan extends BaseController{
 
     public function cancel(int $loanId) {
         $borrowerId = session()->get('userId'); 
-        $loan = $this->bookLoanModel->find($loanId);
+        $loan = $this->bookLoanModel->getBookLoanDetail($loanId);
 
         if (!$loan || $loan['borrower_id'] != $borrowerId || $loan['status'] != BookLoanModel::STATUS_PENDING) {
             return redirect()->back()->with('error', 'Permintaan tidak dapat dibatalkan.');
@@ -212,7 +207,7 @@ class BookLoan extends BaseController{
 
     public function markAsReturned(int $loanId){
         $ownerId = session()->get('userId');
-        $loan = $this->bookLoanModel->find($loanId);
+        $loan = $this->bookLoanModel->getBookLoanDetail($loanId);
 
         if (!$loan || $loan['lender_id'] != $ownerId || $loan['status'] != BookLoanModel::STATUS_APPROVED) {
             return redirect()->back()->with('error', 'Aksi tidak valid.');

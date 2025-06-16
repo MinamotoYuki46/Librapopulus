@@ -90,3 +90,5 @@ $routes -> get("group/create", "Community::createGroup");
 $routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup");
 $routes -> get("group/(:segment)", "Community::group/$1");
 $routes -> post("group/send", "Community::groupSendMessage");
+
+$routes -> get("loans", "LoanAndBorrow::index");

@@ -1,25 +1,3 @@
-<!-- <?php 
-
-// $book = [
-//     'id' => 10,
-//     'title' => 'Wuthering Heights',
-//     'author' => 'Emily Brontë',
-//     'genre' => 'Gothic Fiction',
-//     'readPages' => 10,
-//     'totalPages' => 416,
-//     'image' => 'https://m.media-amazon.com/images/I/81-8dCuxEsL._SY466_.jpg',
-//     'desc' => 'Wuthering Heights is a classic novel of intense passion and revenge, set on the bleak Yorkshire moors. It tells the tragic story of Heathcliff and Catherine Earnshaw, and explores themes of love, class, and destiny.',
-//     'rate' => '5',
-//     'review' => 'A haunting and powerful story with unforgettable characters. A must-read for fans of classic literature.',
-//     'date_published' => '1847-12-01',
-//     'date_added' => date('Y-m-d'),
-// ];
- 
-// $owner = "Fulan";
-// $currentUser = "Alice";
-
-?> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,11 +62,11 @@
 
                     <?php endif; ?>
 
-                <?php else: // JIKA TIDAK ADA PEMINJAMAN AKTIF, TAMPILKAN FORM ?>
+                <?php else: ?>
 
                     <form action="<?= base_url('library/loan/request') ?>" method="POST" class="space-y-4 pt-6">
                         <?= csrf_field() ?>
-                        <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+                        <input type="hidden" name="book_collection_id" value="<?= $book['collection_id'] ?>">
                         <input type="hidden" name="owner_id" value="<?= $owner['id'] ?>">
                         <div>
                             <label for="from_user" class="block text-3xl font-bold text-gray-700">Dari</label>

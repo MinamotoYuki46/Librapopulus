@@ -14,11 +14,7 @@ class CreateBookLoanTable extends Migration
                 'unsigned' => true, 
                 'auto_increment' => true
             ],
-            'book_id' => [
-                'type' => 'INT', 
-                'unsigned' => true
-            ],
-            'lender_id' => [
+            'book_collection_id' => [
                 'type' => 'INT', 
                 'unsigned' => true
             ],
@@ -55,8 +51,7 @@ class CreateBookLoanTable extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('book_id', 'book', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('lender_id', 'user', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('book_collection_id', 'book_collection', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('borrower_id', 'user', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('book_loans');
     }

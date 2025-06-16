@@ -127,7 +127,7 @@
                     endswitch; 
                     ?>
 
-                    <a href="<?= base_url('/books') ?>" class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400 transition">
+                    <a href="<?= base_url('/library') ?>" class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400 transition">
                         <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
                     </a>
                 </div>
