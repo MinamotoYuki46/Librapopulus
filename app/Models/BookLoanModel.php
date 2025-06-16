@@ -84,4 +84,30 @@ class BookLoanModel extends Model
             ->findAll();
     }
 
+    public function getDataBorrower(int $borrowerId) {
+        return $this->select('
+                book_loans.id as id,
+                book_loans.created_at,
+                book_loans.loan_start_date,
+                book_loans.loan_end_date,
+                book_loans.returned_at,
+                book_loans.approved_at,
+                book_loans.updated_at,
+                book_loans.status,
+
+                book.title as book_title,
+                book.author as book_author,
+                book.book_cover as book_cover,
+
+                owner.username as owner_name
+            ')
+            ->join('book_collection', 'book_collection.id = book_loans.book_collection_id')
+            ->join('book', 'book.id = book_collection.book_id')
+            ->join('user as owner', 'owner.id = book_collection.user_id')
+            ->where('book_loans.borrower_id', $borrowerId)
+            ->orderBy('book_loans.updated_at', 'DESC')
+            ->asArray()
+            ->findAll();
+    }
+
 }

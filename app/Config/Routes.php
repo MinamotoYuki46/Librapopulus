@@ -92,3 +92,4 @@ $routes -> get("group/(:segment)", "Community::group/$1");
 $routes -> post("group/send", "Community::groupSendMessage");
 
 $routes -> get("loans", "BookLoan::loanList");
+$routes -> get("borrowed", "BookLoan::borrowList");

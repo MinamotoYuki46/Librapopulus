@@ -4189,6 +4189,11 @@
       color: var(--color-gray-600);
     }
   }
+  .dark\:text-green-100 {
+    &:where(.dark, .dark *) {
+      color: var(--color-green-100);
+    }
+  }
   .dark\:text-green-300 {
     &:where(.dark, .dark *) {
       color: var(--color-green-300);
@@ -4217,6 +4222,11 @@
   .dark\:text-white {
     &:where(.dark, .dark *) {
       color: var(--color-white);
+    }
+  }
+  .dark\:text-yellow-100 {
+    &:where(.dark, .dark *) {
+      color: var(--color-yellow-100);
     }
   }
   .dark\:text-yellow-300 {

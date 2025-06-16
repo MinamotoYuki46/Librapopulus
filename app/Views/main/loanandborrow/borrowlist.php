@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Buku Pinjaman</title>
+    <title>Daftar Buku yang Pinjam</title>
 
     <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
@@ -58,10 +58,10 @@
                     <button class="inline-block p-4 border-b-2 rounded-t-lg" id="requests-tab" data-tabs-target="#requests" type="button" role="tab" aria-controls="requests" aria-selected="true">Permintaan Peminjaman</button>
                 </li>
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="lent-out-tab" data-tabs-target="#lent-out" type="button" role="tab" aria-controls="lent-out" aria-selected="false">Buku Dipinjamkan</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="lent-out-tab" data-tabs-target="#lent-out" type="button" role="tab" aria-controls="lent-out" aria-selected="false">Buku Dipinjam</button>
                 </li>
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-lender-tab" data-tabs-target="#history-lender" type="button" role="tab" aria-controls="history-lender" aria-selected="false">Riwayat Pinjaman</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-lender-tab" data-tabs-target="#history-lender" type="button" role="tab" aria-controls="history-lender" aria-selected="false">Riwayat Pinjaman Saya</button>
                 </li>
             </ul>
         </div>
@@ -71,15 +71,15 @@
                 <h3 class="text-lg font-bold mb-4">Permintaan Peminjaman Buku</h3>
                 <?php if (!empty($requests)): ?>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <?php foreach ($requests as $loan): ?>
+                        <?php foreach ($requests as $borrow): ?>
                             <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flowbite-card-with-image">
-                                <?php $coverPath = isset($loan['book_cover']) && !empty($loan['book_cover']) ? base_url($loan['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
-                                <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($loan['book_cover']))?>" alt="<?= esc($loan['book_title']) ?> cover" />
+                                <?php $coverPath = isset($borrow['book_cover']) && !empty($borrow['book_cover']) ? base_url($borrow['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
+                                <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($borrow['book_cover']))?>" alt="<?= esc($borrow['book_title']) ?> cover" />
                                 <div class="p-5">
-                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($loan['book_title']) ?></h5>
-                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Diminta oleh: <strong><?= esc($loan['borrower_name']) ?></strong></p>
-                                    <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Permintaan: <?= date('d M Y', strtotime($loan['created_at'])) ?></p>
-                                    <a href="<?= base_url('library/requested-loan/' . $loan['id']) ?>"
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($borrow['book_title']) ?></h5>
+                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Diminta oleh: <strong><?= esc($borrow['owner_name']) ?></strong></p>
+                                    <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Permintaan: <?= date('d M Y', strtotime($borrow['created_at'])) ?></p>
+                                    <a href="<?= base_url('library/requested-loan/' . $borrow['id']) ?>"
                                         class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         Lihat Detail
                                     </a>
@@ -93,19 +93,19 @@
             </div>
 
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 tab-content-section" id="lent-out" role="tabpanel" aria-labelledby="lent-out-tab">
-                <h3 class="text-lg font-bold mb-4">Buku Dipinjamkan</h3>
+                <h3 class="text-lg font-bold mb-4">Buku Dipinjam</h3>
                 <?php if (!empty($lentOut)): ?>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <?php foreach ($lentOut as $loan): ?>
+                        <?php foreach ($lentOut as $borrow): ?>
                             <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flowbite-card-with-image">
-                                <?php $coverPath = isset($loan['book_cover']) && !empty($loan['book_cover']) ? base_url($loan['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
-                                <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($loan['book_cover']))?>" alt="<?= esc($loan['book_title']) ?> cover" />
+                                <?php $coverPath = isset($borrow['book_cover']) && !empty($borrow['book_cover']) ? base_url($borrow['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
+                                <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($borrow['book_cover']))?>" alt="<?= esc($borrow['book_title']) ?> cover" />
                                 <div class="p-5">
-                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($loan['book_title']) ?></h5>
-                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Peminjam: <strong><?= esc($loan['borrower_name']) ?></strong></p>
-                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Pinjam: <?= date('d M Y', strtotime($loan['loan_start_date'])) ?></p>
-                                    <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Jatuh Tempo: <?= date('d M Y', strtotime($loan['loan_end_date'])) ?></p>
-                                    <a href="<?= base_url('library/requested-loan/' . $loan['id']) ?>"
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($borrow['book_title']) ?></h5>
+                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">pemilik: <strong><?= esc($borrow['owner_name']) ?></strong></p>
+                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Pinjam: <?= date('d M Y', strtotime($borrow['loan_start_date'])) ?></p>
+                                    <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Jatuh Tempo: <?= date('d M Y', strtotime($borrow['loan_end_date'])) ?></p>
+                                    <a href="<?= base_url('library/requested-loan/' . $borrow['id']) ?>"
                                         class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         Lihat Detail
                                     </a>
@@ -122,15 +122,15 @@
                 <h3 class="text-lg font-bold mb-4">Riwayat Pinjaman</h3>
                 <?php if (!empty($history)): ?>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <?php foreach ($history as $loan): ?>
+                        <?php foreach ($history as $borrow): ?>
                             <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flowbite-card-with-image">
-                                <?php $coverPath = isset($loan['book_cover']) && !empty($loan['book_cover']) ? base_url($loan['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
-                                <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($loan['book_cover']))?>" alt="<?= esc($loan['book_title']) ?> cover" />
+                                <?php $coverPath = isset($borrow['book_cover']) && !empty($borrow['book_cover']) ? base_url($borrow['book_cover']) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
+                                <img class="book-cover" src="<?= base_url(  'uploads/bookcover/'. esc($borrow['book_cover']))?>" alt="<?= esc($borrow['book_title']) ?> cover" />
                                 <div class="p-5">
-                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($loan['book_title']) ?></h5>
-                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Peminjam: <strong><?= esc($loan['borrower_name']) ?></strong></p>
-                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Pinjam: <?= date('d M Y', strtotime($loan['loan_start_date'])) ?></p>
-                                    <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Kembali: <?= date('d M Y', strtotime($loan['returned_at'])) ?></p>
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($borrow['book_title']) ?></h5>
+                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">pemilik: <strong><?= esc($borrow['owner_name']) ?></strong></p>
+                                    <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Pinjam: <?= date('d M Y', strtotime($borrow['loan_start_date'])) ?></p>
+                                    <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Kembali: <?= date('d M Y', strtotime($borrow['returned_at'])) ?></p>
                                 </div>
                             </div>
                         <?php endforeach; ?>

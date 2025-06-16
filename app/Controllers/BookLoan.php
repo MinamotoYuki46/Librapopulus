@@ -238,4 +238,21 @@ class BookLoan extends BaseController{
         ];
         return view("main/loanandborrow/loanlist", $data);
     }
+
+    public function borrowList(){
+        $currentUserId = session()->get('userId');
+        $borrowData = $this -> bookLoanModel -> getDataBorrower($currentUserId);
+
+        $requests = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_PENDING);
+        $lentOut  = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_APPROVED);
+        $history  = array_filter($borrowData, fn($borrow) => $borrow['status'] == BookLoanModel::STATUS_RETURNED);
+
+
+        $data = [
+            'requests' => $requests,
+            'lentOut'  => $lentOut,
+            'history'  => $history,
+        ];
+        return view("main/loanandborrow/borrowlist", $data);
+    }
 }
