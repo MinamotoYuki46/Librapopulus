@@ -150,12 +150,14 @@ class Auth extends BaseController {
         $rules = $this -> userModel -> getValidationRules();
         $messageValidate = $this -> userModel -> getValidationMessages();
 
+        $rules['confirmPassword'] = 'required|matches[password]';
+        $messageValidate['confirmPassword'] = [
+            'required' => 'Konfirmasi password wajib diisi.',
+            'matches'  => 'Konfirmasi password tidak cocok.'
+        ];
+
         if(!$this -> validate($rules, $messageValidate)){
             return redirect() -> back() -> with('errors', $this -> validator -> getErrors());
-        }
-
-        if($password != $confirmPassword){
-            return redirect() -> back() -> with('error', 'konfirmasi Password Gagal');
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

@@ -69,7 +69,6 @@
     </head>
     <body class="bg-gray-50 min-h-screen">
         <div class="flex min-h-screen">
-            <!-- Left Side - Image/Illustration -->
             <div class="hidden lg:flex lg:w-1/2 bg-library-profile relative">
                 <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-12">
                     <div class="text-center max-w-md">
@@ -105,10 +104,9 @@
                 </div>
             </div>
 
-            <!-- Right Side - Profile Setup Form -->
+
             <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
                 <div class="max-w-md w-full">
-                    <!-- Progress Indicator -->
                     <div class="flex items-center justify-center mb-8">
                         <div class="flex items-center space-x-4">
                             <div class="progress-step completed">
@@ -121,7 +119,7 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Header (visible on small screens) -->
+
                     <div class="lg:hidden text-center mb-8">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
                             <i class="fas fa-user-edit text-2xl text-purple-600"></i>
@@ -129,13 +127,13 @@
                         <h1 class="text-2xl font-bold text-gray-900">Librapopulus</h1>
                     </div>
 
-                    <!-- Profile Setup Header -->
+
                     <div class="text-center mb-8">
                         <h1 class="text-3xl font-bold text-gray-900 mb-2">Lengkapi Profilmu</h1>
                         <p class="text-gray-600">Tambahkan beberapa detail agar menambah kenyamanan</p>
                     </div>
                     
-                    <!-- Error Message -->
+                    
                     <?php if(session()->getFlashdata('error')): ?>
                         <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
                             <div class="flex">
@@ -151,10 +149,9 @@
                         </div>
                     <?php endif; ?>
                     
-                    <!-- Profile Setup Form -->
+
                     <div class="glass-effect rounded-2xl shadow-xl p-8 border border-gray-200">
                         <form action="<?= base_url('auth/processProfileSetup') ?>" method="post" enctype="multipart/form-data" class="space-y-6">  <?= csrf_field() ?>
-                            <!-- Profile Picture Upload -->
                             <div class="text-center">
                                 <label class="block text-sm font-semibold text-gray-700 mb-4">
                                     <i class="fas fa-camera mr-2 text-gray-400"></i>
@@ -172,8 +169,6 @@
                                 <input type="file" id="profilePicture" name="profile_picture" accept="image/*" class="hidden">
                                 <p class="text-xs text-gray-500 mt-2">JPG, PNG atau GIF (maks. 2MB)</p>
                             </div>
-
-                            <!-- Full Name Field -->
                             <div>
                                 <label for="fullName" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-id-card mr-2 text-gray-400"></i>
@@ -184,8 +179,6 @@
                                     placeholder="Masukkan nama lengkapmu">
                                 <p class="text-xs text-gray-500 mt-1">Nama ini akan terlihat di publik</p>
                             </div>
-
-                            <!-- City/Location Field -->
                             <div>
                                 <label for="city" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
@@ -196,8 +189,6 @@
                                     placeholder="contoh, Banjarmasin, Kalimantan Selatan">
                                 <p class="text-xs text-gray-500 mt-1">Bantu kami menghubungkanmu dengan pembaca lokal</p>
                             </div>
-
-                            <!-- Bio/About Field -->
                             <div>
                                 <label for="bio" class="block text-sm font-semibold text-gray-700 mb-2">
                                     <i class="fas fa-pen mr-2 text-gray-400"></i>
@@ -206,9 +197,7 @@
                                 <textarea id="bio" name="bio" rows="3"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent input-focus transition-all duration-200 resize-none"
                                     placeholder="Katakan kepada dunia tentang dirimu"></textarea>
-                                <p class="text-xs text-gray-500 mt-1">Genre atau Topik Favoritmu?</p>
                             </div>
-                            <!-- Action Buttons -->
                             <div class="flex gap-4">
                                 <button type="submit" 
                                     class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
@@ -219,7 +208,7 @@
                         </form>
                     </div>
                     
-                    <!-- Help Text -->
+
                     <div class="text-center mt-6">
                         <p class="text-sm text-gray-500">
                             Kamu selalu bisa mengubah profilmu nanti di pengaturan
@@ -230,7 +219,6 @@
         </div>
         
         <script>
-            // Profile picture upload handling
             document.getElementById('profileUpload').addEventListener('click', function() {
                 document.getElementById('profilePicture').click();
             });
@@ -238,13 +226,12 @@
             document.getElementById('profilePicture').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    // Validate file size (2MB max)
                     if (file.size > 2 * 1024 * 1024) {
                         alert('File size must be less than 2MB');
                         return;
                     }
 
-                    // Validate file type
+
                     if (!file.type.startsWith('image/')) {
                         alert('Please select an image file');
                         return;
@@ -266,7 +253,6 @@
             });
 
 
-            // Form validation
             document.querySelector('form').addEventListener('submit', function(e) {
                 const fullName = document.getElementById('fullName').value.trim();
                 const city = document.getElementById('city').value.trim();
