@@ -124,7 +124,20 @@ $routes -> get("group/(:segment)", "Community::group/$1", ['filter' => 'userauth
 $routes->post('group/proceedEditGroup/(:segment)', 'Community::proceedEditGroup/$1');
 $routes->post('group/delete/(:num)', 'Community::deleteGroup/$1', ['filter' => 'userauth']);
 
-$routes -> get('group/member/(:segement)', 'Community::members/$1', ['filter' => 'userauth']);
+$routes -> get('group/members/(:segment)', 'Community::members/$1', ['filter' => 'userauth']);
+$routes -> get('group/invite-members/(:segment)', 'Community::inviteMembers/$1', ['filter' => 'userauth']);
+$routes -> post('group/send-invitation', 'Community::sendInvitation', ['filter' => 'userauth']);
+$routes -> post('group/(:num)/promote/(:num)', 'Community::promote/$1/$2', ['filter' => 'userauth']);
+$routes -> post('group/(:num)/kick/(:num)', 'Community::kick/$1/$2', ['filter' => 'userauth']);
+
+$routes -> post('group-invitation/accept/(:num)', 'Community::groupAccept/$1', ['filter' => 'userauth']);
+$routes -> post('group-invitation/decline/(:num)', 'Community::groupDecline/$1', ['filter' => 'userauth']);
+
+$routes -> post('group-request/join/(:num)', 'Community::requestJoin/$1', ['filter' => 'userauth']);
+$routes -> post('group-request/accept/(:num)', 'Community::requestAccept/$1', ['filter' => 'userauth']);
+$routes -> post('group-request/decline/(:num)', 'Community::requestDecline/$1', ['filter' => 'userauth']);
+
+
 
 
 $routes -> get("loans", "BookLoan::loanList", ['filter' => 'userauth']);

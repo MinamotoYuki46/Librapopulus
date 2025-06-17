@@ -24,7 +24,26 @@
                             <button type="submit" class="px-4 py-1.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300">Tolak</button>
                         </form>
                     <?php elseif ($notification['type'] === 'loan_request'): ?>
-                        <a href= "<?= base_url('library/requested-loan/'. $notification['related_id']) ?>" class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600">View Details</a>
+                        <a href= "<?= base_url('library/requested-loan/'. $notification['related_id']) ?>" class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600">Lihat Detail</a>
+                    
+                    <?php elseif ($notification['type'] === 'group_invitation'): ?>
+                        <form action="<?= base_url('group-invitation/accept/' . $notification['related_id']) ?>" method="post">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="px-4 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600">Terima</button>
+                        </form>
+                        <form action="<?= base_url('group-invitation/decline/' . $notification['related_id']) ?>" method="post">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="px-4 py-1.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300">Tolak</button>
+                        </form>
+                    <?php elseif ($notification['type'] === 'group_join_request'): ?>
+                        <form action="<?= base_url('group-request/accept/' . $notification['related_id']) ?>" method="post">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="px-4 py-1.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600">Terima</button>
+                        </form>
+                        <form action="<?= base_url('group-request/decline/' . $notification['related_id']) ?>" method="post">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="px-4 py-1.5 bg-gray-200 text-gray-800 text-sm font-semibold rounded-lg hover:bg-gray-300">Tolak</button>
+                        </form>
                     <?php endif; ?>
                 </div>
             </div>

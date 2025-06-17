@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\BookCollectionModel;
 use App\Models\BookModel;
+use App\Models\GroupMembersModel;
 use App\Models\UserModel;
 use App\Models\GroupsModel;
 
@@ -13,14 +14,17 @@ class MainController extends BaseController {
     private $userModel;
     private $groupModel;
     private $db;
+    private $groupMembersModel;
 
     public function __construct() {
         $this -> bookModel = new BookModel();
         $this -> bookCollectionModel = new BookCollectionModel();
         $this -> userModel = new UserModel();
         $this -> groupModel = new GroupsModel();
+        $this -> groupMembersModel = new GroupMembersModel();
         $this -> db = \Config\Database::connect();
     }
+
 
     public function library($ownerUsername = null){
         $session = session();
@@ -106,11 +110,15 @@ class MainController extends BaseController {
 
         }
 
+        $groupRows = $this -> groupMembersModel -> getGroupsByUserId(session() -> get('userId'));
+        $joinedGroupIds = array_column($groupRows, 'group_id');
+        
         return view('main/search', [
             'query'        => $query,
             'bookResults'  => $bookResults,
             'userResults'  => $userResults,
             'groupResults' => $groupResults,
+            'joinedGroupIds' => $joinedGroupIds,
         ]);
     }
 

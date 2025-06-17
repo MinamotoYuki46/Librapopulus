@@ -56,7 +56,7 @@ class Friendship extends BaseController {
         $this->friendshipModel->update($requestId, ['status' => FriendshipModel::STATUS_ACCEPTED]);
 
         $this->notificationModel->insert([
-            'user_id'     => $request['user_one_id'], // Notifikasi untuk si pengirim
+            'user_id'     => $request['user_one_id'],
             'sender_id'   => $receiverId,
             'type'        => 'request_accepted',
             'related_id'  => $requestId,

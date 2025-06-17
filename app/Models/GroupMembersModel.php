@@ -67,7 +67,7 @@ class GroupMembersModel extends Model
     }
 
     public function getMembersByGroupId(int $groupId) {
-        return $this->select('user.id, user.username, user.picture')
+        return $this->select('user.id as user_id, user.username, user.picture, user.full_name, group_members.role')
                     ->join('user', 'user.id = group_members.user_id')
                     ->where('group_members.group_id', $groupId)
                     -> where('group_members.status', self::STATUS_APPROVED)
@@ -88,10 +88,13 @@ class GroupMembersModel extends Model
     }
 
     public function getMemberRole($groupId, $userId){
-        return $this -> select('group_members.role')
-                     -> where('group_members.group_id', $groupId)
-                     -> where('group_members.user_id', $userId)
-                     -> where('group_members.status', self::STATUS_APPROVED)
-                     -> first();
+        $result = $this->select('group_members.role')
+                    ->where('group_members.group_id', $groupId)
+                    ->where('group_members.user_id', $userId)
+                    ->where('group_members.status', self::STATUS_APPROVED)
+                    ->first();
+
+        return $result['role'] ?? null;
     }
+
 }

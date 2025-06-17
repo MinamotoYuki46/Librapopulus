@@ -86,33 +86,44 @@
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Grup</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                         <?php foreach ($groupResults as $group): ?>
-                            <a href="<?= base_url('group/' . $group['slug']) ?>" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition duration-200">
-                                <div class="w-16 h-16 mr-4 flex-shrink-0">
-                                    <img src="<?= base_url('uploads/groups/' . $group['icon']) ?>"
-                                        alt="<?= esc($group['name']) ?>"
-                                        class="rounded-full w-full h-full object-cover" />
-                                </div>
-                                <div class="flex-grow">
-                                    <p class="text-black font-bold text-lg"><?= esc($group['name']) ?></p>
-                                    
-                                    <?php if (!empty($group['description'])): ?>
-                                        <p class="text-gray-600 text-sm mt-1 truncate">
-                                            <?= esc($group['description']) ?>
-                                        </p>
-                                    <?php endif; ?>
-
-                                    <div class="flex items-center text-xs text-gray-500 mt-2">
-                                        <i class="fas fa-users mr-1.5"></i>
-                                        <span><?= $group['member_count'] ?> Anggota</span>
+                            <div class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition duration-200">
+                                <a href="<?= base_url('group/' . $group['slug']) ?>" class="flex items-center w-full">
+                                    <div class="w-16 h-16 mr-4 flex-shrink-0">
+                                        <img src="<?= base_url('uploads/groups/' . $group['icon']) ?>"
+                                            alt="<?= esc($group['name']) ?>"
+                                            class="rounded-full w-full h-full object-cover" />
                                     </div>
+                                    <div class="flex-grow">
+                                        <p class="text-black font-bold text-lg"><?= esc($group['name']) ?></p>
+                                        
+                                        <?php if (!empty($group['description'])): ?>
+                                            <p class="text-gray-600 text-sm mt-1 truncate">
+                                                <?= esc($group['description']) ?>
+                                            </p>
+                                        <?php endif; ?>
 
-                                </div>
-                                <i class="fas fa-chevron-right text-gray-400"></i>
-                            </a>
+                                        <div class="flex items-center text-xs text-gray-500 mt-2">
+                                            <i class="fas fa-users mr-1.5"></i>
+                                            <span><?= $group['member_count'] ?> Anggota</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <?php if (!in_array($group['id'], $joinedGroupIds)): ?>
+                                    <form action="<?= base_url('group-request/join/' . $group['id']) ?>" method="post" class="ml-3">
+                                        <?= csrf_field() ?>
+                                        <button type="submit"
+                                            class="px-3 py-1.5 text-xs bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700">
+                                            Gabung
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="ml-3 text-xs text-gray-500">Sudah bergabung</span>
+                                <?php endif ?>
+                            </div>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-
             <?php endif; ?>
         <?php endif; ?>
     </main>

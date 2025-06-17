@@ -4,9 +4,11 @@ namespace App\Controllers;
 
 use App\Models\FriendshipModel;
 use App\Models\GroupMessagesModel;
+use App\Models\NotificationModel;
 use App\Models\UserModel;
 use App\Models\GroupMembersModel;
 use App\Models\GroupsModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Community extends BaseController {
     private $userModel;
@@ -14,6 +16,7 @@ class Community extends BaseController {
     private $friendshipModel;
     private $groupMembersModel;
     private $groupMessageModel;
+    private $notificationModel;
 
     public function __construct(){
         $this -> userModel = new UserModel();
@@ -21,6 +24,7 @@ class Community extends BaseController {
         $this -> groupMembersModel = new GroupMembersModel();
         $this -> groupsModel = new GroupsModel();
         $this -> groupMessageModel = new GroupMessagesModel();
+        $this -> notificationModel = new NotificationModel();
     }
 
     private function isLogin() {
@@ -295,7 +299,6 @@ class Community extends BaseController {
         return redirect()->to('/community')->with('success', 'Grup berhasil dihapus.');
     }
 
-<<<<<<< HEAD
     public function members(string $slug){
         $group = $this -> groupsModel -> where('slug', $slug) -> first();
 
@@ -306,12 +309,189 @@ class Community extends BaseController {
         $masterUserId = session('userId');
         $username = session('username'); 
 
-        if (!$this -> groupMembersModel -> isMember($group['id'], $masterUserId)) {
-            return redirect()->to(base_url('groups'))->with('error', 'Anda tidak memiliki akses ke pengaturan anggota grup ini.');
+        if (!$this -> groupMembersModel -> isMember( $masterUserId, $group['id'])) {
+            return redirect()->to(base_url('community'))->with('error', 'Anda tidak memiliki akses ke pengaturan anggota grup ini.');
         }
 
         $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
-=======
+        log_message('debug', 'Current user role: ' . print_r($currentUserRole, true));
+
+
+        if ($currentUserRole != 'admin') {
+            return redirect()->to(base_url('group/' . $slug))->with('error', 'Anda tidak memiliki izin untuk mengelola anggota grup.');
+        }
+
+        $members = $this -> groupMembersModel -> getMembersByGroupId($group['id']);
+        $isCurrentUserAdmin = $this-> groupMembersModel -> getMemberRole($group['id'], $masterUserId) === 'admin';
+
+        $data = [
+            'group'         => $group,
+            'currentUserRole' => $currentUserRole,
+            'members'       => $members,
+            'isCurrentUserAdmin' => $isCurrentUserAdmin
+        ];
+
+        return view('main/community/groupmember', $data);
+    }
+
+    public function inviteMembers($groupSlug){
+        $group = $this-> groupsModel ->where('slug', $groupSlug)->first();
+
+        if (!$group) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $masterUserId = session('userId');
+        $username = session('username');
+
+        if (!$this->groupMembersModel->isMember($masterUserId, $group['id'],)) {
+            return redirect()->to(base_url('groups'))->with('error', 'Anda bukan anggota grup ini.');
+        }
+        $currentUserRole = $this->groupMembersModel->getMemberRole($group['id'], $masterUserId);
+        if (!in_array($currentUserRole, ['admin', 'creator'])) {
+            return redirect()->to(base_url('group/' . $groupSlug))->with('error', 'Anda tidak memiliki izin untuk mengundang anggota.');
+        }
+
+        $searchQuery = $this->request->getGet('q'); 
+        $foundUsers = []; 
+
+        if ($searchQuery && strlen($searchQuery) >= 3) {
+            $usersQuery = $this->userModel->select('id, username, email, full_name, picture')
+                                    ->groupStart()
+                                        ->like('username', $searchQuery, 'after')
+                                        ->orLike('email', $searchQuery, 'after')
+                                    ->groupEnd()
+                                    ->where('role', 'user');
+
+
+            $existingMembers = $this->groupMembersModel->select('user_id')->where('group_id', $group['id'])->findAll();
+            $memberIds = array_column($existingMembers, 'user_id');
+            if (!empty($memberIds)) {
+                $usersQuery->whereNotIn('id', $memberIds);
+            }
+
+            $existingInvitations = $this-> groupMembersModel
+                                    ->select('user_id')
+                                    ->where('group_id', $group['id'])
+                                    ->where('status', GroupMembersModel::STATUS_PENDING)
+                                    ->findAll();
+            $invitedIds = array_column($existingInvitations, 'recipient_id');
+            if (!empty($invitedIds)) {
+                $usersQuery->whereNotIn('id', $invitedIds);
+            }
+            
+            $foundUsers = $usersQuery->findAll(10); 
+        }
+        
+        $data = [
+            'title'         => 'Undang Anggota Grup',
+            'group'         => $group,
+            'masterUserId'  => $masterUserId,
+            'searchQuery'   => $searchQuery, 
+            'foundUsers'    => $foundUsers,
+            'user' => [
+                'id' => $masterUserId,
+                'username' => $username,
+                'picture' => session('picture')
+            ]
+        ];
+
+        return view('main/community/groupinvite', $data);
+    }
+
+    public function sendInvitation(): RedirectResponse {
+        $groupId = $this->request->getPost('group_id');
+        $recipientId = $this->request->getPost('user_id');
+
+        $group = $this->groupsModel->find($groupId);
+        if (!$group) {
+            return redirect()->back()->with('error', 'Grup tidak ditemukan.');
+        }
+
+        $masterUserId = session('userId');
+
+        if (!$this-> groupMembersModel -> getMemberRole($groupId, $masterUserId)) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk mengundang anggota.');
+        }
+
+        $recipient = $this->userModel->find($recipientId);
+        if (!$recipient) {
+            return redirect()->back()->with('error', 'Pengguna tidak ditemukan.');
+        }
+
+        if ($this->groupMembersModel->isMember( $recipientId, $groupId)) {
+            return redirect()->back()->with('error', 'Pengguna sudah menjadi anggota grup ini.');
+        }
+
+        $existingInvitation = $this->groupMembersModel
+                                 ->where('group_id', $groupId)
+                                 ->where('user_id', $recipientId)
+                                 ->where('status', GroupMembersModel::STATUS_PENDING)
+                                 ->first();
+
+        if ($existingInvitation) {
+            return redirect()->back()->with('error', 'Pengguna ini sudah memiliki undangan pending untuk grup ini.');
+        }
+
+        $this -> groupMembersModel -> insert([
+            'group_id'      => $groupId,
+            'user_id'       => $recipientId,
+            'status'        => GroupMembersModel::STATUS_PENDING,
+        ]);
+
+        $this -> notificationModel->insert([
+            'user_id'     => $recipientId, 
+            'sender_id'   => $masterUserId,
+            'type'        => 'group_invitation',
+            'related_id'  => $groupId,
+            'message'     => 'mengirimi Anda permintaan bergabung ke grup.'
+        ]);
+
+        return redirect()->back()->with('success', 'Undangan berhasil dikirim!');
+    }
+
+    public function promote($groupId, $userId){
+        $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->set(['role' => 'admin'])
+            ->update();
+
+        return redirect()->back()->with('success', 'Pengguna dipromosikan jadi admin.');
+    }
+
+    public function kick($groupId, $userId){
+        $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->delete();
+
+        return redirect()->back()->with('success', 'Anggota dikeluarkan dari grup.');
+    }
+
+    public function groupAccept($groupId){
+        $userId = session('userId');
+
+        $member = $this -> groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$member || $member['status'] != GroupMembersModel::STATUS_PENDING) {
+            return redirect()->back()->with('error', 'Undangan tidak valid.');
+        }
+
+        $this -> groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->set(['status' => GroupMembersModel::STATUS_APPROVED])
+            ->update();
+
+            return redirect()->to(base_url('community'))->with('success', 'Berhasil bergabung!');
+    }
+
+    
+
     public function fetchMessages($groupId, $lastMessageId){
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(403, 'Forbidden');
@@ -326,6 +506,26 @@ class Community extends BaseController {
         ->findAll();
 
         return $this->response->setJSON($newMessages);
+    }
+
+    public function groupDecline($groupId){
+        $userId = session('userId');
+
+        $member = $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$member || $member['status'] != GroupMembersModel::STATUS_PENDING) {
+            return redirect()->back()->with('error', 'Undangan tidak valid.');
+        }
+
+        $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->delete();
+
+        return redirect()->to('/dashboard')->with('success', 'Undangan grup ditolak.');
     }
 
     public function fetchPrevMessages($groupId, $oldestMessageId){
@@ -350,6 +550,112 @@ class Community extends BaseController {
         }
 
         return $this->response->setJSON(['messages' => array_reverse($previousMessages), 'hasMore' => $moreMessagesCount > 0]);
->>>>>>> 2b9a2478a6df02f3f55c98b862695b9622300221
     }
+
+    public function requestJoin($groupId){
+        $userId = session()->get('userId');
+
+        $existing = $this->groupMembersModel
+                        ->where('group_id', $groupId)
+                        ->where('user_id', $userId)
+                        ->first();
+
+        if ($existing) {
+            return redirect()->back()->with('warning', 'Kamu sudah mengirim permintaan atau sudah menjadi anggota.');
+        }
+
+        $this -> groupMembersModel -> insert([
+            'group_id' => $groupId,
+            'user_id' => $userId,
+            'status' => GroupMembersModel::STATUS_PENDING
+        ]);
+
+        $admins = $this->groupMembersModel
+                    ->select('user_id')
+                    ->where('group_id', $groupId)
+                    ->where('role', 'admin')
+                    ->findAll();
+
+        foreach ($admins as $admin) {
+            $this->notificationModel->insert([
+                'user_id'    => $admin['user_id'],
+                'sender_id'  => $userId,
+                'type'       => 'group_join_request',
+                'related_id' => $groupId,
+                'message'    => 'meminta bergabung ke grup.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Permintaan bergabung berhasil dikirim. Menunggu persetujuan admin.');
+    }
+
+    public function requestAccept(int $groupId){
+        $currentUserId = session()->get('userId');
+
+        $notification = $this->notificationModel
+                    ->where('user_id', $currentUserId)
+                    ->where('related_id', $groupId)
+                    ->where('type', 'group_join_request')
+                    ->orderBy('created_at', 'DESC')
+                    ->first();
+
+        if (!$notification) {
+            return redirect()->back()->with('error', 'Permintaan tidak ditemukan.');
+        }
+
+        $senderId = $notification['sender_id'];
+
+        $updated = $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $senderId)
+            ->set('status', GroupMembersModel::STATUS_APPROVED)
+            ->update();
+
+        if ($updated) {
+            $this->notificationModel
+                ->where('user_id', $currentUserId)
+                ->where('related_id', $groupId)
+                ->where('sender_id', $senderId)
+                ->where('type', 'group_join_request')
+                ->delete();
+
+            return redirect()->to(base_url())->with('success', 'Permintaan telah disetujui.');
+
+        }
+
+        return redirect()->back()->with('error', 'Gagal menyetujui permintaan.');
+    }
+
+    public function requestDecline($groupId){
+        $currentUserId = session()->get('userId');
+
+        $notification = $this->notificationModel
+            ->where('user_id', $currentUserId)
+            ->where('related_id', $groupId)
+            ->where('type', 'group_join_request')
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        if (!$notification) {
+            return redirect()->back()->with('error', 'Permintaan tidak ditemukan.');
+        }
+
+        $senderId = $notification['sender_id'];
+
+        $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $senderId)
+            ->delete();
+
+        $this->notificationModel
+            ->where('user_id', $currentUserId)
+            ->where('related_id', $groupId)
+            ->where('sender_id', $senderId)
+            ->where('type', 'group_join_request')
+            ->delete();
+
+        return redirect()->to(base_url())->with('success', 'Permintaan telah ditolak.');
+    }
+
+
 }

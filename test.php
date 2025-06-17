@@ -1,3 +1,3 @@
 <?php
 
-print(password_hash("admin123", PASSWORD_DEFAULT));
+print(password_hash("tes()123", PASSWORD_DEFAULT));

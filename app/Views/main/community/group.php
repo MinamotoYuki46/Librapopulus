@@ -45,10 +45,18 @@
                         Edit Group
                     </a>
                 <?php endif; ?>
+
+                <?php if ($isAdmin): ?>
+                    <a href="<?= base_url('group/members/' . $group['slug']) ?>" 
+                        class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 ml-2">
+                        <i class="fas fa-users-cog mr-2"></i>Atur Anggota
+                    </a>
+                <?php endif; ?>
                 
             </header>
 
             <div class="bg-white p-3 border-b border-gray-200">
+ 
                 <div class="flex items-center text-sm font-semibold text-gray-600 mb-2">
                     <i class="fas fa-users mr-2"></i>
                     <?= count($members) ?> Anggota
@@ -63,6 +71,7 @@
                         </a>
                     <?php endforeach; ?>
                 </div>
+                
             </div>
             
             <section id="chat-messages" class="bg-white rounded-lg shadow p-4 max-h-[60vh] overflow-y-auto space-y-4 mb-6">
