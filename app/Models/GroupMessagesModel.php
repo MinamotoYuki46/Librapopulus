@@ -49,6 +49,8 @@ class GroupMessagesModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+
+
     public function getMessagesByGroup(int $groupId) {
         return $this->select('group_messages.*, user.username as sender_username, user.picture as sender_picture')
                     ->join('user', 'user.id = group_messages.sender_id')

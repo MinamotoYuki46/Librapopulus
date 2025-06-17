@@ -78,18 +78,15 @@
                         <div class="flex <?= $isOwnMessage ? 'justify-end' : 'justify-start' ?>">
                             <div class="flex items-start gap-2.5 mb-4 <?= $isOwnMessage ? 'flex-row-reverse' : '' ?>">
 
-                                <!-- Avatar -->
                                 <img src="<?= base_url('uploads/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>"
                                     alt="avatar"
                                     class="w-8 h-8 rounded-full">
 
-                                <!-- Bubble -->
                                 <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200
                                     <?= $isOwnMessage
                                         ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto'
                                         : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl' ?>">
 
-                                    <!-- Header (username dan waktu) -->
                                     <div class="flex items-center space-x-2">
                                         <span class="text-sm font-semibold <?= $isOwnMessage ? 'text-white' : 'text-blue-600' ?>">
                                             <?= $isOwnMessage ? 'Anda' : esc($msg['sender_username']) ?>
@@ -99,7 +96,6 @@
                                         </span>
                                     </div>
 
-                                    <!-- Isi Pesan -->
                                     <p class="text-sm font-normal py-2.5">
                                         <?= nl2br(esc($msg['message_text'])) ?>
                                     </p>

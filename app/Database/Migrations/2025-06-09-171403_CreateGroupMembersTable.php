@@ -25,6 +25,12 @@ class CreateGroupMembersTable extends Migration {
                 'constraint' => ['admin', 'member'],
                 'default'    => 'member',
             ],
+            'status' => [
+                'type'           => 'TINYINT',
+                'unsigned'       => true,
+                'constraint'     => 1,
+                'default'        => 0,
+            ],
             'joined_at' => [
                 'type' => 'DATETIME',
                 'null' => true
