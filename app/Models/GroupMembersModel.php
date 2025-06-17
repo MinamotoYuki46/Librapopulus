@@ -86,4 +86,12 @@ class GroupMembersModel extends Model
         
         return $result !== null;
     }
+
+    public function getMemberRole($groupId, $userId){
+        return $this -> select('group_members.role')
+                     -> where('group_members.group_id', $groupId)
+                     -> where('group_members.user_id', $userId)
+                     -> where('group_members.status', self::STATUS_APPROVED)
+                     -> first();
+    }
 }

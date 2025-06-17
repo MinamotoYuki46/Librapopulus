@@ -276,4 +276,21 @@ class Community extends BaseController {
 
         return redirect()->to('/community')->with('success', 'Grup berhasil dihapus.');
     }
+
+    public function members(string $slug){
+        $group = $this -> groupsModel -> where('slug', $slug) -> first();
+
+        if (!$group) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $masterUserId = session('userId');
+        $username = session('username'); 
+
+        if (!$this -> groupMembersModel -> isMember($group['id'], $masterUserId)) {
+            return redirect()->to(base_url('groups'))->with('error', 'Anda tidak memiliki akses ke pengaturan anggota grup ini.');
+        }
+
+        $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
+    }
 }
