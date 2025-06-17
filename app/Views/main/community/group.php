@@ -26,6 +26,23 @@
                         <p class="text-md text-gray-500 truncate mt-1"><?= esc($group['description']) ?></p>
                     <?php endif; ?>
                 </div>
+
+                <?php if ($isAdmin): ?>
+                    <form action="<?= base_url('group/delete/' . $group['id']) ?>" method="POST" class="ml-auto">
+                        <?= csrf_field() ?>
+                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus grup ini?')"
+                                class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors duration-200">
+                            <i class="fa fa-trash mr-2"></i>Hapus Grup
+                        </button>
+                    </form>
+                <?php endif; ?>
+
+                <?php if ($isAdmin): ?>
+                    <a href="<?= base_url('group/editgroup/' . $group['slug']) ?>" 
+                        class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors duration-200">
+                        Edit Group
+                    </a>
+                <?php endif; ?>
                 
             </header>
 

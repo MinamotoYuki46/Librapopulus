@@ -116,6 +116,9 @@ $routes -> get("group/create", "Community::createGroup", ['filter' => 'userauth'
 $routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup", ['filter' => 'userauth']);
 $routes -> get("group/(:segment)", "Community::group/$1", ['filter' => 'userauth']);
 $routes -> post("group/send", "Community::groupSendMessage", ['filter' => 'userauth']);
+$routes->get('group/editgroup/(:segment)', 'Community::editGroup/$1');
+$routes->post('group/proceedEditGroup/(:segment)', 'Community::proceedEditGroup/$1');
+$routes->post('group/delete/(:num)', 'Community::deleteGroup/$1', ['filter' => 'userauth']);
 
 $routes -> get("loans", "BookLoan::loanList", ['filter' => 'userauth']);
 $routes -> get("borrowed", "BookLoan::borrowList", ['filter' => 'userauth']);
