@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token-name" content="<?= csrf_token() ?>">
+    <meta name="csrf-token-hash" content="<?= csrf_hash() ?>">
     <title>Chat: <?= esc($group['name']) ?></title>
     <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -63,64 +65,45 @@
                 </div>
             </div>
             
-            <section class="bg-white rounded-lg shadow p-4 max-h-[60vh] overflow-y-auto space-y-4 mb-6">
+            <section id="chat-messages" class="bg-white rounded-lg shadow p-4 max-h-[60vh] overflow-y-auto space-y-4 mb-6">
+                <div id="loading-indicator" class="text-center py-2" style="display: none;"><p class="text-gray-500">Memuat pesan lama...</p></div>
+                
                 <?php if (empty($messages)): ?>
-                    <p class="text-center text-gray-500">Jadilah yang pertama mengirim pesan di grup ini! 🚀</p>
+                    <p id="empty-placeholder" class="text-center text-gray-500">Jadilah yang pertama mengirim pesan di grup ini! 🚀</p>
                 <?php else: ?>
-
                     <?php foreach ($messages as $msg): ?>
                         <?php
                             $isOwnMessage = ($msg['sender_id'] == $masterUserId);
                             $dt = new DateTime($msg['created_at'], new DateTimeZone('UTC'));
                             $dt->setTimezone(new DateTimeZone('Asia/Makassar'));
                         ?>
-
-                        <div class="flex <?= $isOwnMessage ? 'justify-end' : 'justify-start' ?>">
+                        <div class="flex <?= $isOwnMessage ? 'justify-end' : 'justify-start' ?>" data-message-id="<?= $msg['id'] ?>">
                             <div class="flex items-start gap-2.5 mb-4 <?= $isOwnMessage ? 'flex-row-reverse' : '' ?>">
-
-                                <!-- Avatar -->
-                                <img src="<?= base_url('uploads/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>"
-                                    alt="avatar"
-                                    class="w-8 h-8 rounded-full">
-
-                                <!-- Bubble -->
-                                <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200
-                                    <?= $isOwnMessage
-                                        ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto'
-                                        : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl' ?>">
-
-                                    <!-- Header (username dan waktu) -->
+                                <img src="<?= base_url('uploads/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>" alt="avatar" class="w-8 h-8 rounded-full">
+                                <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 <?= $isOwnMessage ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl' : 'bg-gray-100 rounded-e-xl rounded-es-xl' ?>">
                                     <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-semibold <?= $isOwnMessage ? 'text-white' : 'text-blue-600' ?>">
-                                            <?= $isOwnMessage ? 'Anda' : esc($msg['sender_username']) ?>
-                                        </span>
-                                        <span class="text-sm font-normal <?= $isOwnMessage ? 'text-blue-100' : 'text-gray-500' ?>">
-                                            <?= $dt->format('d M H:i') ?>
-                                        </span>
+                                        <span class="text-sm font-semibold <?= $isOwnMessage ? 'text-white' : 'text-blue-600' ?>"><?= $isOwnMessage ? 'Anda' : esc($msg['sender_username']) ?></span>
+                                        <span class="text-sm font-normal <?= $isOwnMessage ? 'text-blue-100' : 'text-gray-500' ?>"><?= $dt->format('d M H:i') ?></span>
                                     </div>
-
-                                    <!-- Isi Pesan -->
-                                    <p class="text-sm font-normal py-2.5">
-                                        <?= nl2br(esc($msg['message_text'])) ?>
-                                    </p>
+                                    <p class="text-sm font-normal py-2.5"><?= nl2br(esc($msg['message_text'])) ?></p>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
-
                 <?php endif; ?>
             </section>
         </div>
 
         <footer class="bg-white p-4 border-t border-gray-200 flex-shrink-0">
-            <form action="<?= base_url('group/send') ?>" method="POST" class="max-w-3xl mx-auto flex items-center space-x-3">
+            <form id="chat-form" class="max-w-3xl mx-auto flex items-center space-x-3">
                 <?= csrf_field() ?>
 
-                <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
-                <input type="hidden" name="group_slug" value="<?= $group['slug'] ?>">
+                <input type="hidden" name="group_id" id="group_id" value="<?= $group['id'] ?>">
+                <input type="hidden" name="group_slug" id="group_slug" value="<?= $group['slug'] ?>">
                 
                 <input
                     type="text"
+                    id="message_text"
                     name="message_text"
                     class="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     placeholder="Ketik pesan..."
@@ -136,9 +119,156 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const chatArea = document.querySelector('.overflow-y-auto');
-            if (chatArea) {
-                chatArea.scrollTop = chatArea.scrollHeight;
+            const chatForm = document.getElementById('chat-form');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const messageText = document.getElementById('message_text');
+            const chatMessages = document.getElementById('chat-messages');
+            const groupId = document.getElementById('group_id').value;
+
+            const csrfName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
+            let csrfHash = document.querySelector('meta[name="csrf-token-hash"]').getAttribute('content');
+        
+            let isLoadingPrevious = false;
+            let hasMoreMessages = <?= $hasMoreMessages ? 'true' : 'false' ?>;
+            let lastMessageId = <?= !empty($messages) ? json_encode(end($messages)['id']) : 0?>;
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            async function loadPreviousMessages() {
+                if (!hasMoreMessages) return; 
+
+                isLoadingPrevious = true;
+                loadingIndicator.style.display = 'block';
+
+                const firstMessageDiv = chatMessages.querySelector('div[data-message-id]');
+                if (!firstMessageDiv) {
+                    isLoadingPrevious = false;
+                    loadingIndicator.style.display = 'none';
+                    return;
+                }
+
+                const oldestId = firstMessageDiv.getAttribute('data-message-id');
+                try {
+                    const response = await fetch(`<?= base_url('group/fetch-old-messages/') ?>${groupId}/${oldestId}`, {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    const result = await response.json();
+            
+                    if (result.messages.length > 0) {
+                        const oldScrollHeight = chatMessages.scrollHeight; 
+
+                        result.messages.forEach(msg => {
+                            const messageElement = createMessageElement(msg);
+                            loadingIndicator.after(messageElement);
+                        });
+
+                
+                        const newScrollHeight = chatMessages.scrollHeight;
+                        chatMessages.scrollTop = newScrollHeight - oldScrollHeight;
+                    }
+            
+                    hasMoreMessages = result.hasMore;
+
+                } catch (error) {
+                    console.error('Gagal memuat pesan lama:', error);
+                } finally {
+                    isLoadingPrevious = false;
+                    loadingIndicator.style.display = 'none';
+                }
+            }
+
+            chatMessages.addEventListener('scroll', () => {
+                if (chatMessages.scrollTop < 5 && !isLoadingPrevious) {
+                    loadPreviousMessages();
+                }
+            });
+
+            chatForm.addEventListener('submit', async function(e) {
+                e.preventDefault(); 
+
+                
+                if (messageText.value.trim() === '') {
+                    return; 
+                }
+
+                const formData = new FormData(chatForm);
+                formData.append(csrfName, csrfHash);
+
+                try {
+                    const response = await fetch('<?= base_url('group/send') ?>', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        messageText.value = '';
+                        csrfHash = result.csrf_hash; 
+                        document.querySelector('meta[name="csrf-token-hash"]').setAttribute('content', csrfHash);
+                    } else {
+                        console.error('Gagal mengirim pesan:', result.error);
+                        alert('Gagal mengirim pesan.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan koneksi.');
+                }
+            });
+
+            setInterval(async function() {
+                try {
+                    const response = await fetch(`<?= base_url('group/fetch-message/') ?>${groupId}/${lastMessageId}`, {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    const newMessages = await response.json();
+
+                    if(newMessages.length > 0) {
+                        const placeholder = document.getElementById('empty-placeholder');
+                        if (placeholder) placeholder.remove();
+                        newMessages.forEach(msg => {
+                            const messageElement = createMessageElement(msg);
+                            chatMessages.appendChild(messageElement);
+                            lastMessageId = msg.id;
+                        });
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                } catch (error) {
+                    console.error('Error fetching new messages: ', error);
+                }
+            }, 1000);
+
+            function formatTime(utcDateTimeString) {
+                if (!utcDateTimeString) return '';
+                const date = new Date(utcDateTimeString.replace(' ', 'T') + 'Z');
+                const options = { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+                return new Intl.DateTimeFormat('en-GB', options).format(date);
+            }
+
+            function createMessageElement(msg) {
+                const ownMessage = msg.sender_id == <?= $masterUserId?>;
+                const div = document.createElement('div');
+                const time = formatTime(msg.created_at);
+                const sanitizedMessage = msg.message_text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+                
+                div.className = `flex ${ownMessage ? 'justify-end' : 'justify-start'}`;
+                div.setAttribute('data-message-id', msg.id);
+                div.innerHTML = `
+                    <div class="flex items-start gap-2.5 mb-4 ${ownMessage ? 'flex-row-reverse' : ''}">
+                        <img src="<?= base_url('uploads/') ?>${ownMessage ? '<?= $photoProfile ?>' : msg.sender_picture}" alt="avatar" class="w-8 h-8 rounded-full">
+                        <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 ${ownMessage ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto' : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl'}">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-blue-600'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
+                                <span class="text-sm font-normal ${ownMessage ? 'text-blue-100' : 'text-gray-500'}">${time}</span>
+                            </div>
+                            <p class="text-sm font-normal py-2.5">${sanitizedMessage}</p>
+                        </div>
+                    </div>
+                `;
+                return div;
             }
         });
     </script>
