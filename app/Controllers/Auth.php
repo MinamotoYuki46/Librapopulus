@@ -86,7 +86,7 @@ class Auth extends BaseController {
             'city' => $tmp['city'],
             'province' => $tmp['province'],
             'description' => $tmp['description'],
-            'picture' => $tmp['picture']
+            'picture' => $tmp['picture'],
             //JANGAN DIUBAH NAMANYA LAGI
         ];
 
@@ -100,7 +100,8 @@ class Auth extends BaseController {
             'isLoggedIn' => true,
             'userId'    => $userId, 
             'username'   => $tmp['username'],
-            'picture'    => $tmp['picture']
+            'picture'    => $tmp['picture'],
+            'role'       => 'user',
         ]);
 
         return view('auth/success');
@@ -231,7 +232,8 @@ class Auth extends BaseController {
             'city' => $city,
             'province' => $province,
             'description' => $bio,
-            'picture' => $picture
+            'picture' => $picture,
+            'role'       => 'user',
         ];
 
         $this -> tmpRegisterModel->update($newTmpId, $profileData);
