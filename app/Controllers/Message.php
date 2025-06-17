@@ -52,7 +52,7 @@ class Message extends BaseController {
             'message_text'=> $this->request->getPost('message')
         ]);
 
-        return $this->response->setJSON(['status' => 'success']);
+        return $this->response->setJSON(['status' => 'success', 'csrf_hash' => csrf_hash()]);
     }
 
     public function fetch($withUserId) {
@@ -87,4 +87,28 @@ class Message extends BaseController {
             'csrf_hash' => csrf_hash()
         ]);
     }
+
+    public function delete($messageId = null){
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403, 'Forbidden');
+        }
+
+        $currentUserId = session()->get('userId'); 
+        
+        $message = $this->messageModel->find($messageId);
+        if ($message && $message['sender_id'] == $currentUserId) {
+            if ($this->messageModel->delete($messageId)) {
+                return $this->response->setJSON([
+                    'status'    => 'success', 
+                    'message'   => 'Pesan berhasil dihapus.',
+                    'csrf_hash' => csrf_hash()
+                ]);
+            } else {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menghapus pesan.'])->setStatusCode(500);
+            }
+
+        }
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Anda tidak memiliki izin untuk menghapus pesan ini.'])->setStatusCode(403);
+    }
+
 }

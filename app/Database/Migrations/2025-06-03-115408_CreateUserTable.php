@@ -51,10 +51,6 @@ class CreateUserTable extends Migration
                 'constraint' => '255',
                 'null' => true
             ],
-            'favorite_genres' => [
-                'type' => 'JSON',
-                'null' => true
-            ],
             'picture' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',

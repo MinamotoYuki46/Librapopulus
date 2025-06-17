@@ -39,6 +39,36 @@
     </form>
 </main>
 
+<div id="delete-confirm-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Konfirmasi Penghapusan
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="delete-confirm-modal">
+                    <i class="fas fa-times"></i>
+                    <span class="sr-only">Tutup</span>
+                </button>
+            </div>
+            <div class="p-4 md:p-5">
+                <p class="text-base leading-relaxed text-gray-600">
+                    Apakah Anda yakin ingin menghapus pesan ini? Aksi ini tidak dapat dibatalkan.
+                </p>
+            </div>
+            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+                <button id="confirm-delete-button"  data-modal-hide="delete-confirm-modal" type="button" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Ya, saya yakin
+                </button>
+                <button data-modal-hide="delete-confirm-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     const recipientId = <?= $recipient['id'] ?>;
     const currentUserId = <?= $currentUser['id'] ?>;
@@ -73,26 +103,44 @@
         const bubble = document.createElement('div');
         bubble.className = `flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 ${
             isSentByCurrentUser ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto' : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl'
-        }`;
+        } relative`;
+        bubble.setAttribute('data-message-id', msg.id);
 
-        const header = document.createElement('div');
-        header.className = 'flex items-center space-x-2';
-        header.innerHTML = `
-            <span class="text-sm font-semibold ${isSentByCurrentUser ? 'text-white' : 'text-gray-900'}">${isSentByCurrentUser ? 'Anda' : msg.sender_username}</span>
-            <span class="text-sm font-normal ${isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500'}">${localTime}</span>
+        const dropdownId = `dropdown-for-${msg.id}`;
+        const dropdownButtonId = `button-for-${msg.id}`;
+        const dropdownHTML = isSentByCurrentUser ? `
+            <button id="${dropdownButtonId}" data-dropdown-toggle="${dropdownId}" class="absolute top-2 right-2 inline-flex self-center items-center p-2 text-sm font-medium text-center text-blue-100 hover:bg-blue-600 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <div id="${dropdownId}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
+                <ul class="py-2 text-sm text-gray-700" aria-labelledby="${dropdownButtonId}">
+                    <li>
+                        <a href="#" 
+                        data-modal-target="delete-confirm-modal" 
+                        data-modal-toggle="delete-confirm-modal"
+                        onclick="prepareDelete(${msg.id}); return false;" 
+                        class="block px-4 py-2 hover:bg-gray-100 text-red-600">
+                            <i class="fas fa-trash-alt w-4 mr-2"></i>Hapus
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        ` : '';
+
+        bubble.innerHTML = `
+            <div class="flex flex-col">
+                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                    <span class="text-sm font-semibold ${isSentByCurrentUser ? 'text-white' : 'text-gray-900'}">${isSentByCurrentUser ? 'Anda' : msg.sender_username}</span>
+                    <span class="text-sm font-normal ${isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500'}">${localTime}</span>
+                </div>
+                <p class="text-sm font-normal py-2.5 ${isSentByCurrentUser ? 'text-white' : 'text-gray-900'}">
+                    ${msg.message_text.replace(/\n/g, '<br>')}
+                </p>
+                <span class="text-xs font-normal ${isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500'}">Terkirim</span>
+            </div>
+        
+            ${dropdownHTML}
         `;
-
-        const body = document.createElement('p');
-        body.className = `text-sm font-normal py-2.5 ${isSentByCurrentUser ? 'text-white' : 'text-gray-900'}`;
-        body.innerHTML = msg.message_text.replace(/\n/g, '<br>');
-
-        const status = document.createElement('span');
-        status.className = `text-xs font-normal ${isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500'}`;
-        status.textContent = 'Terkirim';
-
-        bubble.appendChild(header);
-        bubble.appendChild(body);
-        bubble.appendChild(status);
 
         if (isSentByCurrentUser) {
             wrapper.appendChild(bubble);
@@ -104,6 +152,53 @@
 
         return wrapper;
     }
+
+    function prepareDelete(messageId) {
+        const confirmButton = document.getElementById('confirm-delete-button');
+        confirmButton.setAttribute('data-message-id', messageId);
+    }
+
+    async function executeDelete(messageId) {
+        if (!messageId) return;
+        
+        const csrfName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
+        const csrfHash = document.querySelector('meta[name="csrf-token-hash"]').getAttribute('content');
+        const formData = new FormData();
+        formData.append(csrfName, csrfHash);
+
+        try {
+            const response = await fetch(`<?= base_url('message/delete/') ?>${messageId}`, {
+                method: 'POST', 
+                body: formData, 
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            });
+            const data = await response.json();
+            if (response.ok && data.status === 'success') {
+                const messageElement = document.querySelector(`div[data-message-id='${messageId}']`);
+                if (messageElement) {
+                    messageElement.parentElement.remove();
+                }
+
+                document.querySelector('meta[name="csrf-token-hash"]').setAttribute('content', data.csrf_hash);
+
+            } else {
+                alert(data.message || 'Gagal menghapus pesan.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mencoba menghapus pesan.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const confirmButton = document.getElementById('confirm-delete-button');
+        if(confirmButton) {
+            confirmButton.addEventListener('click', function() {
+                const messageId = this.getAttribute('data-message-id');
+                executeDelete(messageId);
+            });
+        }
+    });
 
     async function fetchAndLoadMessages(options = {}) {
         const { offset = 0, sinceId = 0, prepend = false, isInitialLoad = false } = options;
@@ -137,6 +232,10 @@
                 const el = createMessageElement(msg);
                 prepend ? chatBox.prepend(el) : chatBox.appendChild(el);
             });
+
+            if (typeof initFlowbite === 'function') {
+                initFlowbite();
+            }
 
             if (prepend) {
                 chatBox.scrollTop = chatBox.scrollHeight - oldScrollHeight;
