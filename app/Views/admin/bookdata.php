@@ -19,7 +19,13 @@
 
             <h1 class="text-3xl font-bold mb-6">Data Buku</h1>
 
+            
             <div class="flex justify-end mb-4">
+                <a href="<?= base_url('admin/bookdata/add') ?>"
+                    class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition mr-3">
+                    <i class="fas fa-plus mr-2"></i> Tambah Buku
+                </a>
+
                 <div class="relative inline-block text-left px-5">
                     <button id="printDropdownButton" data-dropdown-toggle="printDropdown" 
                         class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition">
@@ -69,6 +75,7 @@
                             <th class="px-6 py-3">Cover</th>
                             <th class="px-6 py-3">Ditambahkan</th>
                             <th class="px-6 py-3">Diubah</th>
+                            <th class="px-6 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,6 +106,20 @@
                                     </td>
                                     <td class="px-6 py-4"><?= date('d M Y H:i', strtotime($book['created_at'])) ?></td>
                                     <td class="px-6 py-4"><?= date('d M Y H:i', strtotime($book['updated_at'])) ?></td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <a href="<?= base_url('admin/bookdata/edit/' . $book['id']) ?>"
+                                        class="inline-flex items-center px-3 py-1.5 bg-yellow-400 text-white text-xs font-medium rounded hover:bg-yellow-500 transition">
+                                            <i class="fas fa-edit mr-1"></i> Edit
+                                        </a>
+                                        <form action="<?= base_url('admin/bookdata/delete/' . $book['id']) ?>" method="POST" onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition">
+                                                <i class="fas fa-trash-alt mr-1"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             <?php endforeach ?>
                         <?php endif ?>

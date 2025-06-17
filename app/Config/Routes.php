@@ -19,8 +19,16 @@ $routes -> get('/admin/bookdata', 'Admin::bookData', ['filter' => 'adminauth']);
 $routes -> get('/admin/book-data/export-excel', 'Admin::printBookDataExcel', ['filter' => 'adminauth']);
 $routes -> get('/admin/book-data/export-pdf', 'Admin::printBookDataPdf', ['filter' => 'adminauth']);
 
-$routes -> get('admin/book-data/importExcelForm', 'Admin::importBookExcelForm');
-$routes -> post('admin/book-data/importExcel', 'Admin::importBookExcel');
+$routes -> get('/admin/book-data/importExcelForm', 'Admin::importBookExcelForm', ['filter' => 'adminauth']);
+$routes -> post('/admin/book-data/importExcel', 'Admin::importBookExcel', ['filter' => 'adminauth']);
+
+$routes -> get('/admin/bookdata/add', 'Admin::addBook', ['filter' => 'adminauth']);
+$routes -> post('/admin/bookdata/adding', 'Admin::processAdd', ['filter' => 'adminauth']);
+
+$routes -> get('/admin/bookdata/edit/(:num)', 'Admin::editBook/$1', ['filter' => 'adminauth']);
+$routes -> post('/admin/bookdata/editing/(:num)', 'Admin::processEdit/$1', ['filter' => 'adminauth']);
+
+$routes->delete('admin/bookdata/delete/(:num)', 'Admin:deleteBook/$1', ['filter' => 'adminauth']);
 
 
 $routes -> group('auth', function($routes) {

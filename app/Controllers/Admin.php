@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\BookGenreModel;
 use App\Models\BookModel;
+use App\Models\GenreModel;
 use App\Models\ReportModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -12,6 +13,7 @@ use Dompdf\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class Admin extends BaseController {
     private $reportModel;
@@ -19,12 +21,14 @@ class Admin extends BaseController {
     private $bookModel;
     private $db;
     private $bookGenreModel;
+    private $genreModel;
 
     public function __construct(){
         $this -> reportModel = new ReportModel();
         $this -> spreadSheet = new Spreadsheet();
         $this -> bookModel = new BookModel();
         $this -> bookGenreModel = new BookGenreModel();
+        $this -> genreModel = new GenreModel();
         $this -> db = \Config\Database::connect();
     }
     public function userReport(){
@@ -337,6 +341,140 @@ class Admin extends BaseController {
         return redirect()->to('/admin/bookdata')->with('success', 'Impor data buku berhasil!');
     }
 
+    public function addBook(){
+        $data['genres'] = $this -> genreModel->findAll();
+        return view('/admin/add', $data);
+    }
 
+
+
+    public function processAdd(){
+        $request = $this -> request;
+        $title = $request->getPost('title');
+        $author = $request->getPost('author');
+        $publishedDate = $request->getPost('published_date');
+        $totalPages = $request -> getPost('total_pages');
+        $description = $request -> getPost('description');
+        
+        $existingBook = $this->bookModel
+                ->where('title', $title)
+                ->where('author', $author)
+                ->where('published_date', $publishedDate)
+                ->first();
+        
+        
+        if ($existingBook) {
+            return redirect()->to('/admin/bookdata')->with('error', 'Kamu sudah menambahkan buku ini ke data sistem.');
+            
+        } 
+        
+        $cover = $request->getFile('cover');
+
+        $slug = url_title($request->getPost('title'), '-', true);
+
+        if (!$cover -> isValid() || $cover -> hasMoved()) {
+            return redirect() -> back() -> withInput() -> with('error', 'Gagal upload cover');
+        }
+
+        $extension = $cover -> getClientExtension();
+        $coverFileName = $slug . '.' . $extension;
+        $cover -> move(FCPATH . 'uploads/bookcover', $coverFileName);
+
+        $bookData = [
+            'title' => $title,
+            'author' => $author,
+            'slug' => $slug,
+            'book_cover' => $coverFileName,
+            'published_date' => $publishedDate,
+            'total_pages' => $totalPages,
+            'description' => $description,
+        ];
+
+        $bookId = $this -> bookModel->insert($bookData, true);
+
+        $genreIds = $this->request->getPost('genres');
+        if ($genreIds) {
+            foreach ($genreIds as $genreId) {
+                $this-> bookGenreModel -> insert([
+                    'book_id' => $bookId,
+                    'genre_id' => $genreId
+                ]);
+            }
+        }
+
+        return redirect() -> to('/admin/bookdata')->with('success', 'Buku berhasil ditambahkan!');
+    }
+
+    public function editBook(int $bookId){
+        $book = $this -> bookModel->find($bookId);
+        $bookGenreIds = $this -> bookGenreModel->where('book_id', $bookId)->findColumn('genre_id');
+
+        return view('admin/edit', [
+            'book' => $book,
+            'genres' => $this-> genreModel->findAll(),
+            'bookGenreIds' => $bookGenreIds,
+        ]);
+    }
+
+    public function processEdit(int $bookId){
+        $book = $this -> bookModel;
+
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'title'         => 'required',
+            'author'        => 'required',
+            'total_pages'   => 'required|integer|greater_than_equal_to[1]',
+            'published_date'=> 'permit_empty|valid_date',
+            'description'   => 'permit_empty',
+            'cover'         => 'permit_empty|uploaded[cover]|is_image[cover]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $data = [
+            'title'         => $this->request->getPost('title'),
+            'author'        => $this->request->getPost('author'),
+            'total_pages'   => $this->request->getPost('total_pages'),
+            'published_date'=> $this->request->getPost('published_date'),
+            'description'   => $this->request->getPost('description'),
+        ];
+
+        $cover = $this->request->getFile('cover');
+        if ($cover && $cover->isValid() && !$cover->hasMoved()) {
+            $newName = $cover->getRandomName();
+            $cover->move('uploads/bookcover', $newName);
+            $data['cover'] = $newName;
+
+            $oldData = $book -> find($bookId);
+            if (!empty($oldData->book_cover) && file_exists(FCPATH . 'uploads/bookcover/' . $oldData->book_cover)) {
+                unlink(FCPATH . 'uploads/bookcover/' . $oldData->book_cover);
+            }
+        }
+
+        $book -> update($bookId, $data);
+
+        $selectedGenres = $this->request->getPost('genres') ?? [];
+        $this -> bookGenreModel ->where('book_id', $bookId)->delete();
+        foreach ($selectedGenres as $genreId) {
+            $this -> bookGenreModel->insert([
+                'book_id' => $bookId,
+                'genre_id' => $genreId
+            ]);
+        }
+        return redirect()->to(base_url('/admin/bookdata'))->with('success', 'Data buku berhasil diperbarui.');
+    }
+
+    public function deleteBook(int $bookId){
+        if (!$bookId) {
+            throw new PageNotFoundException('Buku tidak ditemukan.');
+        }
+
+        $this -> bookModel -> delete('id', $bookId);
+        return redirect() -> to(base_url('/admin/bookdata'))
+                        -> with('success', 'Buku berhasil dihapus dari data sistem.');
+    }
 
 }

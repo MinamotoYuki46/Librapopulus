@@ -163,10 +163,15 @@ class Book extends BaseController {
 
             $bookId = $this -> bookModel->insert($bookData, true);
 
-            $this -> bookGenreModel -> insert([
-                'book_id' => $bookId,
-                'genre_id' => $request->getPost('genre_id'),
-            ]);
+            $genreIds = $this->request->getPost('genres');
+            if ($genreIds) {
+                foreach ($genreIds as $genreId) {
+                    $this-> bookGenreModel -> insert([
+                        'book_id' => $bookId,
+                        'genre_id' => $genreId
+                    ]);
+                }
+            }
         }
 
 
