@@ -121,13 +121,25 @@ class Community extends BaseController {
         }
 
         $members = $this -> groupMembersModel -> getMembersByGroupId($group['id']);
-        $messages = $this -> groupMessageModel -> getMessagesByGroup($group['id']);
+
+        $latestMessages = $this->groupMessageModel
+        ->select('group_messages.*, user.username as sender_username, user.picture as sender_picture')
+        ->join('user', 'user.id = group_messages.sender_id')
+        ->where('group_messages.group_id', $group['id'])
+        ->orderBy('group_messages.id', 'DESC')
+        ->findAll(20);
+
+        $totalMessages = $this->groupMessageModel->where('group_id', $group['id'])->countAllResults();
+        $hasMoreMessages = $totalMessages > 20;
+
+        $messages = array_reverse($latestMessages);
 
         $data = [
             "group" => $group,
             "members" => $members,
             "messages" => $messages,
-            "isAdmin" => $isAdmin
+            "isAdmin" => $isAdmin,
+            "hasMoreMessages" => $hasMoreMessages
         ];
 
         return view("main/community/group", $data);
@@ -220,13 +232,19 @@ class Community extends BaseController {
         $groupId = $this->request->getPost('group_id');
         $groupSlug = $this->request->getPost('group_slug');
 
-        if (!$this -> groupMembersModel -> isMember(session() -> get("userId"), $groupId)) {
-            return redirect()->to('/community') -> with('error', 'Akses ditolak.');
+        if (!$this->groupMembersModel->isMember(session()->get("userId"), $groupId)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => false, 'error' => 'Akses ditolak.'])->setStatusCode(403);
+            }
+            return redirect()->to('/community')->with('error', 'Akses ditolak.');
         }
 
-        $rules = ['message_text' => 'required|max_length[4096]'];
+        $rules = ['message_text' => 'required|max_length[4096]'];   
         if (!$this->validate($rules)) {
-            return redirect()->to('/group/' . $groupSlug) -> withInput();
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => false, 'error' => 'Pesan tidak boleh kosong.'])->setStatusCode(400);
+            }
+            return redirect()->to('/group/' . $groupSlug)->withInput();
         }
 
         $data = [
@@ -235,19 +253,19 @@ class Community extends BaseController {
             'message_text' => $this->request->getPost('message_text') 
         ];
 
-        $logMessage = "Preparing to save group message. Data types: " .
-                  "group_id => " . gettype($data['group_id']) . ", " .
-                  "sender_id => " . gettype($data['sender_id']) . ", " .
-                  "message_text => " . gettype($data['message_text']);
-    
-        log_message('debug', $logMessage);
-
-        $this -> groupMessageModel -> save($data);
-        return redirect()->to('/group/' . $groupSlug);
+        if ($this->groupMessageModel->save($data)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success'   => true,
+                    'csrf_hash' => csrf_hash()
+                ]);
+            }
+        
+            return redirect()->to('/group/' . $groupSlug);
+        }
     }
 
-    public function deleteGroup($groupId)
-    {
+    public function deleteGroup($groupId){
         $isAdmin = $this->groupMembersModel->where([
             'group_id' => $groupId,
             'user_id' => session()->get('userId'),
@@ -277,6 +295,7 @@ class Community extends BaseController {
         return redirect()->to('/community')->with('success', 'Grup berhasil dihapus.');
     }
 
+<<<<<<< HEAD
     public function members(string $slug){
         $group = $this -> groupsModel -> where('slug', $slug) -> first();
 
@@ -292,5 +311,45 @@ class Community extends BaseController {
         }
 
         $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
+=======
+    public function fetchMessages($groupId, $lastMessageId){
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403, 'Forbidden');
+        }
+
+        $newMessages = $this->groupMessageModel
+        ->select('group_messages.*, user.username as sender_username, user.picture as sender_picture')
+        ->join('user', 'user.id = group_messages.sender_id')
+        ->where('group_messages.group_id', $groupId)
+        ->where('group_messages.id >', $lastMessageId)
+        ->orderBy('group_messages.id', 'ASC')
+        ->findAll();
+
+        return $this->response->setJSON($newMessages);
+    }
+
+    public function fetchPrevMessages($groupId, $oldestMessageId){
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403, 'Forbidden');
+        }
+
+        $previousMessages = $this->groupMessageModel
+        ->select('group_messages.*, user.username as sender_username, user.picture as sender_picture')
+        ->join('user', 'user.id = group_messages.sender_id')
+        ->where('group_messages.group_id', $groupId)
+        ->where('group_messages.id <', $oldestMessageId)
+        ->orderBy('group_messages.id', 'DESC')
+        ->findAll(20);
+
+        $oldestIdInBatch = !empty($previousMessages) ? end($previousMessages)['id'] : 0;
+        $moreMessagesCount = 0;
+        if($oldestIdInBatch > 0){
+            $moreMessagesCount = $this->groupMessageModel->where('group_id', $groupId)
+                                                        ->where('id <', $oldestIdInBatch)
+                                                        ->countAllResults();
+        }
+
+        return $this->response->setJSON(['messages' => array_reverse($previousMessages), 'hasMore' => $moreMessagesCount > 0]);
+>>>>>>> 2b9a2478a6df02f3f55c98b862695b9622300221
     }
 }

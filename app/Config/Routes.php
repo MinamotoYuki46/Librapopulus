@@ -116,9 +116,11 @@ $routes -> get("search", "MainController::search", ['filter' => 'userauth']);
 $routes -> get("community", "Community::index", ['filter' => 'userauth']);
 $routes -> get("group/create", "Community::createGroup", ['filter' => 'userauth'], );
 $routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup", ['filter' => 'userauth']);
-$routes -> get("group/(:segment)", "Community::group/$1", ['filter' => 'userauth']);
 $routes -> post("group/send", "Community::groupSendMessage", ['filter' => 'userauth']);
-$routes->get('group/editgroup/(:segment)', 'Community::editGroup/$1');
+$routes -> get("group/fetch-message/(:num)/(:num)", "Community::fetchMessages/$1/$2", ['filter' => 'userauth']);
+$routes -> get("group/fetch-old-messages/(:num)/(:num)", "Community::fetchPrevMessages/$1/$2", ['filter' => 'userauth']);
+$routes -> get('group/editgroup/(:segment)', 'Community::editGroup/$1');
+$routes -> get("group/(:segment)", "Community::group/$1", ['filter' => 'userauth']);
 $routes->post('group/proceedEditGroup/(:segment)', 'Community::proceedEditGroup/$1');
 $routes->post('group/delete/(:num)', 'Community::deleteGroup/$1', ['filter' => 'userauth']);
 
