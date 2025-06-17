@@ -65,6 +65,7 @@ class ReportModel extends Model
             ->join('book', 'book.id = book_collection.book_id')
             ->join('user AS borrower', 'borrower.id = book_loans.borrower_id')
             ->join('user AS owner', 'owner.id = book_collection.user_id')
+            ->orderBy('report.created_at', 'ASC')
             ->findAll();
     }
 }

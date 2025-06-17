@@ -9,9 +9,16 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes -> get('/', 'Home::index');
 
-$routes -> get('/admin', 'Admin::index', ['filter' => 'adminauth']);
-$routes -> get('/admin/report/export-excel', 'Admin::printReportExcel', ['filter' => 'adminauth']);
-$routes -> get('/admin/report/export-pdf', 'Admin::printReportPdf', ['filter' => 'adminauth']);
+$routes -> get('/admin', 'Admin::userReport', ['filter' => 'adminauth']);
+$routes -> get('/admin/user-report/export-excel', 'Admin::printUserReportExcel', ['filter' => 'adminauth']);
+$routes -> get('/admin/user-report/export-pdf', 'Admin::printUserReportPdf', ['filter' => 'adminauth']);
+
+$routes -> get('/admin/bookdata', 'Admin::bookData', ['filter' => 'adminauth']);
+$routes -> get('/admin/book-data/export-excel', 'Admin::printBookDataExcel', ['filter' => 'adminauth']);
+$routes -> get('/admin/book-data/export-pdf', 'Admin::printBookDataPdf', ['filter' => 'adminauth']);
+
+$routes -> get('admin/book-data/importExcelForm', 'Admin::importBookExcelForm');
+$routes -> post('admin/book-data/importExcel', 'Admin::importBookExcel');
 
 
 $routes -> group('auth', function($routes) {
