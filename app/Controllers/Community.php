@@ -295,7 +295,6 @@ class Community extends BaseController {
         return redirect()->to('/community')->with('success', 'Grup berhasil dihapus.');
     }
 
-<<<<<<< HEAD
     public function members(string $slug){
         $group = $this -> groupsModel -> where('slug', $slug) -> first();
 
@@ -311,7 +310,8 @@ class Community extends BaseController {
         }
 
         $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
-=======
+    }
+    
     public function fetchMessages($groupId, $lastMessageId){
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(403, 'Forbidden');
@@ -350,6 +350,5 @@ class Community extends BaseController {
         }
 
         return $this->response->setJSON(['messages' => array_reverse($previousMessages), 'hasMore' => $moreMessagesCount > 0]);
->>>>>>> 2b9a2478a6df02f3f55c98b862695b9622300221
     }
 }
