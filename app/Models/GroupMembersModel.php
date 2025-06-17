@@ -16,6 +16,7 @@ class GroupMembersModel extends Model
         "user_id",
         "group_id",
         "role",
+        "status"
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -48,6 +49,9 @@ class GroupMembersModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    const STATUS_PENDING = 0;
+    const STATUS_APPROVED = 1;
+
     public function getGroupsByUserId($userId) {
         return $this -> select(
             'group_members.group_id, 
@@ -58,6 +62,7 @@ class GroupMembersModel extends Model
         )
                     -> join('groups', 'groups.id = group_members.group_id')
                     -> where('group_members.user_id', $userId)
+                    -> where('group_members.status', self::STATUS_APPROVED)
                     -> findAll();
     }
 
@@ -65,6 +70,7 @@ class GroupMembersModel extends Model
         return $this->select('user.id, user.username, user.picture')
                     ->join('user', 'user.id = group_members.user_id')
                     ->where('group_members.group_id', $groupId)
+                    -> where('group_members.status', self::STATUS_APPROVED)
                     ->findAll();
     }
 
@@ -75,6 +81,7 @@ class GroupMembersModel extends Model
 
         $result = $this->where('user_id', $userId)
                        ->where('group_id', $groupId)
+                       -> where('group_members.status', self::STATUS_APPROVED)
                        ->first();
         
         return $result !== null;
