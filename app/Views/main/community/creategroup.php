@@ -49,7 +49,8 @@
                         </div>
                         <label class="block">
                             <span class="sr-only">Pilih ikon grup</span>
-                            <input type="file" name="group_icon" id="group_icon" onchange="previewIcon(event)" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                            <input type="file" name="group_icon" id="group_icon" accept="image/*" onchange="previewIcon(event)" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                            <img id="icon_preview" src="#" alt="Preview Icon" class="mt-4 w-32 h-32 object-cover rounded" style="display:none;" />
                         </label>
                     </div>
                 </div>
@@ -63,6 +64,26 @@
             </form>
         </div>
     </main>
+    <script>
+        function previewIcon(event) {
+            const input = event.target;
+            const preview = document.getElementById('icon_preview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        }
+    </script>
     <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>
