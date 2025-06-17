@@ -10,6 +10,8 @@ use CodeIgniter\Router\RouteCollection;
 $routes -> get('/', 'Home::index');
 
 $routes -> get('/admin', 'Admin::userReport', ['filter' => 'adminauth']);
+
+$routes -> get('/admin/userreport', 'Admin::userReport', ['filter' => 'adminauth']);
 $routes -> get('/admin/user-report/export-excel', 'Admin::printUserReportExcel', ['filter' => 'adminauth']);
 $routes -> get('/admin/user-report/export-pdf', 'Admin::printUserReportPdf', ['filter' => 'adminauth']);
 
