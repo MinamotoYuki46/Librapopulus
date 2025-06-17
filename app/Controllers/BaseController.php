@@ -63,7 +63,7 @@ abstract class BaseController extends Controller
             "masterUserId"      => $currentUserId,
             "masterUsername"    => session() -> get('username') ?? 'Guest',
             "masterFullname"    => session() -> get("fullname"),
-            'photoProfile'      => session() -> get('picture') ?? null,
+            'photoProfile'      => session() -> get('picture') ?? 'default_user.png',
             'notificationCount' => 0,
             'notifications'     => []
         ];

@@ -38,23 +38,19 @@
                     </div>
                 </div>
 
-                <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Librapopulus!</h1>
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">Selamat Datang di Librapopulus!</h1>
                 <p class="text-gray-600 mb-8 leading-relaxed">
-                    Your profile has been successfully created. You're now ready to explore our community and discover amazing books!
+                    Profilmu sudah selesai dibuat. Silahkan masuk dan jelajahi buku dan teman-teman barumu.
                 </p>
 
                 <div class="grid grid-cols-3 gap-4 mb-8">
                     <div class="text-center">
                         <div class="text-2xl font-bold text-purple-600">50K+</div>
-                        <div class="text-xs text-gray-500">Books</div>
+                        <div class="text-xs text-gray-500">Buku</div>
                     </div>
                     <div class="text-center">
                         <div class="text-2xl font-bold text-blue-600">10K+</div>
-                        <div class="text-xs text-gray-500">Members</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-green-600">24/7</div>
-                        <div class="text-xs text-gray-500">Access</div>
+                        <div class="text-xs text-gray-500">Anggota</div>
                     </div>
                 </div>
 
@@ -64,18 +60,6 @@
                         <i class="fas fa-home mr-2"></i>
                         Ke Dashboard
                     </a>
-                </div>
-
-                <div class="mt-8 p-4 bg-blue-50 rounded-xl">
-                    <h3 class="font-semibold text-blue-900 mb-2">
-                        <i class="fas fa-lightbulb mr-2"></i>
-                        Quick Tips
-                    </h3>
-                    <ul class="text-sm text-blue-800 space-y-1 text-left">
-                        <li>• Update your reading preferences in settings</li>
-                        <li>• Join discussions to meet fellow readers</li>
-                        <li>• Check out local book clubs in your area</li>
-                    </ul>
                 </div>
             </div>
         </div>

@@ -188,16 +188,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-start">
-                                <input type="checkbox" id="terms" name="terms" required
-                                    class="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-                                <label for="terms" class="ml-3 text-sm text-gray-600">
-                                    Saya setuju dengan 
-                                    <a href="#" class="text-green-600 hover:text-green-700 font-medium">Syarat & Ketentuan</a> 
-                                    dan 
-                                    <a href="#" class="text-green-600 hover:text-green-700 font-medium">Kebijakan Privasi</a>
-                                </label>
-                            </div>
+
                             
                             <div>
                                 <button type="submit" 
