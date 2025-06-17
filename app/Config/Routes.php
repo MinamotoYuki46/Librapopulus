@@ -26,6 +26,12 @@ $routes -> group('auth', function($routes) {
     $routes -> post('processProfileSetup', 'Auth::processProfile');
 
     $routes -> delete('logout', 'Auth::logout');
+
+    $routes->get('forgot-password', 'Auth::forgotPasswordForm');
+    $routes->post('forgot-password', 'Auth::processForgotPassword');
+    $routes->get('reset-password/(:segment)', 'Auth::resetPassword/$1');
+    $routes->post('reset-password', 'Auth::processResetPassword');
+
 });
 
 $routes -> post("notification/mark-read", "Notification::markRead", ['filter' => 'userauth'], );

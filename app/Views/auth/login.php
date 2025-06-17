@@ -104,6 +104,13 @@
                                     </button>
                                 </div>
                             </div>
+
+                            <div class="text-right">
+                                <a href="<?= base_url('auth/forgot-password') ?>" class="text-sm text-blue-600 hover:underline">
+                                    Lupa password?
+                                </a>
+                            </div>
+
                             
 
                             <div>
@@ -115,7 +122,6 @@
                             </div>
                         </form>
                         
-                        <!-- Register Link -->
                         <div class="mt-6 text-center">
                             <p class="text-gray-600">
                                 Belum punya akun? 
@@ -126,7 +132,6 @@
                         </div>
                     </div>
                     
-                    <!-- Back to Home -->
                     <div class="text-center mt-8">
                         <a href="<?= base_url() ?>" class="inline-flex items-center text-gray-500 hover:text-blue-600 text-sm font-medium transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>

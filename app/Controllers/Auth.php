@@ -2,16 +2,21 @@
 
 namespace App\Controllers;
 
+use App\Models\PasswordResetsModel;
 use App\Models\UserModel;
 use App\Models\TmpRegisterProcessModel;
 
 class Auth extends BaseController {
     private $userModel;
     private $tmpRegisterModel;
+    private $passwordResetModel;
+    private $db;
     
     public function __construct() {
         $this -> userModel = new UserModel();
         $this -> tmpRegisterModel = new TmpRegisterProcessModel();
+        $this -> passwordResetModel = new PasswordResetsModel();
+        $this -> db = \Config\Database::connect();
     }
     
     public function index(){
@@ -254,4 +259,78 @@ class Auth extends BaseController {
             session()->remove('register_data');
         }
     }
+
+    public function forgotPasswordForm() {
+        return view('auth/forgotpassword');
+    }
+
+    public function processForgotPassword(){
+        $email = $this->request->getPost('email');
+        $user = $this->userModel->where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Email tidak ditemukan.');
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $resetModel = $this -> passwordResetModel; 
+
+        $resetModel->insert([
+            'email' => $email,
+            'token' => $token,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+
+        $link = base_url("auth/reset-password/$token");
+
+        $emailService = \Config\Services::email();
+        $emailService->setTo($email);
+        $emailService->setFrom('Librapopulus.official@email.com', 'Reset Password');
+        $emailService->setSubject('Reset Password');
+        $emailService->setMessage("Klik link berikut untuk reset password Anda: <a href='$link'>$link</a>");
+        $emailService->send();
+
+        return redirect()->to(base_url('auth/forgot-password'))
+                        ->with('success', 'Link reset password telah dikirim ke email Anda.');
+    }
+
+    public function resetPassword($token){
+        $resetModel = $this -> passwordResetModel;
+        $reset = $resetModel->where('token', $token)->first();
+
+        if (!$reset || strtotime($reset['created_at']) < time() - 3600) {
+            return redirect()->to(base_url('auth/forgot-password'))->with('error', 'Token tidak valid atau telah kedaluwarsa.');
+        }
+
+        return view('auth/resetpassword', ['token' => $token]);
+    }
+
+
+    public function processResetPassword(){
+        $token = $this->request->getPost('token');
+        $password = $this->request->getPost('password');
+        $confirmPassword = $this->request->getPost('confirmPassword');
+
+        if ($password !== $confirmPassword) {
+            return redirect()->back()->with('error', 'Konfirmasi password tidak cocok.');
+        }
+
+        $resetModel = $this -> passwordResetModel;
+        $reset = $resetModel->where('token', $token)->first();
+
+        if (!$reset || strtotime($reset['created_at']) < time() - 3600) {
+            return redirect()->to(base_url('auth/forgot-password'))->with('error', 'Token tidak valid atau telah kedaluwarsa.');
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $this->userModel->where('email', $reset['email'])->set(['password' => $hashedPassword])->update();
+
+        $resetModel->where('email', $reset['email'])->delete();
+
+        return redirect()->to(base_url('auth/login'))->with('success', 'Password berhasil direset.');
+    }
+
+
+
+
 }

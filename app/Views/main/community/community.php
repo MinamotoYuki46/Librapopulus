@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-200 min-h-screen font-[Inter]">
+<body class="bg-gray-200 min-h-screen">
     <?php include __DIR__ . '/../layout/layout.php' ?>
     
     <main class="px-6 pb-6 py-6" id="mainContent">
