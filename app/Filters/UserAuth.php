@@ -11,7 +11,7 @@ class UserAuth implements FilterInterface {
         $session = session();
 
         if (!$session->get('isLoggedIn')) {
-            return redirect()->to('/welcome')->with('error', 'Silakan login terlebih dahulu.');
+            return redirect()->to('/')->with('error', 'Silakan login terlebih dahulu.');
         }
 
         if ($session->get('role') !== 'user') {

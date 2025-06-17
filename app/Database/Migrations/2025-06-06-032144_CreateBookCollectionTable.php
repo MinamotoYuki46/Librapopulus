@@ -36,6 +36,10 @@ class CreateBookCollectionTable extends Migration
                 'type' => 'TEXT',
                 'null' => true
             ],
+            'read_duration' => [
+                'type' => 'INT',
+                'null' => true
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true

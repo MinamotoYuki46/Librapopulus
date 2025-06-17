@@ -1,106 +1,120 @@
-<?php
-// Dummy data
-$users = [
-    ['name' => 'Alice Johnson', 'avatar' => 'https://i.pravatar.cc/100?u=alice'],
-    ['name' => 'Bob Smith', 'avatar' => 'https://i.pravatar.cc/100?u=bob'],
-    ['name' => 'Charlie Davis', 'avatar' => 'https://i.pravatar.cc/100?u=charlie'],
-];
-
-$books = [
-    ['title' => 'Harry Potter and the Chamber of Secrets', 'author' => 'J.K. Rowling'],
-    ['title' => 'The Hobbit', 'author' => 'J.R.R. Tolkien'],
-    ['title' => '1984', 'author' => 'George Orwell'],
-];
-
-// Handle search query
-$query = $_GET['query'] ?? '';
-$userResults = [];
-$bookResults = [];
-
-if ($query) {
-    $queryLower = strtolower($query);
-
-    $userResults = array_filter($users, fn($u) =>
-        str_contains(strtolower($u['name']), $queryLower)
-    );
-
-    $bookResults = array_filter($books, fn($b) =>
-        str_contains(strtolower($b['title']), $queryLower)
-    );
-}
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Search</title>
+    <title>Cari</title>
     <link href="<?= base_url('assets/css/tailwind.css')?>" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Inter Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-     
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen px-4 py-8">
-    <?php include 'layout/layout.php' ?>
-    <main class="px-6 pb-6 py-6" id="mainContent">
+<body class="bg-gray-100 min-h-screen font-[Inter]">
 
-        <div class="max-w-3xl mx-auto">
-            <h1 class="text-3xl font-bold mb-6 text-center">Cari</h1>
-            
-            <form method="GET" action="<?= site_url('search') ?>" class="flex mb-6">
+    <?php include 'layout/layout.php' ?>
+
+    <main class="px-4 py-10 max-w-4xl mx-auto" id="mainContent">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Pencarian</h1>
+
+        <form method="GET" action="<?= site_url('search') ?>" class="flex gap-2 mb-8">
+            <div class="relative w-full">
                 <input 
                     type="text" 
                     name="query" 
-                    value="<?= htmlspecialchars($query) ?>" 
-                    placeholder="Search for users or books..." 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                <button 
-                    type="submit" 
-                    class="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 transition"
-                >
-                Search
-                </button>
-            </form>
+                    value="<?= esc($query ?? '') ?>" 
+                    placeholder="Cari pengguna atau buku..."
+                    class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                />
+            </div>
+            <button 
+                type="submit" 
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
+            >
+                <i class="fas fa-search mr-2"></i> Cari
+            </button>
+        </form>
 
-            <?php if ($query): ?>
-                <p class="mb-4 text-gray-600">Showing results for "<strong><?= htmlspecialchars($query) ?></strong>":</p>
-                
-                <?php if (count($userResults) === 0 && count($bookResults) === 0): ?>
-                    <p class="text-red-500 mb-8">No results found.</p>
-                    <?php else: ?>
+        <?php if (!empty($query)): ?>
+            <p class="mb-4 text-gray-600 text-center">Hasil untuk: <strong><?= esc($query) ?></strong></p>
 
-                        <?php if ($userResults): ?>
-                            <h2 class="text-xl font-semibold mb-3">Users</h2>
-                        <div class="space-y-4 mb-8">
-                            <?php foreach ($userResults as $user): ?>
-                                <div class="flex items-center bg-white p-4 shadow rounded-lg">
-                                    <img src="<?= htmlspecialchars($user['avatar']) ?>" alt="Avatar" class="w-12 h-12 rounded-full mr-4">
-                                    <p class="text-gray-800 font-medium"><?= htmlspecialchars($user['name']) ?></p>
+            <?php if (empty($userResults) && empty($bookResults) && empty($groupResults)): ?>
+                <div class="text-center text-red-500 font-semibold mb-6">Tidak ada hasil ditemukan.</div>
+            <?php else: ?>
+
+                <?php if (!empty($userResults)): ?>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Pengguna</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                        <?php foreach ($userResults as $user): ?>
+                            <a href="<?= base_url('profile/' . $user['username']) ?>" class="block bg-white p-4 rounded-lg shadow text-center hover:shadow-lg transition duration-200">
+                                <div class="w-28 h-28 mx-auto">
+                                    <img src="<?= base_url('uploads/' . $user['picture']) ?>"
+                                        alt="<?= esc($user['username']) ?>"
+                                        class="rounded-full w-full h-full object-cover border-4 border-gray-300" />
                                 </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($bookResults): ?>
-                        <h2 class="text-xl font-semibold mb-3">Books</h2>
-                        <div class="space-y-4">
-                            <?php foreach ($bookResults as $book): ?>
-                                <div class="bg-white p-4 shadow rounded-lg">
-                                    <h3 class="text-lg font-semibold"><?= htmlspecialchars($book['title']) ?></h3>
-                                    <p class="text-gray-600">Author: <?= htmlspecialchars($book['author']) ?></p>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-
+                                <p class="text-black font-bold mt-2 truncate"><?= '@' . esc($user['username']) ?></p>
+                                <p class="text-gray-600 font-medium truncate"><?= esc($user['full_name']) ?></p>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
+
+
+                <?php if (!empty($bookResults)): ?>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Buku</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <?php foreach ($bookResults as $book): ?>
+                            <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flowbite-card-with-image">
+                                <?php $cover = !empty($book['book_cover']) ? base_url('uploads/bookcover/' . esc($book['book_cover'])) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
+                                
+                                <img class="book-cover w-full aspect-[2/3] object-cover rounded-t-lg" src="<?= $cover ?>" alt="<?= esc($book['title']) ?> cover" />
+
+                                <div class="p-5">
+                                    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        <?= esc($book['title']) ?>
+                                    </h5>
+                                    <p class="text-sm text-gray-700 dark:text-gray-400">
+                                        Penulis: <?= esc($book['author']) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($groupResults)): ?>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Grup</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <?php foreach ($groupResults as $group): ?>
+                            <a href="<?= base_url('group/' . $group['slug']) ?>" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition duration-200">
+                                <div class="w-16 h-16 mr-4 flex-shrink-0">
+                                    <img src="<?= base_url('uploads/groups/' . $group['icon']) ?>"
+                                        alt="<?= esc($group['name']) ?>"
+                                        class="rounded-full w-full h-full object-cover" />
+                                </div>
+                                <div class="flex-grow">
+                                    <p class="text-black font-bold text-lg"><?= esc($group['name']) ?></p>
+                                    
+                                    <?php if (!empty($group['description'])): ?>
+                                        <p class="text-gray-600 text-sm mt-1 truncate">
+                                            <?= esc($group['description']) ?>
+                                        </p>
+                                    <?php endif; ?>
+
+                                    <div class="flex items-center text-xs text-gray-500 mt-2">
+                                        <i class="fas fa-users mr-1.5"></i>
+                                        <span><?= $group['member_count'] ?> Anggota</span>
+                                    </div>
+
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
             <?php endif; ?>
-        </div>
+        <?php endif; ?>
     </main>
+
     <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

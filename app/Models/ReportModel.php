@@ -57,8 +57,8 @@ class ReportModel extends Model
 
                 book.title AS book_title,
 
-                borrower.username AS borrower_username,
-                owner.username AS owner_username
+                borrower.email AS borrower_email,
+                owner.email AS owner_email
             ')
             ->join('book_loans', 'book_loans.id = report.book_loan_id')
             ->join('book_collection', 'book_collection.id = book_loans.book_collection_id')

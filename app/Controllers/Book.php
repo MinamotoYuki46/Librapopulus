@@ -17,12 +17,15 @@ class Book extends BaseController {
     private $genreModel;
     private $userModel;
 
+    private $db;
+
     public function __construct() {
         $this -> bookModel = new BookModel();
         $this -> bookCollectionModel = new BookCollectionModel();
         $this -> bookGenreModel = new BookGenreModel();
         $this -> genreModel = new GenreModel();
         $this -> userModel = new UserModel();
+        $this -> db = \Config\Database::connect();
     }
 
 
@@ -412,5 +415,64 @@ class Book extends BaseController {
         }
 
         return view("main/library/acceptloan");
+    }
+
+    public function book(string $slug){
+        $book = $this -> bookModel
+        ->where('slug', $slug)
+        ->first();
+
+        if (!$book) {
+            throw PageNotFoundException::forPageNotFound("Buku dengan slug '$slug' tidak ditemukan.");
+        }
+
+        $owners = $this->bookCollectionModel
+                ->select('user.id, user.username, user.full_name, user.picture, book_collection.rating, book_collection.review')
+                ->join('user', 'user.id = book_collection.user_id')
+                ->where('book_collection.book_id', $book['id'])
+                ->findAll();
+        
+        $ratings = $this->db->table('book_collection')
+                ->select('user.full_name, user.username, book_collection.rating, book_collection.review')
+                ->join('user', 'user.id = book_collection.user_id')
+                ->join('book', 'book.id = book_collection.book_id')
+                ->where('book.slug', $slug)
+                ->where('book_collection.rating IS NOT NULL')
+                ->orderBy('book_collection.rating', 'DESC')
+                ->get()
+                ->getResultArray();
+
+        $averageRating = $this->db->table('book_collection')
+                ->selectAvg('rating')
+                ->join('book', 'book.id = book_collection.book_id')
+                ->where('book.slug', $slug)
+                ->get()
+                ->getRow()
+                ->rating;
+        
+        $genre = $this -> bookGenreModel
+                    -> select('genres.genre_name')
+                    -> join('genres', 'genres.id = book_genres.genre_id')
+                    -> where('book_genres.book_id', $book['id'])
+                    -> first();
+        
+        $data = [
+        'book' => [
+            'id'            => $book['id'],
+            'title'         => $book['title'],
+            'author'        => $book['author'],
+            'slug'          => $book['slug'],
+            'book_cover'    => $book['book_cover'],
+            'published_date'=> $book['published_date'],
+            'total_pages'   => $book['total_pages'],
+            'description'   => $book['description'],
+            'genres'        => $genre['genre_name'],
+        ],
+        'owners'        => $owners,
+        'ratings'       => $ratings,
+        'averageRating' => $averageRating,
+    ];
+
+    return view('main/library/book', $data);
     }
 }

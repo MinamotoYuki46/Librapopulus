@@ -7,9 +7,12 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-$routes -> get('/', 'Home::index', ['filter' => 'userauth']);
+$routes -> get('/', 'Home::index');
 
 $routes -> get('/admin', 'Admin::index', ['filter' => 'adminauth']);
+$routes -> get('/admin/report/export-excel', 'Admin::printReportExcel', ['filter' => 'adminauth']);
+$routes -> get('/admin/report/export-pdf', 'Admin::printReportPdf', ['filter' => 'adminauth']);
+
 
 $routes -> group('auth', function($routes) {
     $routes -> get('/', 'Auth::index');
@@ -30,6 +33,7 @@ $routes -> post("notification/mark-read", "Notification::markRead", ['filter' =>
 
 $routes -> group('library',['filter' => 'userauth'],  function($routes) {
     $routes -> get('/', 'MainController::library'); 
+    $routes -> get('book/(:segment)', 'Book::book/$1');
 
     $routes -> get('add', 'Book::addBook');
     $routes -> post('proceedAddBook', 'Book::proceedAddBook');
