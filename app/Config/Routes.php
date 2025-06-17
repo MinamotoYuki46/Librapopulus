@@ -30,6 +30,8 @@ $routes -> post('/admin/bookdata/editing/(:num)', 'Admin::processEdit/$1', ['fil
 
 $routes->delete('admin/bookdata/delete/(:num)', 'Admin:deleteBook/$1', ['filter' => 'adminauth']);
 
+$routes -> get('csrf-refresh', 'Auth::refreshCsrf', ['filter' => 'ajax']);
+
 
 $routes -> group('auth', function($routes) {
     $routes -> get('/', 'Auth::index');

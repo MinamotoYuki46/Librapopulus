@@ -68,6 +68,8 @@
     </div>
 </div>
 
+<script src="<?= base_url("flowbite.min.js") ?>"></script>
+
 
 <script>
     const recipientId = <?= $recipient['id'] ?>;
@@ -75,10 +77,13 @@
     let isLoading = false;
     let noMoreMessages = false;
     let lastMessageId = 0;
-
+    
     const chatBox = document.getElementById('chat-box');
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('chat-input');
+    
+    const csrfTokenName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
+    let csrfHash = document.querySelector('meta[name="csrf-token-hash"]').getAttribute('content');
 
     function formatTime(utcDateTimeString) {
         if (!utcDateTimeString) return '';
@@ -138,7 +143,7 @@
                 </p>
                 <span class="text-xs font-normal ${isSentByCurrentUser ? 'text-blue-100' : 'text-gray-500'}">Terkirim</span>
             </div>
-        
+            
             ${dropdownHTML}
         `;
 
@@ -153,6 +158,21 @@
         return wrapper;
     }
 
+    function updateAllCsrfTokens(newToken) {
+        const csrfMetaTag = document.querySelector('meta[name="csrf-token-hash"]');
+        if (csrfMetaTag) {
+            csrfMetaTag.setAttribute('content', newToken);
+        }
+        
+        document.querySelectorAll(`input[name="${csrfTokenName}"]`).forEach(input => {
+            input.value = newToken;
+        });
+        
+        csrfHash = newToken;
+
+        console.log('Semua token CSRF di form HTML dan meta tag telah diperbarui:', newToken);
+    }
+
     function prepareDelete(messageId) {
         const confirmButton = document.getElementById('confirm-delete-button');
         confirmButton.setAttribute('data-message-id', messageId);
@@ -161,10 +181,8 @@
     async function executeDelete(messageId) {
         if (!messageId) return;
         
-        const csrfName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
-        const csrfHash = document.querySelector('meta[name="csrf-token-hash"]').getAttribute('content');
         const formData = new FormData();
-        formData.append(csrfName, csrfHash);
+        formData.append(csrfTokenName, csrfHash);
 
         try {
             const response = await fetch(`<?= base_url('message/delete/') ?>${messageId}`, {
@@ -172,15 +190,20 @@
                 body: formData, 
                 headers: {'X-Requested-With': 'XMLHttpRequest'}
             });
+
             const data = await response.json();
+            
+            if (data.csrf_hash) { 
+                updateAllCsrfTokens(data.csrf_hash);
+            } else if (data.csrf_token) { 
+                 updateAllCsrfTokens(data.csrf_token);
+            }
+
             if (response.ok && data.status === 'success') {
                 const messageElement = document.querySelector(`div[data-message-id='${messageId}']`);
                 if (messageElement) {
                     messageElement.parentElement.remove();
                 }
-
-                document.querySelector('meta[name="csrf-token-hash"]').setAttribute('content', data.csrf_hash);
-
             } else {
                 alert(data.message || 'Gagal menghapus pesan.');
             }
@@ -198,6 +221,57 @@
                 executeDelete(messageId);
             });
         }
+
+        fetchAndLoadMessages({ offset: 0, isInitialLoad: true });
+
+        chatBox.addEventListener('scroll', () => {
+            if (chatBox.scrollTop < 5 && !isLoading && !noMoreMessages) {
+                const count = chatBox.children.length;
+                fetchAndLoadMessages({ offset: count, prepend: true });
+            }
+        });
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const text = messageInput.value.trim();
+            if (text === '') return;
+
+            const formData = new FormData(chatForm);
+            formData.append(csrfTokenName, csrfHash);
+
+            messageInput.value = '';
+
+            try {
+                const response = await fetch('<?= base_url('message/send') ?>', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {'X-Requested-With': 'XMLHttpRequest'}
+                });
+                const data = await response.json();
+
+                if (data.csrf_hash) { 
+                    updateAllCsrfTokens(data.csrf_hash);
+                } else if (data.csrf_token) { 
+                     updateAllCsrfTokens(data.csrf_token);
+                }
+
+                fetchAndLoadMessages({ sinceId: lastMessageId });
+
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Terjadi kesalahan saat mengirim pesan.');
+            }
+        });
+
+        setInterval(() => {
+            if (!isLoading) {
+                fetchAndLoadMessages({ sinceId: lastMessageId });
+            }
+        }, 3000);
+
+        if (typeof initFlowbite === 'function') {
+            initFlowbite();
+        }
     });
 
     async function fetchAndLoadMessages(options = {}) {
@@ -213,6 +287,12 @@
         try {
             const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             const data = await response.json();
+
+            if (data.csrf_hash) { 
+                updateAllCsrfTokens(data.csrf_hash);
+            } else if (data.csrf_token) { 
+                 updateAllCsrfTokens(data.csrf_token);
+            }
 
             if (data.messages.length === 0) {
                 if (prepend) noMoreMessages = true;
@@ -242,50 +322,13 @@
             } else if (shouldAutoScroll) {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
-
-            document.querySelector('meta[name="csrf-token-hash"]').setAttribute('content', data.csrf_hash);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
         } finally {
             isLoading = false;
         }
     }
-
-    chatBox.addEventListener('scroll', () => {
-        if (chatBox.scrollTop < 5 && !isLoading && !noMoreMessages) {
-            const count = chatBox.children.length;
-            fetchAndLoadMessages({ offset: count, prepend: true });
-        }
-    });
-
-    chatForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const text = messageInput.value.trim();
-        if (text === '') return;
-
-        const formData = new FormData(chatForm);
-        const csrfName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
-        const csrfHash = document.querySelector('meta[name="csrf-token-hash"]').getAttribute('content');
-        formData.append(csrfName, csrfHash);
-
-        messageInput.value = '';
-
-        await fetch('<?= base_url('message/send') ?>', {
-            method: 'POST',
-            body: formData,
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        });
-
-        fetchAndLoadMessages({ sinceId: lastMessageId });
-    });
-
-    fetchAndLoadMessages({ offset: 0, isInitialLoad: true });
-
-    setInterval(() => {
-        if (!isLoading) {
-            fetchAndLoadMessages({ sinceId: lastMessageId });
-        }
-    }, 3000);
 </script>
 
-<script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

@@ -303,6 +303,16 @@
 
                     showToast(`Sesi membaca berhasil disimpan! Durasi: ${formatTime(duration)}, Halaman: ${pagesRead}`);
 
+                    const newToken = data.csrf_token;
+                    csrfHash = newToken;
+
+                    const csrfTokenName = '<?= csrf_token() ?>'; 
+                    document.querySelectorAll(`input[name="${csrfTokenName}"]`).forEach(input => {
+                        input.value = newToken;
+                    });
+
+                    console.log('Semua token CSRF di form HTML telah diperbarui.');
+
                     
                 } catch (error) {
                     console.error('Gagal menyimpan sesi:', error);

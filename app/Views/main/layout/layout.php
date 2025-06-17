@@ -66,7 +66,7 @@ $navigationItems = [
                                 <a href="<?= base_url("profile/" . $masterUsername)?> " class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Profil</a>
                             </li>
                             <li>
-                                <form action="<?= base_url('auth/logout') ?>" method="POST" class="w-full">
+                                <form id="logout-form" action="<?= base_url('auth/logout') ?>" method="POST" class="w-full">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" 
@@ -187,3 +187,4 @@ $navigationItems = [
     });
 
 </script>
+

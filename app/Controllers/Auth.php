@@ -23,6 +23,17 @@ class Auth extends BaseController {
         $this -> destroyRegisterSession();
         return redirect() -> to(base_url('auth/login'));
     }
+
+    public function refreshCsrf(){
+        if (!$this->request->isAJAX()) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException();
+        }
+
+        return $this->response->setJSON([
+            'csrf_token' => csrf_hash()
+        ]);
+    }
+
     
     public function login() {
         if (session() -> get('isLoggedIn')) {
