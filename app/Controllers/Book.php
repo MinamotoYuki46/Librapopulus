@@ -307,7 +307,6 @@ class Book extends BaseController {
             return redirect()->back()->with('error', 'Koleksi buku tidak ditemukan.');
         }
 
-        // Hapus dari koleksi
         $this-> bookCollectionModel -> delete($bookCollection['id']);
 
         return redirect() -> to(base_url('/library/' . $username))

@@ -49,8 +49,9 @@
                             class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 inline-flex items-center">
                             <i class="fas fa-pen mr-2"></i> Edit
                         </a>
-                        <form method="POST" action="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/delete') ?>" 
+                        <form method="POST" action="<?= base_url('/library/' . esc($user['username']) . '/' . esc($book['slug']) . '/delete') ?>" 
                             onsubmit="return confirm('Apakah kamu yakin ingin menghapus buku ini?')" class="inline-block">
+                            <?= csrf_field() ?>
                             <button type="submit"
                                 class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 inline-flex items-center">
                                 <i class="fas fa-trash mr-2"></i> Hapus
