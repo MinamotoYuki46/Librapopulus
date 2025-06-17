@@ -1006,6 +1006,9 @@
   .top-1\/2 {
     top: calc(1/2 * 100%);
   }
+  .top-2 {
+    top: calc(var(--spacing) * 2);
+  }
   .top-3 {
     top: calc(var(--spacing) * 3);
   }
@@ -1819,6 +1822,9 @@
   }
   .w-32 {
     width: calc(var(--spacing) * 32);
+  }
+  .w-40 {
+    width: calc(var(--spacing) * 40);
   }
   .w-44 {
     width: calc(var(--spacing) * 44);
@@ -3887,6 +3893,11 @@
       --tw-ring-color: var(--color-blue-500);
     }
   }
+  .focus\:ring-gray-50 {
+    &:focus {
+      --tw-ring-color: var(--color-gray-50);
+    }
+  }
   .focus\:ring-gray-100 {
     &:focus {
       --tw-ring-color: var(--color-gray-100);
@@ -4079,6 +4090,11 @@
   .md\:flex-row {
     @media (width >= 48rem) {
       flex-direction: row;
+    }
+  }
+  .md\:p-5 {
+    @media (width >= 48rem) {
+      padding: calc(var(--spacing) * 5);
     }
   }
   .md\:text-2xl {

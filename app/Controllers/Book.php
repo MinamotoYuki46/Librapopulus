@@ -58,11 +58,11 @@ class Book extends BaseController {
             return redirect()->to(base_url('/library/book/' . $username . '/' . $book['slug']), 301);
         }
 
-        $genre = $this -> bookGenreModel
+        $genres = $this -> bookGenreModel
                     -> select('genres.genre_name')
                     -> join('genres', 'genres.id = book_genres.genre_id')
                     -> where('book_genres.book_id', $book['id'])
-                    -> first();
+                    -> findAll();
 
         $data = [
             'book' => [
@@ -76,7 +76,7 @@ class Book extends BaseController {
                 'description'   => $book['description'],
                 'added_at'    => $book['created_at'],
                 'updated_at'    => $book['updated_at'],
-                'genres'        => $genre['genre_name'],
+                'genres'        => $genres,
 
                 'collection_id' => $bookCollection['id'],
                 'read_page'     => $bookCollection['read_page'],
@@ -105,6 +105,11 @@ class Book extends BaseController {
             ->orLike('author', $query)
             ->select('id, title, author, published_date, total_pages, description')
             ->findAll(10);
+        
+        foreach ($books as &$book) {
+            $genreRows = $this -> bookGenreModel ->where('book_id', $book['id'])->findAll();
+            $book['genre_ids'] = array_column($genreRows, 'genre_id');
+        }
 
         return $this -> response -> setJSON($books);
     }
@@ -501,12 +506,12 @@ class Book extends BaseController {
                 ->getRow()
                 ->rating;
         
-        $genre = $this -> bookGenreModel
+        $genres = $this -> bookGenreModel
                     -> select('genres.genre_name')
                     -> join('genres', 'genres.id = book_genres.genre_id')
                     -> where('book_genres.book_id', $book['id'])
-                    -> first();
-        
+                    -> findAll();
+
         $data = [
         'book' => [
             'id'            => $book['id'],
@@ -517,12 +522,15 @@ class Book extends BaseController {
             'published_date'=> $book['published_date'],
             'total_pages'   => $book['total_pages'],
             'description'   => $book['description'],
-            'genres'        => $genre['genre_name'],
+            'genres'        => $genres,
         ],
         'owners'        => $owners,
         'ratings'       => $ratings,
         'averageRating' => $averageRating,
     ];
+
+    log_message('debug', 'Data: ' . print_r($data, true));
+
 
     return view('main/library/book', $data);
     }

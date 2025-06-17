@@ -75,7 +75,6 @@
                     </p>
                 </div>
 
-                <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
                     <a href="<?= site_url('auth/login') ?>" 
                        class="group px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
@@ -91,7 +90,6 @@
                     </a>
                 </div>
 
-                <!-- Features Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                     <div class="glass-card rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300">
                         <i class="fas fa-exchange-alt text-3xl text-white mb-4"></i>
@@ -111,7 +109,6 @@
                 </div>
             </div>
 
-            <!-- Footer (Inside Hero Section) -->
             <div class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm py-4">
                 <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center space-x-2 mb-4 md:mb-0">

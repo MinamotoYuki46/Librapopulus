@@ -120,6 +120,7 @@
                         const li = document.createElement('li');
                         li.className = 'px-4 py-2 hover:bg-indigo-100 cursor-pointer';
                         li.textContent = `${book.title} - ${book.author} (${book.published_date})`;
+                        
                         li.addEventListener('click', () => {
                             document.getElementById('title').value = book.title;
                             document.getElementById('author').value = book.author;
@@ -127,6 +128,17 @@
                             document.getElementById('description').value = book.description ?? '';
                             document.getElementById('total_pages').value = book.total_pages ?? '';
                             bookIdInput.value = book.id;
+
+                            document.querySelectorAll('input[name="genres[]"]').forEach(cb => {
+                                cb.checked = false;
+                            });
+
+                            if (Array.isArray(book.genre_ids)) {
+                                book.genre_ids.forEach(genreId => {
+                                    const checkbox = document.querySelector(`input[name="genres[]"][value="${genreId}"]`);
+                                    if (checkbox) checkbox.checked = true;
+                                });
+                            }
 
                             resultsBox.innerHTML = '';
                             resultsBox.classList.add('hidden');

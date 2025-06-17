@@ -77,6 +77,7 @@
         </div>
     </form>
 </main>
+<script src="<?= base_url("flowbite.min.js") ?>"></script>
 
 </body>
 </html>

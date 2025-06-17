@@ -44,11 +44,15 @@
                             oleh <strong class="font-semibold"><?= esc($book['author']) ?></strong>
                         </p>
 
-                        <?php if (!empty(trim($book['genres']))): ?>
+                        <?php if (!empty($book['genres'])): ?>
                             <p class="text-lg text-gray-700 dark:text-gray-300">
-                                <strong class="font-medium">Genre:</strong> <?= esc(trim($book['genres'])) ?>
+                                <strong class="font-medium">Genre:</strong>
+                                <?php foreach ($book['genres'] as $i => $genre): ?>
+                                    <?= esc($genre['genre_name']) ?><?= $i < count($book['genres']) - 1 ? ', ' : '' ?>
+                                <?php endforeach; ?>
                             </p>
                         <?php endif; ?>
+
 
                         <?php if (!empty(trim($book['published_date']))): ?>
                             <p class="text-lg text-gray-700 dark:text-gray-300">

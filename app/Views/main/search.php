@@ -62,6 +62,7 @@
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Buku</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <?php foreach ($bookResults as $book): ?>
+                            <a href="<?= base_url('/library/book/' . $book['slug']) ?>">
                             <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flowbite-card-with-image">
                                 <?php $cover = !empty($book['book_cover']) ? base_url('uploads/bookcover/' . esc($book['book_cover'])) : 'https://flowbite.com/docs/images/blog/image-1.jpg'; ?>
                                 
@@ -76,6 +77,7 @@
                                     </p>
                                 </div>
                             </div>
+                            </a>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
