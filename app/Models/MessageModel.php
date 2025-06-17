@@ -10,11 +10,14 @@ class MessageModel extends Model
     protected $allowedFields = [
         'sender_id', 
         'receiver_id', 
-        'message_text'
+        'message_text',
+        'deleted_at'
     ];
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = '';
+    protected $useSoftDeletes = true;
+    protected $useTimestamps  = true;
+    protected $createdField   = 'created_at';
+    protected $updatedField   = '';
+    protected $deletedField   = 'deleted_at';
 
 
     public function getConversation(int $userId1, int $userId2, int $limit, int $offset) {

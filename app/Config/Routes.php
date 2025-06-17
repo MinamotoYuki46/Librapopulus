@@ -94,6 +94,7 @@ $routes -> group("message", ['filter' => 'userauth'],  function($routes) {
     $routes -> post('send', 'Message::send');
     $routes -> get('fetch/(:num)', 'Message::fetch/$1');
     $routes -> get('fetch_new/(:num)', 'Message::fetchNew/$1');
+    $routes -> post('delete/(:num)', 'Message::delete/$1');
     $routes -> get('(:segment)', 'Message::index/$1');
 });
 

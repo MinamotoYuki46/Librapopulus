@@ -16,7 +16,6 @@ class UserModel extends Model
         'city',
         'province',
         'description',
-        'favorite_genres',
         'picture',
         'created_at',
         'updated_at'
@@ -53,7 +52,6 @@ class UserModel extends Model
             city,
             province,
             description,
-            favorite_genres,
             picture
         ')
         ->where('id', $userId)
@@ -68,7 +66,6 @@ class UserModel extends Model
             city,
             province,
             description,
-            favorite_genres,
             picture
         ')
         ->where('username', $username)

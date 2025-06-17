@@ -157,5 +157,6 @@
         totalPagesInput.addEventListener('input', validatePagesRead);
         pagesReadInput.addEventListener('input', validatePagesRead);
     </script>
+    <script src="<?= base_url("flowbite.min.js") ?>"></script>
 </body>
 </html>

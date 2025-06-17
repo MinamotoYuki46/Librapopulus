@@ -48,7 +48,6 @@ class Profile extends BaseController {
             'city'              => $dataUser["city"],
             'province'          => $dataUser["province"],
             'description'       => $dataUser["description"],
-            'favoriteGenres'    => $dataUser["favorite_genres"],
             'photoProfile'      => $dataUser["picture"],
             "friendCount"       => $friendCount,
             "bookCount"         => $bookCount,
@@ -67,7 +66,6 @@ class Profile extends BaseController {
             'city'              => $dataUser["city"],
             'province'          => $dataUser["province"],
             'description'       => $dataUser["description"],
-            'favoriteGenres'    => $dataUser["favorite_genres"],
             'photoProfile'      => $dataUser["picture"],
         ];
 
@@ -176,7 +174,6 @@ class Profile extends BaseController {
             'city'              => $targetUser["city"],
             'province'          => $targetUser["province"],
             'description'       => $targetUser["description"],
-            'favoriteGenres'    => $targetUser["favorite_genres"],
             'otherPhotoProfile' => $targetUser["picture"],
             "friendCount"       => $friendCount,
             "bookCount"         => $bookCount,
@@ -186,32 +183,6 @@ class Profile extends BaseController {
         ];
 
         return view('main/profile/otherprofile', $data);
-    }
-
-
-    public function message(string $username) {
-        $targetUser = $this -> userModel -> getDataUserByUsername($username);
-        
-
-        if (!$targetUser) {
-            throw new PageNotFoundException('User tidak ditemukan.');
-        }
-
-        $targetUser['username'] = $username;
-        $myUser = [
-            'id' => session()->get('userId'),
-            'username' => session()->get('username'),
-            'picture' => session()->get('picture')
-        ];
-        
-
-        $data = [
-            'recipient' => $targetUser,
-            'messages' => $this->messageModel->getConversation($myUser['id'], $targetUser['id']),
-            'currentUser' => $myUser
-        ];
-
-        return view("main/profile/message", $data);
     }
 
     public function friend() {
