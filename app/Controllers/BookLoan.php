@@ -89,6 +89,26 @@ class BookLoan extends BaseController{
     }
 
     public function request() {
+        $rules = [
+            'start_date' => 'required|date_greater_than_equal_to_today',
+            'end_date' => 'required|date_greater_than_equal_to[start_date]'
+        ];
+
+        $messageValidate = [
+            'start_date' => [
+                'required' => 'Tanggal mulai peminjaman wajib ada',
+                'date_greater_than_equal_to_today' => 'Tanggal awal peminjaman minimal hari ini'
+            ],
+            'end_date' => [
+                'required' => 'Tanggal akhir peminjaman wajib ada',
+                'date_greater_than_equal_to' => 'Tanggal peminjaman akhir tidak boleh sebelum tanggal peminjaman awal'
+            ]
+        ];
+
+        if(!$this -> validate($rules, $messageValidate)){
+            return redirect() -> back() -> with('errors', $this -> validator -> getErrors());
+        }
+
         $bookCollectionId = $this->request->getPost('book_collection_id');
         $ownerId = $this->request->getPost('owner_id');
         $startDate = DateTime::createFromFormat('d-m-Y', $this->request->getPost('start_date'))->format('Y-m-d');
