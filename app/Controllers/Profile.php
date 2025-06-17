@@ -73,86 +73,60 @@ class Profile extends BaseController {
     }
 
     public function update() {
-        $userId = session()->get("userId");
+        $userId = session()->get('userId');
+        $dataUser = $this->userModel->getDataUser($userId);
 
-        $user = $this -> userModel->find($userId);
-
-        $oldUsername = $user['username'];
-        $newUsername = $this -> request -> getPost('username');
-
-        $validationRules = [
-            'fullname'  => 'required',
-            'city'      => 'permit_empty',
-            'province'  => 'permit_empty',
-            'description' => 'permit_empty',
-            'photoProfile' => 'if_exist|is_image[photoProfile]|max_size[photoProfile,2048]',
-        ];
-
-        if ($newUsername !== $oldUsername) {
-            $validationRules['username'] = 'required|is_unique[user.username]';
-        } else {
-            $validationRules['username'] = 'required';
+        if (!$dataUser) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Pengguna tidak ditemukan.');
         }
 
-        $validation = \Config\Services::validation();
-        $validation -> setRules($validationRules);
+        $rules = [
+            'username' => 'required|min_length[3]|max_length[50]' . ($this->request->getPost('username') !== $dataUser['username'] ? '|is_unique[user.username]' : ''),
+            'fullname' => 'required|min_length[3]|max_length[100]',
+            'city' => 'permit_empty|max_length[100]',
+            'province' => 'permit_empty|max_length[100]',
+            'description' => 'permit_empty|max_length[500]',
+            'photoProfile' => [
+                'rules' => 'max_size[photoProfile,2048]|is_image[photoProfile]|mime_in[photoProfile,image/jpg,image/jpeg,image/png,image/webp]',
+            ]
+        ];
 
-        if (!$this -> validate($validation->getRules())) {
-            return redirect() -> back() -> withInput() -> with('errors', $validation -> getErrors());
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $data = [
-            'full_name'     => $this->request->getPost('fullname'),
-            'city'          => $this->request->getPost('city'),
-            'province'      => $this->request->getPost('province'),
-            'description'   => $this->request->getPost('description'),
+            'username' => $this->request->getPost('username'),
+            'full_name' => $this->request->getPost('fullname'),
+            'city' => $this->request->getPost('city'),
+            'province' => $this->request->getPost('province'),
+            'description' => $this->request->getPost('description'),
         ];
 
-        if ($newUsername !== $oldUsername) {
-            $data['username'] = $newUsername;
-
-            $oldFolder = FCPATH . "uploads/$oldUsername";
-            $newFolder = FCPATH . "uploads/$newUsername";
-
-            if (is_dir($oldFolder)) {
-                rename($oldFolder, $newFolder);
-
-                if (!empty($user['picture'])) {
-                    $oldPath = $user['picture'];
-                    $newPath = str_replace($oldUsername, $newUsername, $oldPath);
-                    $data['picture'] = $newPath;
-                }
+        $photoProfile = $this->request->getFile('photoProfile');
+        if ($photoProfile && $photoProfile->isValid() && !$photoProfile->hasMoved()) {
+            if ($dataUser['picture'] && file_exists('Uploads/' . $dataUser['picture'])) {
+                unlink('Uploads/' . $dataUser['picture']);
             }
-        } 
 
-        $file = $this -> request -> getFile('photoProfile');
-        if ($file && $file -> isValid() && !$file -> hasMoved()) {
-            $newName = $file -> getRandomName();
-            $file->move('uploads/', $newName);
-            $data['picture'] = $newName;
-
-            $oldPhoto = $user['picture'];
-            if ($oldPhoto && file_exists("uploads/$oldPhoto")) {
-                unlink("uploads/$oldPhoto");
-            }
+            $randomName = $photoProfile->getRandomName();
+            $photoProfile->move('Uploads', $randomName);
+            $data['picture'] = $randomName;
         }
 
-        $this -> userModel -> update($userId, $data);
+        $this->userModel->update($userId, $data);
 
         $newSessionData = [
-            'userId'     => $userId,
-            'username'   => $data['username'],
-            'picture'    => $data['picture'],
+            'userId' => $userId,
+            'username' => $data['username'],
+            'picture' => $data['picture'] ?? $dataUser['picture'],
             'isLoggedIn' => true
         ];
-        
-        session() -> set($newSessionData);
 
-        return redirect()->to(base_url('profile/' . $user['username']))->with('success', 'Profil berhasil diperbarui.');
-    }
+        session()->set($newSessionData);
 
-
-
+        return redirect()->to(base_url('profile/' . $data['username']))->with('success', 'Profil berhasil diperbarui.');
+    }    
 
 
     private function otherProfile(string $username) {
