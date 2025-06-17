@@ -88,13 +88,15 @@
     
     <script>
         function previewFile() {
-            const file = document.getElementById('photoProfile').files[0];
             const preview = document.getElementById('previewImage');
+            const file = document.getElementById('photoProfile').files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            };
+
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
                 reader.readAsDataURL(file);
             }
         }

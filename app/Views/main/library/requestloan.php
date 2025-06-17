@@ -40,6 +40,17 @@
                 <?= ($activeLoan && $activeLoan['status'] == \App\Models\BookLoanModel::STATUS_PENDING) ? 'Status Permintaan Peminjaman' : 'Ajukan Peminjaman Buku' ?>
             </h2>
         </div>
+
+        <?php if (session()->getFlashdata('errors')): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Peminjaman Gagal!</strong>
+                <ul class="mt-2 list-disc list-inside">
+                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                        <li><?= esc($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
 
     <div class="flex flex-col md:flex-row gap-6 lg:gap-8 relative bg-white p-6 rounded-lg shadow-xl">
