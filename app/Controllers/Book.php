@@ -8,6 +8,7 @@ use App\Models\BookGenreModel;
 use App\Models\GenreModel;
 use App\Models\UserModel;
 
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 
 class Book extends BaseController {
@@ -92,33 +93,82 @@ class Book extends BaseController {
         return view('main/library/add', $data);
     }
 
-    public function proceedAddBook(){
-        $request = $this->request;
-        $cover = $request->getFile('cover');
+    public function searchBook(): ResponseInterface {
+        $query = $this->request->getGet('q');
 
-        $slug = url_title($request->getPost('title'), '-', true);
-
-        if (!$cover -> isValid() || $cover -> hasMoved()) {
-            return redirect() -> back() -> withInput() -> with('error', 'Gagal upload cover');
+        if (!$query || strlen($query) < 2) {
+            return $this->response->setJSON([]);
         }
 
-        $extension = $cover -> getClientExtension();
-        $coverFileName = $slug . '.' . $extension;
-        $cover -> move(FCPATH . 'uploads/bookcover', $coverFileName);
+        $books = $this -> bookModel
+            ->like('title', $query)
+            ->orLike('author', $query)
+            ->select('id, title, author, published_date, total_pages, description')
+            ->findAll(10);
 
-        $bookData = [
-            'title' => $request -> getPost('title'),
-            'author' => $request -> getPost('author'),
-            'slug' => $slug,
-            'book_cover' => $coverFileName,
-            'published_date' => $request -> getPost('published_date'),
-            'total_pages' => $request -> getPost('total_pages'),
-            'description' => $request -> getPost('description'),
-        ];
+        return $this -> response -> setJSON($books);
+    }
 
-        $bookId = $this -> bookModel->insert($bookData, true);
+    public function proceedAddBook(){
+        $request = $this->request;
+        $title = $request->getPost('title');
+        $author = $request->getPost('author');
+        $publishedDate = $request->getPost('published_date');
+        $totalPages = $request -> getPost('total_pages');
+        $description = $request -> getPost('description');
 
         $userId = session() -> get('userId');
+        
+        $existingBook = $this->bookModel
+                ->where('title', $title)
+                ->where('author', $author)
+                ->where('published_date', $publishedDate)
+                ->first();
+        
+        
+        if ($existingBook) {
+            $bookId = $existingBook['id'];
+
+            $alreadyOwned = $this->bookCollectionModel
+            ->where('user_id', $userId)
+            ->where('book_id', $bookId)
+            ->first();
+
+            if ($alreadyOwned) {
+                return redirect()->to('/library')->with('error', 'Kamu sudah menambahkan buku ini ke koleksimu.');
+            }
+        } 
+        else {
+            $cover = $request->getFile('cover');
+
+            $slug = url_title($request->getPost('title'), '-', true);
+
+            if (!$cover -> isValid() || $cover -> hasMoved()) {
+                return redirect() -> back() -> withInput() -> with('error', 'Gagal upload cover');
+            }
+
+            $extension = $cover -> getClientExtension();
+            $coverFileName = $slug . '.' . $extension;
+            $cover -> move(FCPATH . 'uploads/bookcover', $coverFileName);
+
+            $bookData = [
+                'title' => $title,
+                'author' => $author,
+                'slug' => $slug,
+                'book_cover' => $coverFileName,
+                'published_date' => $publishedDate,
+                'total_pages' => $totalPages,
+                'description' => $description,
+            ];
+
+            $bookId = $this -> bookModel->insert($bookData, true);
+
+            $this -> bookGenreModel -> insert([
+                'book_id' => $bookId,
+                'genre_id' => $request->getPost('genre_id'),
+            ]);
+        }
+
 
         $this -> bookCollectionModel->insert([
             'user_id' => $userId,
@@ -129,10 +179,6 @@ class Book extends BaseController {
             'read_duration' => 0, 
         ]);
 
-        $this -> bookGenreModel -> insert([
-            'book_id' => $bookId,
-            'genre_id' => $request->getPost('genre_id'),
-        ]);
 
         return redirect() -> to('/library')->with('success', 'Buku berhasil ditambahkan!');
     }
