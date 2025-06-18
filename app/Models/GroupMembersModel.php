@@ -53,12 +53,13 @@ class GroupMembersModel extends Model
     const STATUS_APPROVED = 1;
 
     public function getGroupsByUserId($userId) {
+        $memberCountSubquery = '(SELECT COUNT(*) FROM group_members WHERE group_members.group_id = groups.id AND group_members.status = ' . self::STATUS_APPROVED . ')';
         return $this -> select(
             'group_members.group_id, 
                     groups.name as group_name, 
                     groups.icon, groups.slug, 
-                    groups.description, 
-                    (SELECT COUNT(*) FROM group_members WHERE group_members.group_id = groups.id) as member_count'
+                    groups.description,' . 
+                    $memberCountSubquery . ' as member_count'
         )
                     -> join('groups', 'groups.id = group_members.group_id')
                     -> where('group_members.user_id', $userId)

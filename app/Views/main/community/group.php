@@ -98,11 +98,28 @@
                                         ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto'
                                         : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl' ?>">
 
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-semibold <?= $isOwnMessage ? 'text-white' : 'text-blue-600' ?>"><?= $isOwnMessage ? 'Anda' : esc($msg['sender_username']) ?></span>
-                                        <span class="text-sm font-normal <?= $isOwnMessage ? 'text-blue-100' : 'text-gray-500' ?>"><?= $dt->format('d M H:i') ?></span>
-                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-sm font-semibold ..."><?= $isOwnMessage ? 'Anda' : esc($msg['sender_username']) ?></span>
+                                            <span class="text-sm font-normal ..."><?= $dt->format('d M H:i') ?></span>
+                                        </div>
 
+                                        <?php if ($isOwnMessage || $isAdmin): ?>
+                                            <button id="dropdown-button-<?= $msg['id'] ?>" data-dropdown-toggle="dropdown-<?= $msg['id'] ?>" class="inline-flex self-center items-center p-2 text-sm font-medium text-center <?= $isOwnMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-white hover:bg-gray-100' ?> rounded-lg focus:outline-none" type="button">
+                                                <svg class="w-4 h-4 text-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15"><path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
+                                            </button>
+                                            <div id="dropdown-<?= $msg['id'] ?>" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
+                                                <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button-<?= $msg['id'] ?>">
+                                                    <li>
+                                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 delete-message-btn" data-message-id="<?= $msg['id'] ?>">
+                                                            <i class="fas fa-trash w-4 h-4 mr-2 text-red-600 hover:bg-red-100"></i>
+                                                            Hapus
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
                                     <p class="text-sm font-normal py-2.5">
                                         <?= nl2br(esc($msg['message_text'])) ?>
                                     </p>
@@ -136,7 +153,30 @@
             </form>
         </footer>
     </div>
-
+    <div id="delete-message-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="delete-message-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Tutup</span>
+                </button>
+                <div class="p-4 md:p-5 text-center">
+                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus pesan ini?</h3>
+                    <button id="confirm-delete-btn" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        Ya, saya yakin
+                    </button>
+                    <button data-modal-hide="delete-message-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        Tidak, batalkan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chatForm = document.getElementById('chat-form');
@@ -152,6 +192,10 @@
             let hasMoreMessages = <?= $hasMoreMessages ? 'true' : 'false' ?>;
             let lastMessageId = <?= !empty($messages) ? json_encode(end($messages)['id']) : 0?>;
 
+            const deleteModalElement = document.getElementById('delete-message-modal');
+            const deleteModal = new Modal(deleteModalElement);
+            let messageIdToDelete = null;
+            
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             async function loadPreviousMessages() {
@@ -173,7 +217,7 @@
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     });
                     const result = await response.json();
-            
+
                     if (result.messages.length > 0) {
                         const oldScrollHeight = chatMessages.scrollHeight; 
 
@@ -185,6 +229,8 @@
                 
                         const newScrollHeight = chatMessages.scrollHeight;
                         chatMessages.scrollTop = newScrollHeight - oldScrollHeight;
+
+                        initFlowbite();
                     }
             
                     hasMoreMessages = result.hasMore;
@@ -255,6 +301,7 @@
                             lastMessageId = msg.id;
                         });
                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                        initFlowbite();
                     }
                 } catch (error) {
                     console.error('Error fetching new messages: ', error);
@@ -268,11 +315,78 @@
                 return new Intl.DateTimeFormat('en-GB', options).format(date);
             }
 
+            async function performDeleteMessage() {
+                if (!messageIdToDelete) return;
+
+                const formData = new FormData();
+                formData.append(csrfName, csrfHash);
+                
+                try {
+                    const response = await fetch(`<?=  base_url('group/delete-message/')?>${messageIdToDelete}`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {'X-Requested-With': 'XMLHttpRequest'}
+                    });
+                    const result = await response.json();
+
+                    if(result.success) {
+                        csrfHash = result.csrf_hash;
+                        document.querySelector('meta[name="csrf-token-hash"]').setAttribute('content', csrfHash);
+
+                        const messageElement = document.querySelector(`div[data-message-id="${messageIdToDelete}"]`);
+                        if (messageElement) {
+                            messageElement.style.transition = 'opacity 0.3s ease-out';
+                            messageElement.style.opacity = '0';
+                            setTimeout(() => messageElement.remove(), 300);
+                        }
+                    } else {
+                        alert(result.error || 'Gagal hapus pesan');
+                    }
+                } catch(error) {
+                    console.error('error', error);
+                    alert('terjadi kesalahan koneksi')
+                } finally {
+                    messageIdToDelete = null;
+                    deleteModal.hide();
+                }
+            } 
+
+            chatMessages.addEventListener('click', function(e) {
+                const deleteButton = e.target.closest('.delete-message-btn');
+                if(deleteButton) {
+                    e.preventDefault();
+                    messageIdToDelete = deleteButton.dataset.messageId;
+                    deleteModal.show();
+                }
+            });
+
+            document.getElementById('confirm-delete-btn').addEventListener('click', function() {
+                performDeleteMessage();
+            })
+
             function createMessageElement(msg) {
                 const ownMessage = msg.sender_id == <?= $masterUserId?>;
+                const isAdmin = <?= $isAdmin ? 'true' : 'false' ?>;
                 const div = document.createElement('div');
+                
                 const time = formatTime(msg.created_at);
                 const sanitizedMessage = msg.message_text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+                const deleteButtonHTML = (ownMessage || isAdmin) ?
+                    `<button id="dropdown-button-${msg.id}" data-dropdown-toggle="dropdown-${msg.id}" class="inline-flex self-center items-center p-2 text-sm font-medium text-center ${ownMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-white hover:bg-gray-100'} rounded-lg focus:outline-none" type="button">
+                        <svg class="w-4 h-4 text-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15"><path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
+                    </button>
+                    <div id="dropdown-${msg.id}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button-${msg.id}">
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 delete-message-btn" data-message-id="${msg.id}">
+                                    <i class="fas fa-trash w-4 h-4 mr-2 text-red-600 hover:bg-red-100"></i>
+                                    Hapus
+                                </a>
+                            </li>
+                        </ul>
+                    </div>` : '';
+
+
                 
                 div.className = `flex ${ownMessage ? 'justify-end' : 'justify-start'}`;
                 div.setAttribute('data-message-id', msg.id);
@@ -280,9 +394,12 @@
                     <div class="flex items-start gap-2.5 mb-4 ${ownMessage ? 'flex-row-reverse' : ''}">
                         <img src="<?= base_url('uploads/') ?>${ownMessage ? '<?= $photoProfile ?>' : msg.sender_picture}" alt="avatar" class="w-8 h-8 rounded-full">
                         <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 ${ownMessage ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto' : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl'}">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-blue-600'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
-                                <span class="text-sm font-normal ${ownMessage ? 'text-blue-100' : 'text-gray-500'}">${time}</span>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-blue-600'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
+                                    <span class="text-sm font-normal ${ownMessage ? 'text-blue-100' : 'text-gray-500'}">${time}</span>
+                                </div>
+                                ${deleteButtonHTML}
                             </div>
                             <p class="text-sm font-normal py-2.5">${sanitizedMessage}</p>
                         </div>

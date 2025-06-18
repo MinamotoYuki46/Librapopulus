@@ -99,7 +99,8 @@ class Community extends BaseController {
         $this -> groupMembersModel -> save([
             'group_id' => $newGroupId,
             'user_id'  => session() -> get("userId"),
-            'role'     => 'admin'
+            'role'     => 'admin',
+            'status'   => 1
         ]);
 
         return redirect()->to('/community') -> with('success', 'Grup berhasil dibuat!');
@@ -314,7 +315,6 @@ class Community extends BaseController {
         }
 
         $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
-<<<<<<< HEAD
         log_message('debug', 'Current user role: ' . print_r($currentUserRole, true));
 
 
@@ -492,11 +492,6 @@ class Community extends BaseController {
     }
 
     
-
-=======
-    }
-    
->>>>>>> 47e46690077bc6af8360413b8c0e4e9d4f97825f
     public function fetchMessages($groupId, $lastMessageId){
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(403, 'Forbidden');
@@ -662,5 +657,39 @@ class Community extends BaseController {
         return redirect()->to(base_url())->with('success', 'Permintaan telah ditolak.');
     }
 
+    public function deleteMessage($messageId) {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403, 'Forbidden');
+        }
 
+        $userId = session()->get('userId');
+        $message = $this->groupMessageModel->find($messageId);
+
+    
+        if (!$message) {
+            return $this->response->setStatusCode(404, 'Pesan tidak ditemukan.');
+        }
+        
+        $isAdmin = !empty($this->groupMembersModel->where([
+            'group_id' => $message['group_id'],
+            'user_id'  => $userId,
+            'role'     => 'admin'
+        ])->first());
+
+        $isSender = ($message['sender_id'] == $userId);
+
+    
+        if (!$isAdmin && !$isSender) {
+            return $this->response->setStatusCode(403, 'Anda tidak memiliki izin untuk menghapus pesan ini.');
+        }
+
+        if ($this->groupMessageModel->delete($messageId)) {
+            return $this->response->setJSON([
+                'success'   => true,
+                'csrf_hash' => csrf_hash()
+            ]);
+        } else {
+            return $this->response->setStatusCode(500, 'Gagal menghapus pesan');
+        }
+    }
 }

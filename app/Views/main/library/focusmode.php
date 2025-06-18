@@ -143,6 +143,7 @@
 
             const initialReadPage = <?= esc($book['read_page']) ?>;
             const totalPages = <?= esc($book['total_pages']) ?>;
+            const remainingPages = parseInt(totalPages) - parseInt(initialReadPage);
             const progressText = document.getElementById('progress-text');
             const progressBar = document.getElementById('progress-bar');
             
@@ -248,8 +249,8 @@
                 const duration = elapsedSeconds;
                 const pagesRead = parseInt(pagesReadInput.value);
 
-                if (isNaN(pagesRead) || pagesRead < 0 || pagesRead > totalPages) {
-                    alert(`Jumlah halaman yang dibaca harus antara 0 dan ${totalPages}.`);
+                if (isNaN(pagesRead) || pagesRead < 0 || pagesRead > remainingPages) {
+                    alert(`Jumlah halaman yang dibaca harus antara 0 dan ${remainingPages}.`);
                     endBtn.disabled = false;
                     endBtn.textContent = 'Akhiri';
                     setButtonState('paused');
