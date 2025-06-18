@@ -11,8 +11,13 @@
 </head>
 <body class="bg-gray-200 min-h-screen">
     <?php include __DIR__ . '/../layout/layout.php' ?>
-    
-    <main class="px-6 pb-6 py-6" id="mainContent">
+    <div class="w-full max-w-7xl mx-auto mb-4 py-2">
+        <a href="<?= base_url() ?>" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Kembali Ke Koleksi Buku
+        </a>
+    </div>
+    <main class="px-6 pb-6" id="mainContent">
         <section class="max-w-5xl mx-auto mt-10 flex flex-col space-y-12">
             
             <div>
