@@ -72,6 +72,7 @@ class BookLoanModel extends Model
                 book.title as book_title,
                 book.author as book_author,
                 book.book_cover as book_cover,
+                book.slug as book_slug,
 
                 borrower.username as borrower_name
             ')
@@ -98,6 +99,7 @@ class BookLoanModel extends Model
                 book.title as book_title,
                 book.author as book_author,
                 book.book_cover as book_cover,
+                book.slug as book_slug,
 
                 owner.username as owner_name
             ')
