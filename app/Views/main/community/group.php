@@ -17,7 +17,10 @@
     <div class="max-w-3xl mx-auto px-4 py-6">
         <div class="flex-grow overflow-y-auto">
             <header class="bg-white p-4 border-b border-gray-200 shadow-sm sticky top-0 z-10 flex items-center space-x-4">
-    
+                <a href="<?= base_url() ?>" title="Kembali" class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-200 transition-colors duration-200">
+                    <i class="fas fa-arrow-left fa-lg"></i>
+                    <span class="sr-only">Kembali</span>
+                </a>
                 <img src="<?= base_url('uploads/groups/' . $group['icon']) ?>" 
                     alt="<?= esc($group['name']) ?>"
                     class="w-24 h-24 rounded-full object-cover flex-shrink-0">
