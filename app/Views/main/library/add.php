@@ -30,28 +30,29 @@
             <input type="hidden" name="existing_book_id" id="existing_book_id" value="">
 
             <div>
+                <label class="block mb-1 font-medium text-gray-700">Sampul Buku</button>
+                <img id="cover_preview" src="https://via.placeholder.com/150x220.png?text=Sampul" alt="Pratinjau Sampul" class="h-40 w-auto rounded border p-1 bg-gray-50 object-cover">
+                <input type="hidden" name="selected_cover" id="selected_cover">
+            </div>
+
+            <div>
                 <label for="title" class="block mb-1 font-medium text-gray-700">Judul Buku</label>
-                <input type="text" id="title" name="title" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <input type="text" id="title" name="title" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" readonly/>
             </div>
 
             <div>
                 <label for="author" class="block mb-1 font-medium text-gray-700">Penulis</label>
-                <input type="text" id="author" name="author" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-            </div>
-
-            <div>
-                <label for="cover" class="block mb-1 font-medium text-gray-700">Sampul Buku</label>
-                <input type="file" id="cover" name="cover" accept="image/*" class="w-full text-gray-600" />
+                <input type="text" id="author" name="author" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" readonly/>
             </div>
 
             <div>
                 <label for="published_date" class="block mb-1 font-medium text-gray-700">Tanggal Terbit</label>
-                <input type="date" id="published_date" name="published_date" max="<?= date('Y-m-d') ?>" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <input type="date" id="published_date" name="published_date" max="<?= date('Y-m-d') ?>" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" readonly />
             </div>
 
             <div>
                 <label for="total_pages" class="block mb-1 font-medium text-gray-700">Jumlah Halaman</label>
-                <input type="number" id="total_pages" name="total_pages" min="1" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required />
+                <input type="number" id="total_pages" name="total_pages" min="1" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" readonly required />
             </div>
 
             <div>
@@ -62,7 +63,7 @@
 
             <div>
                 <label for="description" class="block mb-1 font-medium text-gray-700">Deskripsi Buku</label>
-                <textarea id="description" name="description" rows="4" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y"></textarea>
+                <textarea id="description" name="description" rows="4" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y" readonly></textarea>
             </div>
 
             <div>
@@ -75,15 +76,9 @@
                 <input type="number" id="rating" name="rating" min="1" max="5" step="1" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
 
-            <div>
+            <div id="genre_section_wrapper" class="hidden">
                 <p class="block mb-1 font-medium text-gray-700">Genre</p>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    <?php foreach ($genres as $genre): ?>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="genres[]" value="<?= esc($genre['id']) ?>" class="text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                            <span class="ml-2 text-gray-700"><?= esc($genre['genre_name']) ?></span>
-                        </label>
-                    <?php endforeach; ?>
+                <div id="genre_display_area" class="grid grid-cols-2 md:grid-cols-3 gap-2">
                 </div>
             </div>
 
@@ -98,12 +93,19 @@
         const searchInput = document.getElementById('book_search');
         const resultsBox = document.getElementById('search_results');
         const bookIdInput = document.getElementById('existing_book_id');
+        const coverPreview = document.getElementById('cover_preview');
+        const selectedCoverInput = document.getElementById('selected_cover');
+        const genreSectionWrapper = document.getElementById('genre_section_wrapper');
+        const genreDisplayArea = document.getElementById('genre_display_area');
+        const allGenres = <?= isset($genres) ? json_encode($genres) : '[]' ?>;
 
         searchInput.addEventListener('input', async function () {
             const query = this.value.trim();
             resultsBox.innerHTML = '';
             resultsBox.classList.add('hidden');
             bookIdInput.value = '';
+
+            genreSectionWrapper.classList.add('hidden');
 
             if (query.length < 2) return;
 
@@ -129,16 +131,46 @@
                             document.getElementById('total_pages').value = book.total_pages ?? '';
                             bookIdInput.value = book.id;
 
-                            document.querySelectorAll('input[name="genres[]"]').forEach(cb => {
-                                cb.checked = false;
-                            });
+                            const coverBasePath = "<?= base_url('uploads/bookcover/') ?>" + book.book_cover;
+                            const placeholderImage = "https://via.placeholder.com/150x220.png?text=Sampul";
 
-                            if (Array.isArray(book.genre_ids)) {
-                                book.genre_ids.forEach(genreId => {
-                                    const checkbox = document.querySelector(`input[name="genres[]"][value="${genreId}"]`);
-                                    if (checkbox) checkbox.checked = true;
-                                });
+                            if (book.book_cover) {
+                                coverPreview.src = coverBasePath;
+                                selectedCoverInput.value = book.book_cover;
+                            } else {
+                                coverPreview.src = placeholderImage;
+                                selectedCoverInput.value = '';
                             }
+
+                            genreDisplayArea.innerHTML = '';
+
+                            const bookGenreIds = Array.isArray(book.genre_ids) ? book.genre_ids.map(String) : [];
+
+                            allGenres.forEach(genre => {
+                                const label = document.createElement('label');
+                                label.className = 'inline-flex items-center';
+
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.name = 'genres[]';
+                                checkbox.value = genre.id;
+                                checkbox.className = 'text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded';
+                                checkbox.disabled = true;
+                                
+                                if (bookGenreIds.includes(String(genre.id))) {
+                                    checkbox.checked = true;
+                                }
+
+                                const span = document.createElement('span');
+                                span.className = 'ml-2 text-gray-700';
+                                span.textContent = genre.genre_name;
+
+                                label.appendChild(checkbox);
+                                label.appendChild(span);
+
+                                genreDisplayArea.appendChild(label);
+                            });
+                            genreSectionWrapper.classList.remove('hidden');
 
                             resultsBox.innerHTML = '';
                             resultsBox.classList.add('hidden');

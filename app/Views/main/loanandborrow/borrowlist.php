@@ -86,7 +86,7 @@
                                     <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= esc($borrow['book_title']) ?></h5>
                                     <p class="mb-1 text-sm font-normal text-gray-700 dark:text-gray-400">Diminta oleh: <strong><?= esc($borrow['owner_name']) ?></strong></p>
                                     <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">Tanggal Permintaan: <?= date('d M Y', strtotime($borrow['created_at'])) ?></p>
-                                    <a href="<?= base_url('library/requested-loan/' . $borrow['id']) ?>"
+                                    <a href="<?= base_url('library/' . $borrow['owner_name'] . '/' . $borrow['book_slug'] . '/requestloan') ?>"
                                         class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         Lihat Detail
                                     </a>

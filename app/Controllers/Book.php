@@ -112,7 +112,7 @@ class Book extends BaseController {
         $books = $this -> bookModel
             ->like('title', $query)
             ->orLike('author', $query)
-            ->select('id, title, author, published_date, total_pages, description')
+            ->select('id, title, author, published_date, total_pages, description, book_cover')
             ->findAll(10);
         
         foreach ($books as &$book) {
@@ -125,70 +125,10 @@ class Book extends BaseController {
 
     public function proceedAddBook(){
         $request = $this->request;
-        $title = $request->getPost('title');
-        $author = $request->getPost('author');
-        $publishedDate = $request->getPost('published_date');
-        $totalPages = $request -> getPost('total_pages');
-        $description = $request -> getPost('description');
+        $bookId = $request -> getPost('existing_book_id');
 
         $userId = session() -> get('userId');
         
-        $existingBook = $this->bookModel
-                ->where('title', $title)
-                ->where('author', $author)
-                ->where('published_date', $publishedDate)
-                ->first();
-        
-        
-        if ($existingBook) {
-            $bookId = $existingBook['id'];
-
-            $alreadyOwned = $this->bookCollectionModel
-            ->where('user_id', $userId)
-            ->where('book_id', $bookId)
-            ->first();
-
-            if ($alreadyOwned) {
-                return redirect()->to('/library')->with('error', 'Kamu sudah menambahkan buku ini ke koleksimu.');
-            }
-        } 
-        else {
-            $cover = $request->getFile('cover');
-
-            $slug = url_title($request->getPost('title'), '-', true);
-
-            if (!$cover -> isValid() || $cover -> hasMoved()) {
-                return redirect() -> back() -> withInput() -> with('error', 'Gagal upload cover');
-            }
-
-            $extension = $cover -> getClientExtension();
-            $coverFileName = $slug . '.' . $extension;
-            $cover -> move(FCPATH . 'uploads/bookcover', $coverFileName);
-
-            $bookData = [
-                'title' => $title,
-                'author' => $author,
-                'slug' => $slug,
-                'book_cover' => $coverFileName,
-                'published_date' => $publishedDate,
-                'total_pages' => $totalPages,
-                'description' => $description,
-            ];
-
-            $bookId = $this -> bookModel->insert($bookData, true);
-
-            $genreIds = $this->request->getPost('genres');
-            if ($genreIds) {
-                foreach ($genreIds as $genreId) {
-                    $this-> bookGenreModel -> insert([
-                        'book_id' => $bookId,
-                        'genre_id' => $genreId
-                    ]);
-                }
-            }
-        }
-
-
         $this -> bookCollectionModel->insert([
             'user_id' => $userId,
             'book_id' => $bookId,
