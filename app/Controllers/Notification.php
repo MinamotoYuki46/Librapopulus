@@ -15,7 +15,7 @@ class Notification extends BaseController {
         if (!$this -> request -> isAJAX() || !session() -> get("userId")) {
             $data = [
                 'error' => 'Forbidden',
-                'csrf_token' => csrf_hash() // Get the newest token
+                'csrf_token' => csrf_hash()
             ];
             return $this -> response -> setStatusCode(403)->setJSON($data);
         }
@@ -31,13 +31,13 @@ class Notification extends BaseController {
             $data = [
                 'success' => true,
                 'message' => 'Notifications marked as read.',
-                'csrf_token' => csrf_hash() // Add the NEW token to the response
+                'csrf_token' => csrf_hash() 
             ];
             return $this->response->setJSON($data);
         } else {
             $data = [
                 'error' => 'Update failed',
-                'csrf_token' => csrf_hash() // Also send a new token on failure
+                'csrf_token' => csrf_hash()
             ];
             return $this->response->setStatusCode(500)->setJSON($data);
         }

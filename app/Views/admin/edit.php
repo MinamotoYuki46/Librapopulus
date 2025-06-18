@@ -72,7 +72,7 @@
         </div>
 
         <div class="flex justify-end gap-4">
-            <a href="<?= base_url('/library') ?>" class="px-4 py-2 bg-gray-200 rounded">Batal</a>
+            <a href="<?= base_url('/admin/bookdata') ?>" class="px-4 py-2 bg-gray-200 rounded">Batal</a>
             <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Simpan Perubahan</button>
         </div>
     </form>
