@@ -14,6 +14,14 @@
     <div class="max-w-2xl mx-auto bg-white shadow p-6 rounded-lg">
         <h2 class="text-2xl font-semibold mb-4">Import Buku dari Excel</h2>
 
+        <div class="mb-4">
+            <a href="<?= base_url('assets/template/import_book_template.xlsx') ?>" 
+            class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                <i class="fa-solid fa-download mr-2"></i> Unduh Template Excel
+            </a>
+        </div>
+
+
         <?php if (session()->has('message')): ?>
             <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
                 <?= session('message') ?>
