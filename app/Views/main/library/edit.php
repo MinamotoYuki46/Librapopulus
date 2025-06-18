@@ -43,7 +43,7 @@
             </div>
 
             <div class="flex justify-end gap-4 mt-6">
-                <a href="<?= base_url('/library') ?>" class="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition">
+                <a href="<?= base_url('/library/' . session()->get('username') . '/' . $book['slug']) ?>" class="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition">
                     Batal
                 </a>
                 <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">

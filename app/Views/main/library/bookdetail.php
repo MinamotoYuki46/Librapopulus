@@ -59,12 +59,23 @@
                         </form>
                     </div>
                 <?php else : ?>
-                    <a href="<?= base_url('library/' . $user["username"] . '/' . $book['slug'] . '/requestloan') ?>">
-                        <button type="button"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 inline-flex items-center">
-                            <i class="fas fa-book-open-reader mr-2"></i> Pinjam Buku
-                        </button>
-                    </a>
+                    <?php if ($isFriend && $isFriend['status'] == \App\Models\FriendshipModel::STATUS_ACCEPTED) : ?>
+                        <a href="<?= base_url('library/' . $user["username"] . '/' . $book['slug'] . '/requestloan') ?>">
+                            <button type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 inline-flex items-center">
+                                <i class="fas fa-book-open-reader mr-2"></i> Pinjam Buku
+                            </button>
+                        </a>
+                    <?php else : ?>
+                        <div class="text-right">
+                            <button type="button"
+                                class="text-white bg-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center cursor-not-allowed dark:bg-gray-600"
+                                disabled>
+                                <i class="fas fa-book-open-reader mr-2"></i> Pinjam Buku
+                            </button>
+                            <p class="text-red-600 text-xs mt-1 dark:text-red-400">Anda harus berteman dengan <?= esc($user['username']) ?> untuk meminjam buku ini.</p>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
 

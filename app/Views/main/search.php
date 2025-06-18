@@ -13,6 +13,12 @@
     <?php include 'layout/layout.php' ?>
 
     <main class="px-4 py-10 max-w-4xl mx-auto" id="mainContent">
+        <div class="mb-4">
+            <a href="<?= base_url() ?>" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-800">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Kembali Ke koleksi Buku
+            </a>
+        </div>
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Pencarian</h1>
 
         <form method="GET" action="<?= site_url('search') ?>" class="flex gap-2 mb-8">
