@@ -41,7 +41,7 @@ class BookLoan extends BaseController{
 
         $friendship = $this->friendshipModel->getFriendshipStatus(session() -> get("userId"), $owner['id']);
 
-        if ($friendship['status'] != FriendshipModel::STATUS_ACCEPTED){
+        if (!$friendship || $friendship['status'] != FriendshipModel::STATUS_ACCEPTED){
             return redirect()->back()->with('error', 'Anda belum berteman dengan pengguna ini');
         }
 

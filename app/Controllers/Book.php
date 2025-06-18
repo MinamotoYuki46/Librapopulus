@@ -7,6 +7,7 @@ use App\Models\BookCollectionModel;
 use App\Models\BookGenreModel;
 use App\Models\GenreModel;
 use App\Models\UserModel;
+use App\Models\FriendshipModel;
 
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
@@ -17,6 +18,7 @@ class Book extends BaseController {
     private $bookGenreModel;
     private $genreModel;
     private $userModel;
+    private $friendshipModel;
 
     private $db;
 
@@ -26,6 +28,7 @@ class Book extends BaseController {
         $this -> bookGenreModel = new BookGenreModel();
         $this -> genreModel = new GenreModel();
         $this -> userModel = new UserModel();
+        $this -> friendshipModel = new FriendshipModel();
         $this -> db = \Config\Database::connect();
     }
 
@@ -38,6 +41,11 @@ class Book extends BaseController {
         $user = $this -> userModel -> where('username', $username) -> first();
         if (!$user) {
             throw new PageNotFoundException('User tidak ditemukan.');
+        }
+
+        $isFriend = null;
+        if($user['id'] !== session()->get('userId')){
+            $isFriend = $this->friendshipModel->getFriendshipStatus(session()->get('userId'), $user['id']);
         }
 
         $book = $this -> bookModel -> where('slug', $slug) -> first();
@@ -84,6 +92,7 @@ class Book extends BaseController {
                 'review'        => $bookCollection['review'],
             ],
             'user' => $user,
+            'isFriend' => $isFriend
         ];
         return view('main/library/bookdetail', $data);
     }
