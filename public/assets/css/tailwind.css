@@ -1123,6 +1123,9 @@
   .my-6 {
     margin-block: calc(var(--spacing) * 6);
   }
+  .ms-1 {
+    margin-inline-start: calc(var(--spacing) * 1);
+  }
   .ms-2 {
     margin-inline-start: calc(var(--spacing) * 2);
   }
@@ -1592,6 +1595,9 @@
   }
   .aspect-\[2\/3\] {
     aspect-ratio: 2/3;
+  }
+  .h-0\.5 {
+    height: calc(var(--spacing) * 0.5);
   }
   .h-1 {
     height: calc(var(--spacing) * 1);

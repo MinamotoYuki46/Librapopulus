@@ -41,7 +41,7 @@ class NotificationModel extends Model
                 'timestamp' => strtotime($row['created_at']),
                 'sender' => [
                     'name' => $row['sender_username'],
-                    'picture' => base_url('uploads/' . $row['sender_picture']) 
+                    'picture' => base_url('uploads/users/' . $row['sender_picture']) 
                 ],
                 'message' => $row['message'],
             ];

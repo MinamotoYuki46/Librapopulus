@@ -1,34 +1,4 @@
 <?php
-// $friends = [
-//     [
-//         'id' => 1,
-//         'name' => 'Alice Johnson',
-//         'avatar' => 'https://i.pravatar.cc/100?u=alice',
-//         'last_message' => [
-//             'content' => 'Hey! Are you still reading The Hobbit?',
-//             'timestamp' => '2025-06-07 10:35'
-//         ]
-//     ],
-//     [
-//         'id' => 2,
-//         'name' => 'Bob Smith',
-//         'avatar' => 'https://i.pravatar.cc/100?u=bob',
-//         'last_message' => [
-//             'content' => 'Sure, I’ll lend you the book tomorrow after lunch.',
-//             'timestamp' => '2025-06-07 08:20'
-//         ]
-//     ],
-//     [
-//         'id' => 3,
-//         'name' => 'Charlie Davis',
-//         'avatar' => 'https://i.pravatar.cc/100?u=charlie',
-//         'last_message' => [
-//             'content' => 'Can you recommend a fantasy book for this weekend?',
-//             'timestamp' => '2025-06-06 22:14'
-//         ]
-//     ],
-// ];
-
 function timeShort($datetime) {
     return date('H:i', strtotime($datetime));
 }

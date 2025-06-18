@@ -64,7 +64,7 @@
                 <div class="flex space-x-4 overflow-x-auto pb-2">
                     <?php foreach ($members as $member): ?>
                         <a href="<?= base_url('profile/' . $member['username']) ?>" class="flex flex-col items-center text-center flex-shrink-0 w-20">
-                            <img src="<?= base_url('uploads/' . $member['picture']) ?>" 
+                            <img src="<?= base_url('uploads/users/' . $member['picture']) ?>" 
                                  alt="<?= esc($member['username']) ?>"
                                  class="w-12 h-12 rounded-full object-cover border-2 border-gray-300">
                             <span class="text-xs mt-1 text-gray-700 truncate font-bold"> @<?= esc($member['username']) ?></span>
@@ -89,7 +89,7 @@
                         <div class="flex <?= $isOwnMessage ? 'justify-end' : 'justify-start' ?>" data-message-id="<?= $msg['id'] ?>">
                             <div class="flex items-start gap-2.5 mb-4 <?= $isOwnMessage ? 'flex-row-reverse' : '' ?>">
 
-                                <img src="<?= base_url('uploads/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>"
+                                <img src="<?= base_url('uploads/users/' . ($isOwnMessage ? $photoProfile : $msg['sender_picture'])) ?>"
                                     alt="avatar"
                                     class="w-8 h-8 rounded-full">
 
@@ -185,7 +185,7 @@
             const chatMessages = document.getElementById('chat-messages');
             const groupId = document.getElementById('group_id').value;
 
-            const csrfName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
+            const csrfTokenName = document.querySelector('meta[name="csrf-token-name"]').getAttribute('content');
             let csrfHash = document.querySelector('meta[name="csrf-token-hash"]').getAttribute('content');
         
             let isLoadingPrevious = false;
@@ -197,6 +197,72 @@
             let messageIdToDelete = null;
             
             chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            function formatTime(utcDateTimeString) {
+                if (!utcDateTimeString) return '';
+                const date = new Date(utcDateTimeString.replace(' ', 'T') + 'Z');
+                const options = { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+                return new Intl.DateTimeFormat('en-GB', options).format(date);
+            }
+
+            function updateAllCsrfTokens(newToken) {
+                const csrfMetaTag = document.querySelector('meta[name="csrf-token-hash"]');
+                if (csrfMetaTag) {
+                    csrfMetaTag.setAttribute('content', newToken);
+                }
+                
+                document.querySelectorAll(`input[name="${csrfTokenName}"]`).forEach(input => {
+                    input.value = newToken;
+                });
+                
+                csrfHash = newToken;
+
+                console.log('Semua token CSRF di form HTML dan meta tag telah diperbarui:', newToken);
+            }
+
+            function createMessageElement(msg) {
+                const ownMessage = msg.sender_id == <?= $masterUserId?>;
+                const isAdmin = <?= $isAdmin ? 'true' : 'false' ?>;
+                const div = document.createElement('div');
+                
+                const time = formatTime(msg.created_at);
+                const sanitizedMessage = msg.message_text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+                const deleteButtonHTML = (ownMessage || isAdmin) ?
+                    `<button id="dropdown-button-${msg.id}" data-dropdown-toggle="dropdown-${msg.id}" class="inline-flex self-center items-center p-2 text-sm font-medium text-center ${ownMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-white hover:bg-gray-100'} rounded-lg focus:outline-none" type="button">
+                        <svg class="w-4 h-4 text-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15"><path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
+                    </button>
+                    <div id="dropdown-${msg.id}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button-${msg.id}">
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 delete-message-btn" data-message-id="${msg.id}">
+                                    <i class="fas fa-trash w-4 h-4 mr-2 text-red-600 hover:bg-red-100"></i>
+                                    Hapus
+                                </a>
+                            </li>
+                        </ul>
+                    </div>` : '';
+
+
+                
+                div.className = `flex ${ownMessage ? 'justify-end' : 'justify-start'}`;
+                div.setAttribute('data-message-id', msg.id);
+                div.innerHTML = `
+                    <div class="flex items-start gap-2.5 mb-4 ${ownMessage ? 'flex-row-reverse' : ''}">
+                        <img src="<?= base_url('uploads/users/') ?>${ownMessage ? '<?= $photoProfile ?>' : msg.sender_picture}" alt="avatar" class="w-8 h-8 rounded-full">
+                        <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 ${ownMessage ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto' : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl'}">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-blue-600'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
+                                    <span class="text-sm font-normal ${ownMessage ? 'text-blue-100' : 'text-gray-500'}">${time}</span>
+                                </div>
+                                ${deleteButtonHTML}
+                            </div>
+                            <p class="text-sm font-normal py-2.5">${sanitizedMessage}</p>
+                        </div>
+                    </div>
+                `;
+                return div;
+            }
 
             async function loadPreviousMessages() {
                 if (!hasMoreMessages) return; 
@@ -217,6 +283,12 @@
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     });
                     const result = await response.json();
+
+                    if (result.csrf_hash) { 
+                        updateAllCsrfTokens(result.csrf_hash);
+                    } else if (result.csrf_token) { 
+                        updateAllCsrfTokens(result.csrf_token);
+                    }
 
                     if (result.messages.length > 0) {
                         const oldScrollHeight = chatMessages.scrollHeight; 
@@ -258,7 +330,7 @@
                 }
 
                 const formData = new FormData(chatForm);
-                formData.append(csrfName, csrfHash);
+                formData.append(csrfTokenName, csrfHash);
 
                 try {
                     const response = await fetch('<?= base_url('group/send') ?>', {
@@ -271,10 +343,18 @@
 
                     const result = await response.json();
 
+                    if (result.csrf_hash) { 
+                        updateAllCsrfTokens(result.csrf_hash);
+                    } else if (result.csrf_token) { 
+                        updateAllCsrfTokens(result.csrf_token);
+                    }
+
                     if (result.success) {
                         messageText.value = '';
                         csrfHash = result.csrf_hash; 
                         document.querySelector('meta[name="csrf-token-hash"]').setAttribute('content', csrfHash);
+
+                        
                     } else {
                         console.error('Gagal mengirim pesan:', result.error);
                         alert('Gagal mengirim pesan.');
@@ -307,19 +387,14 @@
                     console.error('Error fetching new messages: ', error);
                 }
             }, 1000);
-
-            function formatTime(utcDateTimeString) {
-                if (!utcDateTimeString) return '';
-                const date = new Date(utcDateTimeString.replace(' ', 'T') + 'Z');
-                const options = { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
-                return new Intl.DateTimeFormat('en-GB', options).format(date);
-            }
+            
+            
 
             async function performDeleteMessage() {
                 if (!messageIdToDelete) return;
 
                 const formData = new FormData();
-                formData.append(csrfName, csrfHash);
+                formData.append(csrfTokenName, csrfHash);
                 
                 try {
                     const response = await fetch(`<?=  base_url('group/delete-message/')?>${messageIdToDelete}`, {
@@ -328,6 +403,12 @@
                         headers: {'X-Requested-With': 'XMLHttpRequest'}
                     });
                     const result = await response.json();
+
+                    if (result.csrf_hash) { 
+                        updateAllCsrfTokens(result.csrf_hash);
+                    } else if (result.csrf_token) { 
+                        updateAllCsrfTokens(result.csrf_token);
+                    }
 
                     if(result.success) {
                         csrfHash = result.csrf_hash;
@@ -364,49 +445,7 @@
                 performDeleteMessage();
             })
 
-            function createMessageElement(msg) {
-                const ownMessage = msg.sender_id == <?= $masterUserId?>;
-                const isAdmin = <?= $isAdmin ? 'true' : 'false' ?>;
-                const div = document.createElement('div');
-                
-                const time = formatTime(msg.created_at);
-                const sanitizedMessage = msg.message_text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
-                const deleteButtonHTML = (ownMessage || isAdmin) ?
-                    `<button id="dropdown-button-${msg.id}" data-dropdown-toggle="dropdown-${msg.id}" class="inline-flex self-center items-center p-2 text-sm font-medium text-center ${ownMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-white hover:bg-gray-100'} rounded-lg focus:outline-none" type="button">
-                        <svg class="w-4 h-4 text-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15"><path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
-                    </button>
-                    <div id="dropdown-${msg.id}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
-                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button-${msg.id}">
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 delete-message-btn" data-message-id="${msg.id}">
-                                    <i class="fas fa-trash w-4 h-4 mr-2 text-red-600 hover:bg-red-100"></i>
-                                    Hapus
-                                </a>
-                            </li>
-                        </ul>
-                    </div>` : '';
-
-
-                
-                div.className = `flex ${ownMessage ? 'justify-end' : 'justify-start'}`;
-                div.setAttribute('data-message-id', msg.id);
-                div.innerHTML = `
-                    <div class="flex items-start gap-2.5 mb-4 ${ownMessage ? 'flex-row-reverse' : ''}">
-                        <img src="<?= base_url('uploads/') ?>${ownMessage ? '<?= $photoProfile ?>' : msg.sender_picture}" alt="avatar" class="w-8 h-8 rounded-full">
-                        <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 ${ownMessage ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto' : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl'}">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-blue-600'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
-                                    <span class="text-sm font-normal ${ownMessage ? 'text-blue-100' : 'text-gray-500'}">${time}</span>
-                                </div>
-                                ${deleteButtonHTML}
-                            </div>
-                            <p class="text-sm font-normal py-2.5">${sanitizedMessage}</p>
-                        </div>
-                    </div>
-                `;
-                return div;
-            }
+            
         });
     </script>
     <script src="<?= base_url("flowbite.min.js") ?>"></script>

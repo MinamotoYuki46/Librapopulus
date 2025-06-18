@@ -24,7 +24,7 @@
                         <?php foreach ($friends as $friend): ?>
                             <a href="<?= base_url('profile/' . $friend['username']) ?>" class="block bg-white p-4 rounded-lg shadow text-center hover:shadow-lg transition duration-200">
                                 <div class="w-28 h-28 mx-auto">
-                                    <img src="<?= base_url('uploads/' . $friend['picture']) ?>"
+                                    <img src="<?= base_url('uploads/users/' . $friend['picture']) ?>"
                                         alt="<?= esc($friend['username']) ?>"
                                         class="rounded-full w-full h-full object-cover border-4 border-gray-300" />
                                 </div>

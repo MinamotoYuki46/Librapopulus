@@ -14,7 +14,7 @@
 <?php include 'layout/layout.php'; ?>
 <main class="max-w-3xl mx-auto px-4 py-6">
     <header class="flex items-center mb-6">
-        <img src="<?= base_url('uploads/' . $recipient['picture']) ?>" class="w-12 h-12 rounded-full mr-4" alt="Avatar of <?= esc($recipient['username']) ?>">
+        <img src="<?= base_url('uploads/users/' . $recipient['picture']) ?>" class="w-12 h-12 rounded-full mr-4" alt="Avatar of <?= esc($recipient['username']) ?>">
         <h1 class="text-2xl font-bold text-gray-800">@<?= esc($recipient['username']) ?></h1>
     </header>
 
@@ -73,7 +73,7 @@
 
 <script>
     const recipientId = <?= $recipient['id'] ?>;
-    const currentUserId = <?= $currentUser['id'] ?>;
+    const currentUserId = <?= $masterUserId ?>;
     let isLoading = false;
     let noMoreMessages = false;
     let lastMessageId = 0;
@@ -94,7 +94,7 @@
 
     function createMessageElement(msg) {
         const isSentByCurrentUser = msg.sender_id == currentUserId;
-        const userPicture = '<?= base_url('uploads/') ?>' + msg.sender_picture;
+        const userPicture = '<?= base_url('uploads/users/') ?>' + msg.sender_picture;
         const localTime = formatTime(msg.created_at);
 
         const wrapper = document.createElement('div');

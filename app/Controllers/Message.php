@@ -25,17 +25,10 @@ class Message extends BaseController {
         }
 
         $targetUser['username'] = $username;
-        $myUser = [
-            'id' => session() -> get('userId'),
-            'username' => session() -> get('username'),
-            'picture' => session() -> get('picture')
-        ];
         
-
         $data = [
             'recipient' => $targetUser,
             'messages' => [],
-            'currentUser' => $myUser
         ];
 
         return view("main/message", $data);
