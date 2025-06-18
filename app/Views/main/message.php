@@ -196,7 +196,7 @@
             if (data.csrf_hash) { 
                 updateAllCsrfTokens(data.csrf_hash);
             } else if (data.csrf_token) { 
-                 updateAllCsrfTokens(data.csrf_token);
+                updateAllCsrfTokens(data.csrf_token);
             }
 
             if (response.ok && data.status === 'success') {
@@ -291,7 +291,7 @@
             if (data.csrf_hash) { 
                 updateAllCsrfTokens(data.csrf_hash);
             } else if (data.csrf_token) { 
-                 updateAllCsrfTokens(data.csrf_token);
+                updateAllCsrfTokens(data.csrf_token);
             }
 
             if (data.messages.length === 0) {

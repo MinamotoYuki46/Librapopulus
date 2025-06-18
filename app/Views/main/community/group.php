@@ -105,7 +105,7 @@
                                         </div>
 
                                         <?php if ($isOwnMessage || $isAdmin): ?>
-                                            <button id="dropdown-button-<?= $msg['id'] ?>" data-dropdown-toggle="dropdown-<?= $msg['id'] ?>" class="inline-flex self-center items-center p-2 text-sm font-medium text-center <?= $isOwnMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-white hover:bg-gray-100' ?> rounded-lg focus:outline-none" type="button">
+                                            <button id="dropdown-button-<?= $msg['id'] ?>" data-dropdown-toggle="dropdown-<?= $msg['id'] ?>" class="inline-flex self-center items-center p-2 text-sm font-medium text-center <?= $isOwnMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-gray-100 hover:bg-gray-200' ?> rounded-lg focus:outline-none" type="button">
                                                 <svg class="w-4 h-4 text-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15"><path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
                                             </button>
                                             <div id="dropdown-<?= $msg['id'] ?>" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
@@ -228,7 +228,7 @@
                 const time = formatTime(msg.created_at);
                 const sanitizedMessage = msg.message_text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
                 const deleteButtonHTML = (ownMessage || isAdmin) ?
-                    `<button id="dropdown-button-${msg.id}" data-dropdown-toggle="dropdown-${msg.id}" class="inline-flex self-center items-center p-2 text-sm font-medium text-center ${ownMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-white hover:bg-gray-100'} rounded-lg focus:outline-none" type="button">
+                    `<button id="dropdown-button-${msg.id}" data-dropdown-toggle="dropdown-${msg.id}" class="inline-flex self-center items-center p-2 text-sm font-medium text-center ${ownMessage ? 'text-white hover:bg-blue-600' : 'text-gray-900 bg-gray-100 hover:bg-gray-200'} rounded-lg focus:outline-none" type="button">
                         <svg class="w-4 h-4 text-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15"><path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
                     </button>
                     <div id="dropdown-${msg.id}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40">
@@ -252,7 +252,7 @@
                         <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 ${ownMessage ? 'bg-blue-500 text-white rounded-s-xl rounded-ee-xl ml-auto' : 'bg-gray-100 text-gray-900 rounded-e-xl rounded-es-xl'}">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-blue-600'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
+                                    <span class="text-sm font-semibold ${ownMessage ? 'text-white' : 'text-gray-900'}">${ownMessage ? 'Anda' : msg.sender_username}</span>
                                     <span class="text-sm font-normal ${ownMessage ? 'text-blue-100' : 'text-gray-500'}">${time}</span>
                                 </div>
                                 ${deleteButtonHTML}
@@ -290,10 +290,12 @@
                         updateAllCsrfTokens(result.csrf_token);
                     }
 
-                    if (result.messages.length > 0) {
+                    const messagesToPrepend = Array.isArray(result.messages) ? result.messages.reverse() : [];
+
+                    if (messagesToPrepend.length > 0) {
                         const oldScrollHeight = chatMessages.scrollHeight; 
 
-                        result.messages.forEach(msg => {
+                        messagesToPrepend.forEach(msg => {
                             const messageElement = createMessageElement(msg);
                             loadingIndicator.after(messageElement);
                         });

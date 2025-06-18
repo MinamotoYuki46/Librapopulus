@@ -15,7 +15,7 @@
         <div class="max-w-xl mx-auto"> <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-6">
                 <div class="flex flex-col items-center gap-6">
                     <div class="relative w-32 h-32 mb-2">
-                        <img src="<?= esc(base_url('uploads/' . $otherPhotoProfile)) ?>" alt="Foto Profil"
+                        <img src="<?= esc(base_url('uploads/users/' . $otherPhotoProfile)) ?>" alt="Foto Profil"
                              class="rounded-full w-full h-full object-cover border-4 border-blue-500 dark:border-blue-700 shadow-lg" />
                     </div>
 
