@@ -9,6 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        #btnCreateGroup {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body class="bg-gray-200 min-h-screen">
     <?php include __DIR__ . '/../layout/layout.php' ?>
@@ -55,8 +62,11 @@
                     </div>
                 </div>
                 
-                <div>
-                    <button type="submit" class="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                <div id="btnCreateGroup" class="flex gap-6">
+                    <button type="button" onclick="window.location.href='<?= base_url('community') ?>'" class="bg-gray-200 text-black font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200">
                         Buat Grup
                     </button>
                 </div>
