@@ -57,7 +57,10 @@
                     </div>
                 </div>
                 
-                <div>
+                <div class="flex items-center gap-4 pt-2">
+                    <a href="javascript:history.back()" class="w-full bg-gray-200 text-gray-800 text-center font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-200">
+                        Batal
+                    </a>
                     <button type="submit" class="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200">
                         Simpan Perubahan
                     </button>
