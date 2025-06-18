@@ -48,6 +48,13 @@
 <body>
 <?php include __DIR__ . '/../layout/layout.php'; ?>
 
+
+<div class="w-full max-w-7xl mx-auto mb-4">
+    <a href="<?= base_url() ?>" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+        <i class="fas fa-arrow-left mr-2"></i>
+        Kembali Ke Koleksi Buku
+    </a>
+</div>
 <main id="mainContent" class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="main-content-area">
         <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
