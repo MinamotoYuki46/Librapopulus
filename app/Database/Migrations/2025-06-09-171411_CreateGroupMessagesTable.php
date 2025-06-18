@@ -25,7 +25,11 @@ class CreateGroupMessagesTable extends Migration {
             ],
             'created_at' => [
                 'type'    => 'DATETIME',
-                'null'    => null
+                'null'    => false
+            ],
+            'deleted_at' => [
+                'type'    => 'DATETIME',
+                'null'    => true
             ],
         ]);
 
