@@ -174,7 +174,7 @@
                         </div>
                     </form>
                 <?php endif; ?>
-                <a href="<?= base_url('/library/' . $owner["username"] . '/' . $book["slug"]) ?>" class="inline-flex items-center px-5 py-2.5 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-200 ease-in-out shadow-md mt-6">
+                <a href="javascript:history.back()" class="inline-flex items-center px-5 py-2.5 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-200 ease-in-out shadow-md mt-6">
                     <i class="fa fa-arrow-left mr-2"></i> Kembali
                 </a>
             </div>
