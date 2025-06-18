@@ -314,7 +314,6 @@ class Community extends BaseController {
         }
 
         $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
-<<<<<<< HEAD
         log_message('debug', 'Current user role: ' . print_r($currentUserRole, true));
 
 
@@ -492,11 +491,6 @@ class Community extends BaseController {
     }
 
     
-
-=======
-    }
-    
->>>>>>> 47e46690077bc6af8360413b8c0e4e9d4f97825f
     public function fetchMessages($groupId, $lastMessageId){
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(403, 'Forbidden');
