@@ -63,11 +63,11 @@
                 </div>
                 
                 <div id="btnCreateGroup" class="flex gap-6">
-                    <button type="button" onclick="window.location.href='<?= base_url('community') ?>'" class="bg-gray-200 text-black font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-200">
-                        Cancel
-                    </button>
                     <button type="submit" class="bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200">
                         Buat Grup
+                    </button>
+                    <button type="button" onclick="window.location.href='<?= base_url('community') ?>'" class="bg-gray-200 text-black font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-200">
+                        Batal
                     </button>
                 </div>
 

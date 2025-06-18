@@ -16,8 +16,20 @@
     <?php include __DIR__ . '/../layout/layout.php' ?>
     <div class="max-w-3xl mx-auto px-4 py-6">
         <div class="flex-grow overflow-y-auto">
+            
+            <div class="mb-4">
+                <a href="<?= base_url('community/') ?>" class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Kembali
+                </a>
+            </div>
+            
             <header class="bg-white p-4 border-b border-gray-200 shadow-sm sticky top-0 z-10 flex items-center space-x-4">
-    
+                
+
                 <img src="<?= base_url('uploads/groups/' . $group['icon']) ?>" 
                     alt="<?= esc($group['name']) ?>"
                     class="w-24 h-24 rounded-full object-cover flex-shrink-0">
@@ -29,34 +41,50 @@
                     <?php endif; ?>
                 </div>
 
-                <?php if ($isAdmin): ?>
-                    <form action="<?= base_url('group/delete/' . $group['id']) ?>" method="POST" class="ml-auto">
-                        <?= csrf_field() ?>
-                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus grup ini?')"
-                                class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors duration-200">
-                            <i class="fa fa-trash mr-2"></i>Hapus Grup
-                        </button>
-                    </form>
-                <?php endif; ?>
+                <div class="relative inline-block text-left ml-auto">
+                    <button id="group-options-button" data-dropdown-toggle="group-dropdown" 
+                            class="inline-flex justify-center w-full rounded-md  px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
+                            type="button">
+                        <i class="fas fa-ellipsis-v"></i> </button>
 
-                <?php if ($isAdmin): ?>
-                    <a href="<?= base_url('group/editgroup/' . $group['slug']) ?>" 
-                        class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors duration-200">
-                        Edit Group
-                    </a>
-                <?php endif; ?>
+                    <div id="group-dropdown" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="group-options-button">
+                            <?php if ($isAdmin): ?>
+                                <form action="<?= base_url('group/delete/' . $group['id']) ?>" method="POST" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700" role="menuitem"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus grup ini? Ini tidak dapat dibatalkan.')">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="w-full text-left bg-transparent border-none p-0 flex items-center">
+                                        <i class="fa fa-trash mr-2"></i>Hapus Grup
+                                    </button>
+                                </form>
 
-                <?php if ($isAdmin): ?>
-                    <a href="<?= base_url('group/members/' . $group['slug']) ?>" 
-                        class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 ml-2">
-                        <i class="fas fa-users-cog mr-2"></i>Atur Anggota
-                    </a>
-                <?php endif; ?>
+                                <a href="<?= base_url('group/editgroup/' . $group['slug']) ?>" 
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" role="menuitem">
+                                    <i class="fas fa-edit mr-2"></i>Edit Grup
+                                </a>
+
+                                <a href="<?= base_url('group/members/' . $group['slug']) ?>" 
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" role="menuitem">
+                                    <i class="fas fa-users-cog mr-2"></i>Atur Anggota
+                                </a>
+                                <hr class="my-1 border-gray-200"> <?php endif; ?>
+
+                            <form action="<?= base_url('group/leave/' . $group['id']) ?>" method="POST" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                                onsubmit="return confirm('Apakah Anda yakin ingin keluar dari grup ini?')">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="w-full text-left bg-transparent border-none p-0 flex items-center">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>Keluar Grup
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 
             </header>
 
+
             <div class="bg-white p-3 border-b border-gray-200">
- 
+
                 <div class="flex items-center text-sm font-semibold text-gray-600 mb-2">
                     <i class="fas fa-users mr-2"></i>
                     <?= count($members) ?> Anggota

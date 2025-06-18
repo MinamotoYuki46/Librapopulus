@@ -80,17 +80,17 @@ class Community extends BaseController {
             helper('url');
             
 
-            $uploadPath = 'uploads/groups/' . $slug;
+            $uploadPath = 'uploads/groups/';
 
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
 
-            $randomName = $iconFile->getRandomName();
+            $randomName = $iconFile -> getRandomName();
 
             $iconFile->move($uploadPath, $randomName);
 
-            $groupData['icon'] = $slug . '/' . $randomName;
+            $groupData['icon'] = $randomName;
         }
 
         $this -> groupsModel -> save($groupData);
@@ -176,7 +176,7 @@ class Community extends BaseController {
     }
 
     public function proceedEditGroup($slug){
-                $group = $this->groupsModel->getGroupBySlug($slug);
+        $group = $this -> groupsModel -> getGroupBySlug($slug);
         if (!$group) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Grup tidak ditemukan.');
         }
@@ -185,52 +185,62 @@ class Community extends BaseController {
             'group_id' => $group['id'],
             'user_id' => session()->get('userId'),
             'role' => 'admin'
-        ])->first());
+        ]) -> first());
 
         if (!$isAdmin) {
             return redirect()->to('/community')->with('error', 'Anda tidak memiliki izin untuk mengedit grup ini.');
         }
 
         $rules = [
-            'group_name' => 'required|min_length[3]|max_length[100]' . ($this->request->getPost('group_name') !== $group['name'] ? '|is_unique[groups.name]' : ''),
+            // 'group_name' => 'required|min_length[3]|max_length[100]' . ($this->request->getPost('group_name') !== $group['name'] ? '|is_unique[groups.name]' : ''),
             'description' => 'permit_empty|max_length[500]',
             'group_icon' => [
                 'rules' => 'max_size[group_icon,2048]|is_image[group_icon]|mime_in[group_icon,image/jpg,image/jpeg,image/png,image/webp]',
             ]
         ];
 
+        $oldGroupName = $group['name'];
+        $newGroupName = $this -> request -> getPost('group_name');
+
+        if ($oldGroupName === $newGroupName){
+            $validationRules['group_name'] = 'required|min_length[3]|max_length[100]|is_unique[groups.name]';
+        }
+        else {
+            $validationRules['group_name'] = 'required|min_length[3]|max_length[100]';
+        }
+
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $newSlug = $this->request->getPost('group_name') !== $group['name'] ? url_title($this->request->getPost('group_name'), '-', true) : $group['slug'];
+        $newSlug = $this -> request -> getPost('group_name') !== $group['name'] ? url_title($this->request->getPost('group_name'), '-', true) : $group['slug'];
 
-        $groupData = [
-            'id' => $group['id'],
+        $newData = [
             'name' => $this->request->getPost('group_name'),
-            'slug' => $newSlug,
+            'slug' => $newSlug ?? $slug,
             'description' => $this->request->getPost('description'),
         ];
 
-        $iconFile = $this->request->getFile('group_icon');
+        $iconFile = $this -> request -> getFile('group_icon');
+
         if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
             if ($group['icon'] && file_exists('uploads/groups/' . $group['icon'])) {
-                unlink('Uploads/groups/' . $group['icon']);
+                unlink('uploads/groups/' . $group['icon']);
             }
 
-            $uploadPath = 'Uploads/groups/' . $newSlug;
+            $uploadPath = 'uploads/groups/';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
 
             $randomName = $iconFile->getRandomName();
             $iconFile->move($uploadPath, $randomName);
-            $groupData['icon'] = $newSlug . '/' . $randomName;
+            $newData['icon'] = $randomName;
         }
 
-        $this->groupsModel->save($groupData);
+        $this -> groupsModel -> update($group['id'], $newData);
 
-        return redirect()->to('/group/' . $newSlug)->with('success', 'Grup berhasil diperbarui!');
+        return redirect()->to('/group/' . $newSlug) -> with('success', 'Grup berhasil diperbarui!');
     }
 
     public function groupSendMessage(){
@@ -308,22 +318,20 @@ class Community extends BaseController {
         }
 
         $masterUserId = session('userId');
-        $username = session('username'); 
 
         if (!$this -> groupMembersModel -> isMember( $masterUserId, $group['id'])) {
             return redirect()->to(base_url('community'))->with('error', 'Anda tidak memiliki akses ke pengaturan anggota grup ini.');
         }
 
         $currentUserRole = $this -> groupMembersModel -> getMemberRole($group['id'], $masterUserId);
-        log_message('debug', 'Current user role: ' . print_r($currentUserRole, true));
 
 
-        if ($currentUserRole != 'admin') {
+        if ($currentUserRole == 'member') {
             return redirect()->to(base_url('group/' . $slug))->with('error', 'Anda tidak memiliki izin untuk mengelola anggota grup.');
         }
 
         $members = $this -> groupMembersModel -> getMembersByGroupId($group['id']);
-        $isCurrentUserAdmin = $this-> groupMembersModel -> getMemberRole($group['id'], $masterUserId) === 'admin';
+        $isCurrentUserAdmin = $this-> groupMembersModel -> getMemberRole($group['id'], $masterUserId) !== 'member';
 
         $data = [
             'group'         => $group,
@@ -343,11 +351,11 @@ class Community extends BaseController {
         }
 
         $masterUserId = session('userId');
-        $username = session('username');
 
         if (!$this->groupMembersModel->isMember($masterUserId, $group['id'],)) {
             return redirect()->to(base_url('groups'))->with('error', 'Anda bukan anggota grup ini.');
         }
+
         $currentUserRole = $this->groupMembersModel->getMemberRole($group['id'], $masterUserId);
         if (!in_array($currentUserRole, ['admin', 'creator'])) {
             return redirect()->to(base_url('group/' . $groupSlug))->with('error', 'Anda tidak memiliki izin untuk mengundang anggota.');
@@ -356,11 +364,11 @@ class Community extends BaseController {
         $searchQuery = $this->request->getGet('q'); 
         $foundUsers = []; 
 
-        if ($searchQuery && strlen($searchQuery) >= 3) {
-            $usersQuery = $this->userModel->select('id, username, email, full_name, picture')
+        if ($searchQuery) {
+            $usersQuery = $this->userModel->select('id, username, full_name, picture')
                                     ->groupStart()
-                                        ->like('username', $searchQuery, 'after')
-                                        ->orLike('email', $searchQuery, 'after')
+                                        ->like('username', $searchQuery)
+                                        ->orLike('full_name', $searchQuery)
                                     ->groupEnd()
                                     ->where('role', 'user');
 
@@ -390,11 +398,6 @@ class Community extends BaseController {
             'masterUserId'  => $masterUserId,
             'searchQuery'   => $searchQuery, 
             'foundUsers'    => $foundUsers,
-            'user' => [
-                'id' => $masterUserId,
-                'username' => $username,
-                'picture' => session('picture')
-            ]
         ];
 
         return view('main/community/groupinvite', $data);
@@ -456,6 +459,16 @@ class Community extends BaseController {
             ->where('group_id', $groupId)
             ->where('user_id', $userId)
             ->set(['role' => 'admin'])
+            ->update();
+
+        return redirect()->back()->with('success', 'Pengguna dipromosikan jadi admin.');
+    }
+
+    public function demote($groupId, $userId){
+        $this->groupMembersModel
+            ->where('group_id', $groupId)
+            ->where('user_id', $userId)
+            ->set(['role' => 'member'])
             ->update();
 
         return redirect()->back()->with('success', 'Pengguna dipromosikan jadi admin.');

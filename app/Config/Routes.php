@@ -129,6 +129,7 @@ $routes -> get('group/members/(:segment)', 'Community::members/$1', ['filter' =>
 $routes -> get('group/invite-members/(:segment)', 'Community::inviteMembers/$1', ['filter' => 'userauth']);
 $routes -> post('group/send-invitation', 'Community::sendInvitation', ['filter' => 'userauth']);
 $routes -> post('group/(:num)/promote/(:num)', 'Community::promote/$1/$2', ['filter' => 'userauth']);
+$routes -> post('group/(:num)/demote/(:num)', 'Community::demote/$1/$2', ['filter' => 'userauth']);
 $routes -> post('group/(:num)/kick/(:num)', 'Community::kick/$1/$2', ['filter' => 'userauth']);
 
 $routes -> post('group-invitation/accept/(:num)', 'Community::groupAccept/$1', ['filter' => 'userauth']);

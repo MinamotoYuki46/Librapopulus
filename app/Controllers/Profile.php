@@ -105,6 +105,7 @@ class Profile extends BaseController {
             'city'          => $this->request->getPost('city'),
             'province'      => $this->request->getPost('province'),
             'description'   => $this->request->getPost('description'),
+            'username'      => $this->request->getPost('username'),
         ];
 
         $file = $this -> request -> getFile('photoProfile');
@@ -131,7 +132,7 @@ class Profile extends BaseController {
         ]);
 
 
-        return redirect()->to(base_url('profile/' . $user['username']))->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->to(base_url('profile/' . $updatedUser['username']))->with('success', 'Profil berhasil diperbarui.');
     }
 
 

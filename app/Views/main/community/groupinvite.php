@@ -37,11 +37,11 @@
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-xl font-semibold mb-4">Cari Pengguna untuk Diundang</h3>
             <form action="<?= base_url('group/invite-members/' . $group['slug']) ?>" method="GET" class="mb-4">
-                <label for="search-user-input" class="block text-sm font-medium text-gray-700">Cari Pengguna (Username atau Email):</label>
+                <label for="search-user-input" class="block text-sm font-medium text-gray-700">Cari Pengguna (Username atau Nama Lengkap):</label>
                 <div class="flex items-center mt-1">
                     <input type="text" id="search-user-input" name="q"
                            class="flex-grow border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                           placeholder="Ketik username atau email..." value="<?= esc($searchQuery ?? '') ?>">
+                           placeholder="Ketik username atau nama lengkap..." value="<?= esc($searchQuery ?? '') ?>">
                     <button type="submit" class="ml-3 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                         <i class="fas fa-search"></i> Cari
                     </button>
@@ -87,7 +87,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof initFlowbite === 'function') {
                 initFlowbite();
-                console.log('Flowbite diinisialisasi pada group_invite_members_view.php (PHP biasa).');
             }
         });
     </script>

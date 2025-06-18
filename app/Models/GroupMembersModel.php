@@ -68,11 +68,26 @@ class GroupMembersModel extends Model
     }
 
     public function getMembersByGroupId(int $groupId) {
-        return $this->select('user.id as user_id, user.username, user.picture, user.full_name, group_members.role')
-                    ->join('user', 'user.id = group_members.user_id')
-                    ->where('group_members.group_id', $groupId)
-                    -> where('group_members.status', self::STATUS_APPROVED)
-                    ->findAll();
+        $members = $this->select('user.id as user_id, user.username, user.picture, user.full_name, group_members.role')
+                        ->join('user', 'user.id = group_members.user_id')
+                        ->where('group_members.group_id', $groupId)
+                        ->where('group_members.status', self::STATUS_APPROVED)
+                        ->findAll();
+
+        $creatorId = (int) $this->db->table('groups')
+                        ->select('created_by')
+                        ->where('id', $groupId)
+                        ->get()
+                        ->getRow()
+                        -> created_by;
+
+        foreach ($members as &$member) {
+            if ((int) $member['user_id'] === $creatorId) {
+                $member['role'] = 'creator';
+            }
+        }
+
+        return $members;
     }
 
     public function isMember($userId, $groupId) {
@@ -89,13 +104,24 @@ class GroupMembersModel extends Model
     }
 
     public function getMemberRole($groupId, $userId){
+        $owner = (int) $this->db->table('groups')
+                      ->select('created_by')
+                      ->where('id', $groupId)
+                      ->get()
+                      ->getRow()
+                      -> created_by;
+
+        if ($owner == $userId) {
+            return 'creator';
+        }
+
         $result = $this->select('group_members.role')
                     ->where('group_members.group_id', $groupId)
                     ->where('group_members.user_id', $userId)
                     ->where('group_members.status', self::STATUS_APPROVED)
                     ->first();
 
-        return $result['role'] ?? null;
+        return $result['role'];
     }
 
 }

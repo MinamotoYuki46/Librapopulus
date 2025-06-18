@@ -37,7 +37,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 mt-2 gap-3">
                 <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white">Detail Buku</h2>
 
-                <?php if (session()->get('userId') == $user['id']) : ?>
+                <?php if ($masterUserId == $user['id']) : ?>
                     <div class="flex gap-3 items-center">
                         <a href="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/focus') ?>"
                             type="button" 
@@ -149,7 +149,7 @@
 
                         <?php if (!empty(trim($book['rating']))): ?>
                             <div class="pt-2">
-                                <?php if (session()->get('userId') === $user['id']) : ?>
+                                <?php if ($masterUserId === $user['id']) : ?>
                                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Penilaianmu</h3>
                                 <?php else : ?>
                                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Penilaian <?= $user["full_name"] ?></h3>
@@ -166,7 +166,7 @@
 
                         <?php if (!empty(trim($book['review']))): ?>
                             <div class="pt-2">
-                                <?php if (session()->get('userId') === $user['id']) : ?>
+                                <?php if ($masterUserId === $user['id']) : ?>
                                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Ulasanmu</h3>
                                 <?php else : ?>
                                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Ulasan <?= $user["full_name"] ?></h3>
