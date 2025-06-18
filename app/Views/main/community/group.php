@@ -217,7 +217,7 @@
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     });
                     const result = await response.json();
-            
+
                     if (result.messages.length > 0) {
                         const oldScrollHeight = chatMessages.scrollHeight; 
 
@@ -301,6 +301,7 @@
                             lastMessageId = msg.id;
                         });
                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                        initFlowbite();
                     }
                 } catch (error) {
                     console.error('Error fetching new messages: ', error);
