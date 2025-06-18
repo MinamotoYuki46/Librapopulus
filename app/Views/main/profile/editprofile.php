@@ -22,7 +22,7 @@
                 <div class="w-32 h-32 mx-auto relative group">
                     <label for="photoProfile" class="cursor-pointer block w-full h-full">
                         <img id="previewImage"
-                            src="<?= base_url('uploads/' . $photoProfile) ?>"
+                            src="<?= base_url('uploads/users/' . $photoProfile) ?>"
                             alt="Foto Profil"
                             class="rounded-full w-full h-full object-cover border-4 border-gray-300 group-hover:opacity-80 transition duration-200" />
                         <div class="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition">
@@ -32,37 +32,30 @@
                     <input type="file" id="photoProfile" name="photoProfile" accept="image/*" class="hidden" onchange="previewFile()" />
                 </div>
 
-
-
-                <!-- Username -->
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                     <input type="text" id="username" name="username" value="<?= $user['username'] ?? '' ?>" placeholder="<?= $user['username'] ?? '' ?>" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
-                <!-- Nama Lengkap -->
                 <div>
                     <label for="fullname" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
                     <input type="text" id="fullname" name="fullname" value="<?= $user['fullname'] ?? '' ?>" placeholder="<?= $user['fullname'] ?? '' ?>" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
-                <!-- Kota -->
                 <div>
                     <label for="city" class="block text-sm font-medium text-gray-700">Kota</label>
                     <input type="text" id="city" name="city" value="<?= $user['city'] ?? '' ?>" placeholder="<?= $user['city'] ?? '' ?>"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
-                <!-- Provinsi -->
                 <div>
                     <label for="province" class="block text-sm font-medium text-gray-700">Provinsi</label>
                     <input type="text" id="province" name="province" value="<?= $user['province'] ?? '' ?>" placeholder="<?= $user['province'] ?? '' ?>"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
-                <!-- Deskripsi Diri -->
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi Diri</label>
                     <textarea id="description" name="description" rows="4"
@@ -70,7 +63,6 @@
                         placeholder="Tulis sesuatu tentang dirimu..."><?= old('description', $user['description'] ?? '') ?></textarea>
                     </div>
 
-                <!-- Tombol Aksi -->
                 <div class="flex justify-center space-x-4 pt-4">
                     <a href="<?= base_url('profile/' . $user["username"]) ?>" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg shadow">
                         Batal

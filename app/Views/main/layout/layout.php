@@ -46,7 +46,7 @@ $navigationItems = [
                     </button>
                     <div>
                         <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                            <img class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="<?= base_url("uploads/" . $photoProfile) ?>" alt="logged user photo">
+                            <img class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="<?= base_url("uploads/users/" . $photoProfile) ?>" alt="logged user photo">
                         </button>
                     </div>
                     <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">

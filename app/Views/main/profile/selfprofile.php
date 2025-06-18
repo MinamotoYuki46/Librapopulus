@@ -25,7 +25,7 @@
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex flex-col items-center gap-6">
                     <div class="w-32 h-32">
-                        <img src="<?= base_url('uploads/' . $photoProfile) ?>" alt="Foto Profil"
+                        <img src="<?= base_url('uploads/users/' . $photoProfile) ?>" alt="Foto Profil"
                              class="rounded-full w-full h-full object-cover border-4 border-gray-300">
                     </div>
 
