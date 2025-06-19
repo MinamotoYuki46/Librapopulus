@@ -209,7 +209,7 @@ class Auth extends BaseController {
         $file = $this->request->getFile('profile_picture');
         $picture = null;
         if($file && $file->isValid() && !$file->hasMoved()) {
-            $folderPath = FCPATH . 'uploads/';
+            $folderPath = FCPATH . 'uploads/users/';
 
             if (is_dir($folderPath)) {
                 delete_files($folderPath);
