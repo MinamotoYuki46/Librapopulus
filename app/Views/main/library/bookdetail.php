@@ -142,7 +142,7 @@
                                     $totalPages = intval($book['total_pages']);
                                     $progressPercentage = ($totalPages > 0) ? ($readPages / $totalPages) * 100 : 0;
                                 ?>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div class="w-full bg-gray-100 rounded-full h-2.5 dark:bg-gray-700">
                                     <div class="bg-blue-600 h-2.5 rounded-full" style="width: <?= round($progressPercentage, 2) ?>%"></div>
                                 </div>
                             </div>
