@@ -105,7 +105,6 @@ class Profile extends BaseController {
             'city'          => $this->request->getPost('city'),
             'province'      => $this->request->getPost('province'),
             'description'   => $this->request->getPost('description'),
-            'username'      => $this->request->getPost('username'),
         ];
 
         $file = $this -> request -> getFile('photoProfile');
@@ -120,6 +119,10 @@ class Profile extends BaseController {
                 unlink("uploads/users/$oldPhoto");
             }
         }
+
+        if ($newUsername !== $oldUsername) {
+            $data['username'] = $newUsername;
+        } 
 
         $this -> userModel -> update($userId, $data);
 

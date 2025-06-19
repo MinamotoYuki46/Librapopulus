@@ -312,31 +312,54 @@ class Admin extends BaseController {
             }
 
             $genreNames = array_map('trim', explode(',', $row[5]));
+
+            $existingGenres = $this->db->table('genres')->get()->getResult();
+            $normalizedGenreMap = [];
+
+            foreach ($existingGenres as $g) {
+                $normalized = strtolower(trim($g->genre_name));
+                $normalizedGenreMap[$normalized] = $g->id;
+            }
+
             foreach ($genreNames as $genreName) {
                 if ($genreName === '') continue;
-                
-                $genre = $this->db->table('genres')->where('genre_name', $genreName)->get()->getFirstRow();
 
-                if ($genre) {
-                    $genreId = $genre -> id; 
+                $normalizedName = strtolower(trim($genreName));
+
+                if (isset($normalizedGenreMap[$normalizedName])) {
+                    $genreId = $normalizedGenreMap[$normalizedName];
                 } else {
-                    $this->db->table('genres')->insert(['genre_name' => $genreName]);
+                    $properName = ucwords($normalizedName);
+
+                    $this->db->table('genres')->insert([
+                        'genre_name' => $properName,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]);
+
                     $genreId = $this->db->insertID();
+
+                    $normalizedGenreMap[$normalizedName] = $genreId;
                 }
 
-                $exists = $this->db->table('book_genres')
+                $existingBookGenre = $this->db->table('book_genres')
                     ->where('book_id', $bookId)
                     ->where('genre_id', $genreId)
                     ->get()
                     ->getFirstRow();
 
-                if (!$exists) {
+                if (!$existingBookGenre) {
                     $this->db->table('book_genres')->insert([
-                        'book_id'  => $bookId,
-                        'genre_id' => $genreId,
+                        'book_id'    => $bookId,
+                        'genre_id'   => $genreId,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ]);
                 }
             }
+
+
+
         }
 
         return redirect()->to('/admin/bookdata')->with('success', 'Impor data buku berhasil!');
