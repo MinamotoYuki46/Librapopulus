@@ -1,6 +1,5 @@
 <?php
 
-use App\Controllers\Message;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -59,7 +58,7 @@ $routes -> post("notification/mark-read", "Notification::markRead", ['filter' =>
 $routes -> group('library',['filter' => 'userauth'],  function($routes) {
     $routes -> get('/', 'MainController::library'); 
     $routes -> get('booklist', "Book::booklist");
-    
+
     $routes -> get('api/search-book', 'Book::searchBook');
     $routes -> get('book/(:segment)', 'Book::book/$1');
 
@@ -67,6 +66,7 @@ $routes -> group('library',['filter' => 'userauth'],  function($routes) {
     $routes -> post('proceedAddBook', 'Book::proceedAddBook');
 
     $routes -> get('(:segment)', 'MainController::Library/$1');
+    
     $routes -> get('requested-loan/(:num)', 'BookLoan::ownerViewLoan/$1');
     $routes -> get('(:segment)/(:segment)', 'Book::index/$1/$2');
 
@@ -116,12 +116,15 @@ $routes -> get("search", "MainController::search", ['filter' => 'userauth']);
 
 
 $routes -> get("community", "Community::index", ['filter' => 'userauth']);
+
 $routes -> get("group/create", "Community::createGroup", ['filter' => 'userauth'], );
 $routes -> post("group/proceedCreateGroup", "Community::proceedCreateGroup", ['filter' => 'userauth']);
+
 $routes -> post("group/send", "Community::groupSendMessage", ['filter' => 'userauth']);
 $routes -> post('group/delete-message/(:num)', 'Community::deleteMessage/$1', ['filter' => 'userauth']);
 $routes -> get("group/fetch-message/(:num)/(:num)", "Community::fetchMessages/$1/$2", ['filter' => 'userauth']);
 $routes -> get("group/fetch-old-messages/(:num)/(:num)", "Community::fetchPrevMessages/$1/$2", ['filter' => 'userauth']);
+
 $routes -> get('group/editgroup/(:segment)', 'Community::editGroup/$1');
 $routes -> get("group/(:segment)", "Community::group/$1", ['filter' => 'userauth']);
 $routes->post('group/proceedEditGroup/(:segment)', 'Community::proceedEditGroup/$1');
@@ -130,6 +133,7 @@ $routes->post('group/delete/(:num)', 'Community::deleteGroup/$1', ['filter' => '
 $routes -> get('group/members/(:segment)', 'Community::members/$1', ['filter' => 'userauth']);
 $routes -> get('group/invite-members/(:segment)', 'Community::inviteMembers/$1', ['filter' => 'userauth']);
 $routes -> post('group/send-invitation', 'Community::sendInvitation', ['filter' => 'userauth']);
+
 $routes -> post('group/(:num)/promote/(:num)', 'Community::promote/$1/$2', ['filter' => 'userauth']);
 $routes -> post('group/(:num)/demote/(:num)', 'Community::demote/$1/$2', ['filter' => 'userauth']);
 $routes -> post('group/(:num)/kick/(:num)', 'Community::kick/$1/$2', ['filter' => 'userauth']);
@@ -140,8 +144,6 @@ $routes -> post('group-invitation/decline/(:num)', 'Community::groupDecline/$1',
 $routes -> post('group-request/join/(:num)', 'Community::requestJoin/$1', ['filter' => 'userauth']);
 $routes -> post('group-request/accept/(:num)', 'Community::requestAccept/$1', ['filter' => 'userauth']);
 $routes -> post('group-request/decline/(:num)', 'Community::requestDecline/$1', ['filter' => 'userauth']);
-
-
 
 
 $routes -> get("loans", "BookLoan::loanList", ['filter' => 'userauth']);
