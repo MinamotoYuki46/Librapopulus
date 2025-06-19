@@ -357,9 +357,6 @@ class Admin extends BaseController {
                     ]);
                 }
             }
-
-
-
         }
 
         return redirect()->to('/admin/bookdata')->with('success', 'Impor data buku berhasil!');

@@ -2,7 +2,7 @@
 
 $navigationItems = [
         ['icon' => 'fas fa-book', 'label' => 'Data Buku', 'page' => '/admin/bookdata'],
-        ['icon' => 'fas fa-file-alt', 'label' => 'Laporan User', 'page' => '/admin/userreport']
+        ['icon' => 'fas fa-file-alt', 'label' => 'Laporan Pengguna', 'page' => '/admin/userreport']
     ];
 ?>
 
