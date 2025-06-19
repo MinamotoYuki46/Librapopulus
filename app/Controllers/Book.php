@@ -97,6 +97,13 @@ class Book extends BaseController {
         return view('main/library/bookdetail', $data);
     }
 
+    public function booklist(){
+        $books = $this -> bookModel -> findAll();
+
+        return view('main/library/booklist', ['books' => $books]);
+
+    }
+
     public function addBook(){
         $data['genres'] = $this -> genreModel->findAll();
         return view('main/library/add', $data);

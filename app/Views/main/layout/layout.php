@@ -9,6 +9,7 @@ function timeElapsed($timestamp){
 }
 
 $navigationItems = [
+        ['icon' => 'fas fa-book-open', 'label' => 'Semua Buku', 'page' => '/library/booklist'],
         ['icon' => 'fas fa-book', 'label' => 'Koleksi', 'page' => '/library'],
         ['icon' => 'fas fa-search', 'label' => 'Cari', 'page' => '/search'],
         ['icon' => 'fas fa-arrow-up',     'label' => 'Dipinjamkan',  'page' => '/loans'],      

@@ -15,15 +15,23 @@
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <main class="py-6">
-            <div class="flex flex-col mb-6 mt-2 gap-3">
-                <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white">Detail Buku</h2>
+            
+            <div class="mb-6 mt-2 space-y-4">
+                <a href="<?= base_url('/library/booklist') ?>" 
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali ke Daftar Buku
+                </a>
+
+                <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white text-center">Detail Buku</h2>
             </div>
+
 
             <div class="grid md:grid-cols-3 gap-8 items-start">
                 <div class="md:col-span-1">
                     <?php if ($book['book_cover']): ?>
                         <img src="<?= base_url('uploads/bookcover/' . esc($book['book_cover'])) ?>"
-                            alt="Cover of <?= esc($book['title']) ?>"
+                         alt="Cover of <?= esc($book['title']) ?>"
                             class="w-full h-auto object-cover rounded-lg shadow-xl md:sticky md:top-8"
                             style="max-height: 600px;">
                     <?php else: ?>
@@ -118,7 +126,7 @@
                 <?php foreach ($owners as $owner): ?>
                     <a href="<?= base_url('profile/' . $owner['username']) ?>" class="block bg-white p-4 rounded-lg shadow text-center hover:shadow-lg transition duration-200">
                         <div class="w-28 h-28 mx-auto">
-                            <img src="<?= base_url('uploads/' . $owner['picture']) ?>"
+                            <img src="<?= base_url('uploads/users/' . $owner['picture']) ?>"
                                 alt="<?= esc($owner['username']) ?>"
                                 class="rounded-full w-full h-full object-cover border-4 border-gray-300" />
                         </div>

@@ -35,9 +35,17 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <main class="py-6" id="mainContent">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 mt-2 gap-3">
+                
+                <a href="<?= base_url('/library/' . $user["username"])?>" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali ke Koleksi
+                </a>
+                
                 <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white">Detail Buku</h2>
 
                 <?php if ($masterUserId == $user['id']) : ?>
+                    
+
                     <div class="flex gap-3 items-center">
                         <a href="<?= base_url('/library/' . $user["username"] . '/' . $book['slug'] . '/focus') ?>"
                             type="button" 
@@ -80,19 +88,21 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 items-start">
-                <div class="md:col-span-1">
-                    <?php if ($book['book_cover']): ?>
-                        <img src="<?= base_url('uploads/bookcover/' . esc($book['book_cover'])) ?>"
-                            alt="Cover of <?= isset($book['title']) ? esc($book['title']) : 'Book Title' ?>"
-                            class="w-full h-auto object-cover rounded-lg shadow-xl md:sticky md:top-8" 
-                            style="max-height: 600px;">
-                    <?php else: ?>
-                        <div class="w-full bg-gray-300 aspect-[2/3] flex items-center justify-center rounded-lg shadow-xl md:sticky md:top-8" 
-                            style="max-height: 600px;">
-                            <i class="fas fa-image text-gray-500 text-6xl"></i>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                <a href="<?= base_url('library/book/' . esc($book['slug']))?>">
+                    <div class="md:col-span-1">
+                        <?php if ($book['book_cover']): ?>
+                            <img src="<?= base_url('uploads/bookcover/' . esc($book['book_cover'])) ?>"
+                                alt="Cover of <?= isset($book['title']) ? esc($book['title']) : 'Book Title' ?>"
+                                class="w-full h-auto object-cover rounded-lg shadow-xl md:sticky md:top-8" 
+                                style="max-height: 600px;">
+                        <?php else: ?>
+                            <div class="w-full bg-gray-300 aspect-[2/3] flex items-center justify-center rounded-lg shadow-xl md:sticky md:top-8" 
+                                style="max-height: 600px;">
+                                <i class="fas fa-image text-gray-500 text-6xl"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </a>
 
                 <div class="md:col-span-2">
                     <div class="space-y-6 pb-8">

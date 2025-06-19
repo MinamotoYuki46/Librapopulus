@@ -27,23 +27,21 @@
                 align-self: flex-start;
             }
         }
-        /* New style for static display fields to mimic Flowbite input look */
         .static-field-display {
-            background-color: #f9fafb; /* bg-gray-50 */
-            border: 1px solid #e5e7eb; /* border-gray-300 */
-            color: #111827; /* text-gray-900 */
-            font-size: 0.875rem; /* text-sm */
-            line-height: 1.25rem; /* text-sm */
-            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #f9fafb; 
+            border: 1px solid #e5e7eb;
+            font-size: 0.875rem; 
+            line-height: 1.25rem;
+            border-radius: 0.5rem; 
             display: block;
             width: 100%;
-            padding: 0.625rem 1rem; /* p-2.5, px-4 */
-            font-weight: 700; /* font-bold */
+            padding: 0.625rem 1rem; 
+            font-weight: 700;
         }
         .dark .static-field-display {
-            background-color: #374151; /* dark:bg-gray-700 */
-            border-color: #4b5563; /* dark:border-gray-600 */
-            color: #f9fafb; /* dark:text-white */
+            background-color: #374151; 
+            border-color: #4b5563; 
+            color: #f9fafb;
         }
     </style>
 </head>

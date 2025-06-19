@@ -58,6 +58,8 @@ $routes -> post("notification/mark-read", "Notification::markRead", ['filter' =>
 
 $routes -> group('library',['filter' => 'userauth'],  function($routes) {
     $routes -> get('/', 'MainController::library'); 
+    $routes -> get('booklist', "Book::booklist");
+    
     $routes -> get('api/search-book', 'Book::searchBook');
     $routes -> get('book/(:segment)', 'Book::book/$1');
 
