@@ -80,6 +80,7 @@ class Admin extends BaseController {
 
         $options = new Options();
         $options -> set('defaultFont', 'Arial');
+        // $options->set('isRemoteEnabled', true); 
         $dompdf = new Dompdf($options);
         $dompdf -> loadHtml($html);
 

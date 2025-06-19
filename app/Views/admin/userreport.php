@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <title>Laporan Pengguna</title>
     <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -15,7 +16,7 @@
     
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10" id="mainContent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-bold mb-6">Laporan Pengguna</h1>
+            <h1 class="text-3xl font-bold mb-6">Laporan Pengguna Tidak Mengembalikan Buku</h1>
 
             <div class="flex justify-end mb-4">
                 <div class="relative inline-block text-left">

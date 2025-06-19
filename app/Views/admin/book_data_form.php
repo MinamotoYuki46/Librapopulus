@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Import Buku</title>
+    <title>Import Data Buku</title>
     <link href="<?= base_url('assets/css/tailwind.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,7 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 </head>
-<body class="bg-gray-100 min-h-screen p-10">
+<body class="bg-gray-100 min-h-screen">
+    <?= include 'layout.php' ?>
+
+    <div class="h-20"></div>
+
     <div class="max-w-2xl mx-auto bg-white shadow p-6 rounded-lg">
         <h2 class="text-2xl font-semibold mb-4">Import Buku dari Excel</h2>
 
@@ -40,8 +44,13 @@
                 <input type="file" name="excel_file" accept=".xls,.xlsx" required class="border rounded w-full p-2">
             </div>
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-sky-700">
-                Import
+                Impor
             </button>
+
+            <a href="<?= base_url('admin/bookdata') ?>" 
+                class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">
+                Batal
+            </a>
         </form>
     </div>
 </body>

@@ -11,7 +11,9 @@
     </style>
 </head>
 <body>
-    <h2>Laporan Pengguna Librapopulus</h2>
+
+    <h2>Laporan Pengguna Librapopulus: Tidak Mengembalikan Buku</h2>
+    <p class="meta">Dicetak pada <?= date('d M Y, H:i') ?></p>
     <table>
         <thead>
             <tr>
