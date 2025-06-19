@@ -205,12 +205,11 @@ class Auth extends BaseController {
         }
 
         $newTmpId = $registerData['tmp_id'];
-        $username = $registerData['username'];
 
         $file = $this->request->getFile('profile_picture');
         $picture = null;
         if($file && $file->isValid() && !$file->hasMoved()) {
-            $folderPath = FCPATH . 'uploads/' . $username . '/profile_picture/';
+            $folderPath = FCPATH . 'uploads/';
 
             if (is_dir($folderPath)) {
                 delete_files($folderPath);
@@ -223,7 +222,7 @@ class Auth extends BaseController {
             $newFileName = $file->getRandomName();
             $file->move($folderPath, $newFileName);
 
-            $picture = $username . '/profile_picture/' . $newFileName;
+            $picture = $newFileName;
         }
 
 
